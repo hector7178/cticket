@@ -1,0 +1,1 @@
+export type animation = 'grow' | 'fade' | 'slide-left' | 'slide-right'  | 'slide-top' | 'slide-bottom'
