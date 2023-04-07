@@ -1,5 +1,5 @@
 /** @format */
-import { useState } from 'react';
+import { useState, useRef} from 'react';
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
 import { SketchPicker } from 'react-color'
@@ -7,11 +7,12 @@ import { SketchPicker } from 'react-color'
 import AdminLayout from "@/components/layout/admin";
 import { Heading } from '@/components/headers/admin/heading';
 // Forms
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { CustomCancel, CustomLabel, CustomSubmit } from '@/components/forms';
 import { InputLang } from '@/components/forms/lang';
+import { EventCategory } from '@/interfaces/event';
 
 const EventCreateCategory = () => {
     const t = useTranslations("Panel_SideBar");
@@ -23,17 +24,57 @@ const EventCreateCategory = () => {
         { page: t('admin.event.event'), href: '/panel/admin/event/category' },
         { page: t('admin.event.category'), href: '/panel/admin/event/category' },
         { page: t('actions.create'), href: '' }
-    ]
+    ];
+    
+
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<EventCategory >({});
+
+/*input lang*/
+const [angSelected, setLangSelected ]=useState<string>(null);
+const langRef =useRef();
+ const changeLang=()=>{
+    console.log(langRef.current)
+ }
+
+/*input file config*/ 
+    const fileRef=useRef();
+    const inputFile=()=>{
+        fileRef.current.click();
+
+    }
+  
+    const handleFile=(event)=>{
+        const file=event.target.files[0];
+ console.log(file)
+    }
+  
+
+/*input color config*/
+    const [initColor, setInitColor]=useState<string>('#ffffff');
+    const  onChangeColor=(color:any):void=>{ 
+        setInitColor(color.hex)
+    }
+
+/*submit form*/ 
+    const onSubmit:SubmitHandler<EventCategory >= (data: any)=>console.log(data);
+    const submit=(e:SubmitHandler<EventCategory >)=>
+    {handleSubmit((e)=>{
+
+        console.log('enviado'+e)
+    });
+    e.preventDefault();
+    }
+
 
     return (
         <>
             {/* Breadcrumb section */}
             <div>
-                <Heading breadcrumb={breadcrumb} langBread />
+                <Heading breadcrumb={breadcrumb} langBread ref={langRef}/>
             </div>
             <div className="flex flex-1 pt-6">
                 <div className="w-screen min-h-0 overflow-hidden">
-                    <form className="divide-y divide-gray-200 lg:col-span-9" action="#" method="POST">
+                    <form className="divide-y divide-gray-200 lg:col-span-9" onSubmit={submit} method="POST">
                         <div className="py-6 grid grid-cols-12 gap-6">
                             <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6">
                                 <CustomLabel field="icon-upload" name={tc('field_icon')} required />
@@ -55,11 +96,13 @@ const EventCreateCategory = () => {
                                         </svg>
                                         <div className="flex text-sm text-gray-600">
                                             <label
-                                                htmlFor="file-upload"
-                                                className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
+                                                ref={fileRef}
+                                                onClick={inputFile}
+                                                htmlFor="picture"
+                                                className="relative cursor-pointer relative z-10 rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
                                             >
-                                                <span>{tc('field_upload_file')}</span>
-                                                <input id="icon-upload" name="icon-upload" type="file" className="sr-only" />
+                                                <span >{tc('field_upload_file')}</span>
+                                                <input  onChange={handleFile} id="icon-upload" {...register('picture')} type="file"  hidden/>
                                             </label>
                                             <p className="pl-1">{tp('text_drag_n_drop')}</p>
                                         </div>
@@ -69,11 +112,15 @@ const EventCreateCategory = () => {
                             </div>
                             <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6">
                                 <CustomLabel field="front_id" name={tc('field_color')} required />
-                                <SketchPicker />
+                                <SketchPicker 
+                                {...register('color')}
+                                onChange={onChangeColor}
+                                color={initColor}
+                                />
                             </div>
 
 
-                            <InputLang lang="es" />
+                            <InputLang lang="en" {...register('category')}/>
                         </div>
 
                         {/* Buttons section */}
