@@ -30,10 +30,12 @@ const EventCreateCategory = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm<EventCategory >({});
 
 /*input lang*/
-const [angSelected, setLangSelected ]=useState<string>(null);
+const [langSelected, setLangSelected ]=useState<string>(null);
 const langRef =useRef();
  const changeLang=()=>{
     console.log(langRef.current)
+    setLangSelected('selected')
+    console.log(langSelected)
  }
 
 /*input file config*/ 
