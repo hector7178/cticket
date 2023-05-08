@@ -31,10 +31,10 @@ const EventCreateSubcategory = ({dataInit}) => {
     const locale = useLocale();
     console.log('data', dataInit)
     const{mutate, isLoading, isError, isSuccess}=useUpdateEventSubCategory()
-    const { register, handleSubmit,setValue, formState: { errors }, reset,getValues } = useForm<EventSubcategory>({defaultValues:dataInit});
+    const { register, handleSubmit,setValue, formState: { errors, isSubmitted }, reset,getValues } = useForm<EventSubcategory>({defaultValues:dataInit});
    
     useEffect(()=>{
-        if (isSuccess){
+        if (isSuccess && isSubmitted){
             toast.success('Event sub category updated :)',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -44,7 +44,8 @@ const EventCreateSubcategory = ({dataInit}) => {
                 
             } )
             push(`/${locale}/panel/admin/event/subcategory`)   
-        }else if(isError){
+        }else if(isError && isSubmitted){
+            reset();
             toast.error(' Error, No updated :(',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{

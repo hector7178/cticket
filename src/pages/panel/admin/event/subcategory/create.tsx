@@ -42,9 +42,9 @@ const EventCreateSubcategory = () => {
     const t = useTranslations("Panel_SideBar");
     const tc = useTranslations("Common_Forms");
     const locale = useLocale();
-    const { register, handleSubmit,setValue, formState: { errors }, reset, getValues } = useForm<EventSubcategory>({resolver:yupResolver(YupSchema)});
+    const { register, handleSubmit,setValue, formState: { errors, isSubmitted}, reset, getValues } = useForm<EventSubcategory>({resolver:yupResolver(YupSchema)});
     useEffect(()=>{
-        if (isSuccess){
+        if (isSuccess && isSubmitted){
             toast.success('Event sub category created :)',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -54,7 +54,9 @@ const EventCreateSubcategory = () => {
                 
             } )
             push(`/${locale}/panel/admin/event/subcategory`)   
-        }else if(isError){
+        }else if(isError && isSubmitted){
+            reset();
+
             toast.error(' Error, No created:(',{
             position:toast.POSITION.TOP_RIGHT,
             data:{

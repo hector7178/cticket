@@ -48,12 +48,12 @@ const EventCreateCategory = () => {
     })
     
 
-const { register, handleSubmit,setValue, formState: { errors }, reset,getValues } = useForm<EventCategory>({resolver:yupResolver(YupSchema)});
+const { register, handleSubmit,setValue, formState: { errors, isSubmitted }, reset,getValues } = useForm<EventCategory>({resolver:yupResolver(YupSchema)});
 const {mutate, isLoading, isError, isSuccess}= useCreateEventCategory()
 
 
 useEffect(()=>{
-if (isSuccess){
+if (isSuccess && isSubmitted){
     toast.success('Event category created :)',{
             position:toast.POSITION.TOP_RIGHT,
             data:{
@@ -63,7 +63,8 @@ if (isSuccess){
          
     } )
     push(`/${locale}/panel/admin/event/category`)   
-}else if(isError){
+}else if(isError && isSubmitted){
+    reset();
     toast.error(' Error, No created:(',{
             position:toast.POSITION.TOP_RIGHT,
             data:{

@@ -29,13 +29,25 @@ const EventCreateSuplier = ({dataInit}) => {
         { page: t('admin.event.supplier'), href: '/panel/admin/event/supplier' },
         { page: t('actions.update'), href: '' }
     ]
-    const {query,push,locale }=useRouter()
+    const {query,push,locale }=useRouter();
 
-    const{mutate,
-        isError,
-        isSuccess}=useUpdateEventSupplier()
+    const{mutate,isError,isSuccess}=useUpdateEventSupplier();
+
+    const onSubmit:SubmitHandler<EventSupplier>= (data:EventSupplier )=>{
+        const formData=JSON.stringify(data)
+        mutate({id:`${query.id}`,supplier:formData})
+    };
+
+      const { 
+        register,
+        handleSubmit,
+        setValue, 
+        formState: { errors, isSubmitted},
+        reset,
+        getValues } = useForm({defaultValues:dataInit});
+        
     useEffect(()=>{
-        if (isSuccess){
+        if (isSuccess && isSubmitted){
             toast.success('Event supplier updated :)',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -44,8 +56,10 @@ const EventCreateSuplier = ({dataInit}) => {
                     }
                 
             } )
-            push(`/${locale}/panel/admin/event/category`)   
-        }else if(isError){
+            push(`/${locale}/panel/admin/event/supplier`)   
+        }else if(isError && isSubmitted){
+            reset();
+
             toast.error(' Error, No updated :(',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -54,26 +68,15 @@ const EventCreateSuplier = ({dataInit}) => {
                     }
                 } )
         }
-    },[isSuccess,isError])
-    const { 
-        register,
-        handleSubmit,
-        setValue, 
-        formState: { errors },
-        reset,
-        getValues } = useForm({defaultValues:dataInit});
+    },[onSubmit])
+  
 
-    const [initColor, setInitColor]=useState<string>('#ffffff');
+    const [initColor, setInitColor]=useState<string>(dataInit.color);
     const  onChangeColor=(color:any)=>{ 
         setInitColor(color.hex)
         setValue('color', initColor )
     }
-    const onSubmit:SubmitHandler<EventSupplier>= (data:EventSupplier )=>{
-        const formData=new FormData
-        formData.append('event_supliers',JSON.stringify(data))
-        mutate({id:`${query.id}`,supplier:formData})
-    };
-
+    
     return (
         <>
             {/* Breadcrumb section */}
@@ -187,6 +190,10 @@ export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
 
 export async function getStaticProps({ locale, params }: GetStaticPropsContext) {
     const { data } = await axios.get(`/events/suppliers/${params.id}`);
+    delete data._id
+    delete data.user_id
+    delete data.created_at
+    delete data.updated_at
     return {
         props: {
             messages: (await import(`@/messages/${locale}.json`)).default,

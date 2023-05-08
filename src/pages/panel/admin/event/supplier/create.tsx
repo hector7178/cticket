@@ -19,12 +19,28 @@ import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify';
 
 const EventCreateSuplier = () => {
+    const YupSchema= yup.object().shape({
+       
+        user_id: yup.string(),
+        name: yup.string().required('Name is required'),
+        url: yup.string().required('URL is required'),
+        color: yup.string().required('Color is required'),
+        data: yup.object({
+                type: yup.string(),
+                url: yup.string(),
+                key: yup.string()
+        })
+
+    })
+
     const t = useTranslations("Panel_SideBar");
     const { locales,push,locale } = useRouter();
     const tc = useTranslations("Common_Forms");
     const{mutate,isError,isSuccess}=useCreateEventSupplier()
+    const { register,handleSubmit,setValue, formState: { errors, isSubmitted },reset,getValues } = useForm<EventSupplier>({resolver:yupResolver(YupSchema)});
+
      useEffect(()=>{
-        if (isSuccess){
+        if (isSuccess && isSubmitted){
             toast.success('Event supplier created :)',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -33,8 +49,10 @@ const EventCreateSuplier = () => {
                     }
                 
             } )
-            push(`/${locale}/panel/admin/event/category`)   
-        }else if(isError){
+            push(`/${locale}/panel/admin/event/supplier`)   
+        }else if(isError && isSubmitted){
+            reset(); 
+            
             toast.error(' Error, No created :(',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -54,9 +72,7 @@ const EventCreateSuplier = () => {
    
 
 
-    const { register,handleSubmit,setValue, formState: { errors },reset,getValues } = useForm<EventSupplier>();
-
-   console.log(getValues())
+    
     const [initColor, setInitColor]=useState<string>('#ffffff');
     const  onChangeColor=(color:any)=>{ 
         setInitColor(color.hex)
@@ -64,11 +80,13 @@ const EventCreateSuplier = () => {
     }
 //submit
     const onSubmit:SubmitHandler<EventSupplier>= (data:EventSupplier )=>{
-        const formData= new FormData
-        formData.append('event_supplier', JSON.stringify(data))
+        const formData= JSON.stringify(data)
+        
         mutate(formData)
       };
-    return (
+
+      console.log('errores',errors)
+return (
         <>
             {/* Breadcrumb section */}
             <div>
@@ -79,6 +97,7 @@ const EventCreateSuplier = () => {
                     <form className="lg:col-span-9" onSubmit={handleSubmit(onSubmit)} method="POST">
                         <div className="py-6 grid grid-cols-12 gap-6">
                             <div className="col-span-12 md:col-span-6 lg:col-span-4">
+                                <span className='text-[#e74c3c]'>{errors?.name?.message}</span>
                                 <CustomLabel field="name" name={tc('field_name')} />
                                 <input
                                     type="text"
@@ -90,8 +109,10 @@ const EventCreateSuplier = () => {
                                 />
                             </div>
                             <div className="col-span-12 md:col-span-6 lg:col-span-4">
+                                <span className='text-[#e74c3c]'>{errors?.url?.message}</span>
                                 <CustomLabel field="url" name={tc('field_url')} />
                                 <div className="relative rounded-md shadow-sm">
+                                    
                                     <input
                                         type="text"
                                         {...register('url')}
@@ -107,6 +128,7 @@ const EventCreateSuplier = () => {
                             </div>
 
                             <div className="col-span-12 md:col-span-6 lg:col-span-4">
+                                <span className='text-[#e74c3c]'>{errors?.color?.message}</span>
                                 <CustomLabel field="front_id" name={tc('field_color')} required />
                                 <SketchPicker
                                 color={initColor}
@@ -114,6 +136,7 @@ const EventCreateSuplier = () => {
                             </div>
 
                             <div className="col-span-12 md:col-span-6 lg:col-span-4">
+                                
                                 <CustomLabel field="name" name={tc('field_type')} />
                                 <input
                                     type="text"

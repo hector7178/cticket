@@ -6,8 +6,14 @@ export const getEventsSuppliers = async () => {
     return data;
 };
 
-export const createEventSupplier = async (supplier: FormData) => {
-    const { data } = await axios.post(`/events/suppliers/`, supplier);
+export const createEventSupplier = async (supplier:string) => {
+    const { data } = await axios.post(`/events/suppliers/`, supplier, {
+       
+        headers:{
+            'Content-Type':'application/json',
+            'accept': 'application/json'},
+        
+    } );
 
     return data;
 }
@@ -18,8 +24,14 @@ export const readEventSupplier = async (id: string) => {
     return data;
 }
 
-export const updateEventSupplier = async (id: string, supplier: FormData) => {
-    const { data } = await axios.put(`/events/suppliers/${id}`, supplier);
+export const updateEventSupplier = async (id: string, supplier: string) => {
+    const { data } = await axios.put(`/events/suppliers/${id}`, supplier, {
+       
+        headers:{
+            'Content-Type':'application/json',
+            'accept': 'application/json'},
+        
+    });
 
     return data;
 }

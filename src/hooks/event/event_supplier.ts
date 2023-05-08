@@ -51,13 +51,21 @@ export  function useUpdateEventSupplier( ) {
 
   const queryClient=useQueryClient();
 
-  const {mutate, isLoading, isError, isSuccess}= useMutation((values:{id:string,supplier:FormData})=>{
+  const {mutate, isLoading, isError, isSuccess}= useMutation((values:{id:string,supplier:string})=>{
         
          
     return  updateEventSupplier(values.id, values.supplier )},{onSuccess: (data,value)=>{
-        return queryClient.setQueryData([key], (prev:any)=>prev?.map((item)=>{
-           return item._id===value.id? value.supplier:item
-        }))
+       return queryClient.setQueryData([key], (prev:any)=>{
+            
+            const newArray = prev?.map((item)=>{
+             if( item._id===value.id){
+                 return  data
+             }else{
+                  return item
+              }
+          })
+          return newArray
+          })
     }}
 )
 return {mutate, isLoading, isError, isSuccess};

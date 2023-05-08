@@ -37,7 +37,7 @@ const EventCreateCategory = ({dataInit}) => {
     const tc = useTranslations("Common_Forms");
     
 
-const { register, handleSubmit,setValue, formState: { errors }, reset,getValues } = useForm({defaultValues:dataInit});
+const { register, handleSubmit,setValue, formState: { errors, isSubmitted }, reset,getValues } = useForm({defaultValues:dataInit});
 const {mutate, isLoading, isError, isSuccess}= useUpdateEventCategory()
 console.log('afuera',isSuccess)
 
@@ -94,7 +94,7 @@ console.log('afuera',isSuccess)
         setValue('color', initColor )
     }
 useEffect(()=>{
-if (isSuccess){
+if (isSuccess && isSubmitted){
     toast.success('Event category Updated:)',{
             position:toast.POSITION.TOP_RIGHT,
             data:{
@@ -104,7 +104,8 @@ if (isSuccess){
          
     } )
     push(`/${locale}/panel/admin/event/category`)   
-}else if(isError){
+}else if(isError && isSubmitted){
+    reset();
     toast.error(' Error, No updated:(',{
             position:toast.POSITION.TOP_RIGHT,
             data:{

@@ -45,11 +45,11 @@ const EventCreateSubsubcategory = () => {
         picture:yup.string().required('Picture is Required')
 
     })
-    const { register, handleSubmit,setValue, formState: { errors }, reset, getValues } = useForm<EventSubsubcategory>({resolver:yupResolver(YupSchema)});
+    const { register, handleSubmit,setValue, formState: { errors, isSubmitted }, reset, getValues } = useForm<EventSubsubcategory>({resolver:yupResolver(YupSchema)});
     const{ mutate,isSuccess,isError}=useCreateEventSubSubcategory()
 
     useEffect(()=>{
-        if (isSuccess){
+        if (isSuccess && isSubmitted){
             toast.success('Event sub sub category created :)',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -59,7 +59,9 @@ const EventCreateSubsubcategory = () => {
                 
             } )
             push(`/${locale}/panel/admin/event/subsubcategory`)   
-        }else if(isError){
+        }else if(isError && isSubmitted){
+            reset();
+            
             toast.error(' Error, No created :(',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{

@@ -49,7 +49,7 @@ export function useUpdateEventSubCategory(  ) {
          
       return updateEventSubcategory(values.updateSubCategory_id,values.eventSubCategory )},{onSuccess: (data,value)=>{
           return queryClient.setQueryData([key], (prev:any)=>{
-            console.log(prev) 
+            
             const newArray = prev?.map((item)=>{
              if( item._id===value.updateSubCategory_id){
                  return  data

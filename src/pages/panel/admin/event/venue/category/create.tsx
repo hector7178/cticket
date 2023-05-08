@@ -9,14 +9,25 @@ import { HeadingSelect } from '@/components/headers/admin/headingSelect';
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { CustomCancel, CustomSubmit } from '@/components/forms';
-import { InputLang } from '@/components/forms/lang';
+import { CustomCancel, CustomLabel, CustomSubmit } from '@/components/forms';
+import { EventInputLang, InputLang } from '@/components/forms/lang';
 import {  interfaceEventVenueCategory } from '@/interfaces/event';
 import { useCreateEventVenueCategory} from '@/hooks/event/event_venue_category';
 import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify';
 
 const EventCreateVenueCategory = () => {
+
+    
+    const YupSchema= yup.object({
+       
+        category:yup.array().of(yup.object({
+                lang:yup.string().required('Lang is required'),
+                name:yup.string().min(3,'Name required').required('Name is Required')
+            }).required('Venue category is required ')
+        )
+   })
+    const{push,locale}=useRouter()
     const t = useTranslations("Panel_SideBar");
 
     const breadcrumb = [
@@ -27,9 +38,17 @@ const EventCreateVenueCategory = () => {
         { page: t('actions.create'), href: '' }
     ]
     const {mutate,isLoading,isError,isSuccess}=useCreateEventVenueCategory()
-    const{push,locale}=useRouter()
+    
+
+    const onSubmit:SubmitHandler< interfaceEventVenueCategory>= (data: interfaceEventVenueCategory)=>{
+      const DataForm = JSON.stringify(data)
+      mutate(DataForm )
+    };
+
+    const { register, handleSubmit,setValue, formState: { errors,isSubmitted }, reset, getValues} = useForm< interfaceEventVenueCategory>({resolver:yupResolver(YupSchema)});
+  
     useEffect(()=>{
-        if (isSuccess){
+        if (isSuccess && isSubmitted){
             toast.success('Event venue category updated :)',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -39,7 +58,9 @@ const EventCreateVenueCategory = () => {
                 
             } )
             push(`/${locale}/panel/admin/event/category`)   
-        }else if(isError){
+        }else if(isError && isSubmitted){
+            reset();
+
             toast.error(' Error, No updated :(',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -48,60 +69,51 @@ const EventCreateVenueCategory = () => {
                     }
                 } )
         }
-    },[isSuccess,isError])
+    },[onSubmit])
 
-    const { register, handleSubmit,setValue, formState: { errors }, reset, getValues } = useForm< interfaceEventVenueCategory>();
     
-   
-
-
-    const onSubmit:SubmitHandler< interfaceEventVenueCategory>= (data: interfaceEventVenueCategory)=>{
-      const DataForm = new FormData  
-      DataForm.append('category',JSON.stringify(data))
-    
-      mutate(DataForm )
-    };
-
-  
     const[category,setCategory]=useState( [{lang:'en', name:''}])
-
+console.log('error',errors.category)
+console.log('error',isError)
+console.log('error',isSubmitted)
 /*Lang*/
     const[lang ,setlang]=useState(['en'])
     const[SelectValue ,setSelectValue]=useState('en')
-
+   
     const LangSelect:React.ChangeEventHandler<HTMLSelectElement> = (e:any)=>{
     const Lang=e.target.value;
     setSelectValue(Lang)
     }
+
     const onAppend=()=>{
         if(!(lang.includes(SelectValue))){
         setlang([...lang, SelectValue])
         setCategory([...category,{lang:SelectValue, name:''}])
         }
     }
-    const onDelete=(exp, index)=>{
-        if(index > 0 ){
+    const onDelete=(e, exp, index)=>{
+        if(category.length >= 2 ){
         setlang((e)=>e.filter((f)=>f !== exp))
         setCategory(category.filter((e)=>e.lang!==exp))
+        setValue('category', category.filter((e)=>e.lang!==exp))
+        
         }
+        
     }
 /*Name*/
     const handleName:React.ChangeEventHandler<HTMLInputElement> = (e:any)=>{
     const Name=e.target.value;
     const id=e.target.id;
     if(category.find((e)=>e.lang===id)){
-
-        category.find((e)=>e.lang===id).name=Name
-        setValue('category', category)
+        const arr=category.slice()
+        arr.find((e)=>e.lang===id).name=Name
+        setValue('category', arr)
         
     }else{
         setCategory([...category, {lang:id,name:Name}])
         setValue('category', category)
     }
     
-   
-    
-   
 } 
 console.log(getValues())
     return (
@@ -114,9 +126,23 @@ console.log(getValues())
                 <div className="w-screen min-h-0 overflow-hidden">
                     <form className="divide-y divide-gray-200 lg:col-span-9"  onSubmit={handleSubmit(onSubmit)} method="POST">
                         <div className="py-6 grid grid-cols-12 gap-6">
+                             <div >
+                                {errors?.category?.map((e,i)=>{
+                                            return (<span key={i} className='text-[#e74c3c] w-full flex justify-end'>{e.name.message}</span>)
+                                })}
+                                <CustomLabel field='category' name='category'/>
+                            </div>
                             {
-                            lang.map((e, index)=>{
-                                return (<InputLang key={index} index={index} lang={e} onChange={handleName} onClick={()=>onDelete(e,index)}/>)
+                            lang.map((exp, index)=>{
+                                return (<EventInputLang 
+                                    key={index} 
+                                    index={index} 
+                                    lang={exp} 
+                                    onChange={handleName}
+                                    num={category?.length}
+                                    onClick={(e)=>onDelete(e, exp,index)} 
+                                    category={category}
+                                    />)
                             })
                             }
 

@@ -41,8 +41,10 @@ const EventCreateSubsubcategory = ({dataInit}) =>  {
     ]
     const{ mutate,isSuccess, isError}=useUpdateEventCategory()
     
-    useEffect(()=>{
-        if (isSuccess){
+     const { register, handleSubmit,setValue, formState: { errors, isSubmitted}, reset, getValues } = useForm({defaultValues:dataInit});
+
+    useEffect(()=>{ 
+        if (isSuccess && isSubmitted){
             toast.success('Event sub subcategory updated :)',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -52,7 +54,8 @@ const EventCreateSubsubcategory = ({dataInit}) =>  {
                 
             } )
             push(`/${locale}/panel/admin/event/subsubcategory`)   
-        }else if(isError){
+        }else if(isError && isSubmitted){
+            reset();
             toast.error(' Error, No updated :(',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -63,9 +66,7 @@ const EventCreateSubsubcategory = ({dataInit}) =>  {
         }
     },[isSuccess,isError])
 
-    const { register, handleSubmit,setValue, formState: { errors }, reset, getValues } = useForm({defaultValues:dataInit});
-    
-    
+   
       //drop file
       const [upload, setUpload ]=useState('');
       const[url,setUrl]=useState('');

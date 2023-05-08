@@ -6,7 +6,7 @@ export const getEventsVenuesCategories = async () => {
     return data;
 };
 
-export const createEventVenueCategory = async (venue_category: FormData) => {
+export const createEventVenueCategory = async (venue_category: string) => {
     const { data } = await axios.post(`/events/venues/categories/`, venue_category);
 
     return data;
@@ -18,8 +18,14 @@ export const readEventVenueCategory = async (id: string) => {
     return data;
 }
 
-export const updateEventVenueCategory = async (id: string, venue_category:FormData) => {
-    const { data } = await axios.put(`/events/venues/categories/${id}`, venue_category);
+export const updateEventVenueCategory = async (id: string, venue_category:string) => {
+    const { data } = await axios.put(`/events/venues/categories/${id}`, venue_category,{
+       
+        headers:{
+            'Content-Type':'application/json',
+            'accept': 'application/json'},
+        
+    });
 
     return data;
 }

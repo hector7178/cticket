@@ -18,15 +18,23 @@ import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify';
 
 const EventCreateVenueCategory = ({dataInit}) => {
-    console.log(dataInit)
+    console.log('valor inicial',dataInit)
     const t = useTranslations("Panel_SideBar");
     const locale = useLocale();
-    const{push,query}=useRouter()
+    const{push,query,locales}=useRouter()
    
     const {mutate,isLoading,isError,isSuccess}= useUpdateEventVenueCategory()
+
+    const onSubmit:SubmitHandler< interfaceEventVenueCategory>= (data: interfaceEventVenueCategory)=>{
+        const DataForm = JSON.stringify(data) 
+      
     
+      mutate({updateCategory_id:`${query.id}`,eventCategory:DataForm })
+    };
+    const { register, handleSubmit,setValue, formState: { errors, isSubmitted }, reset, getValues } = useForm({defaultValues:dataInit});
+
     useEffect(()=>{
-        if (isSuccess){
+        if (isSuccess && isSubmitted ){
             toast.success('Event venue category updated :)',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -35,8 +43,11 @@ const EventCreateVenueCategory = ({dataInit}) => {
                     }
                 
             } )
-            push(`/${locale}/panel/admin/event/`)   
-        }else if(isError){
+            push(`/${locale}/panel/admin/event/venue/category`)   
+        }else if(isError && isSubmitted ){
+
+            reset();
+            
             toast.error(' Error, No updated :(',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -45,7 +56,8 @@ const EventCreateVenueCategory = ({dataInit}) => {
                     }
                 } )
         }
-    },[isSuccess,isError])
+    },[onSubmit]);
+
     const breadcrumb = [
         { page: t('admin.admin'), href: '/panel/admin' },
         { page: t('admin.event.event'), href: '/panel/admin/event/venue' },
@@ -54,21 +66,12 @@ const EventCreateVenueCategory = ({dataInit}) => {
         { page: t('actions.update'), href: '' }
     ]
     
-    const { register, handleSubmit,setValue, formState: { errors }, reset, getValues } = useForm({defaultValues:dataInit});
-
-
-    const onSubmit:SubmitHandler< interfaceEventVenueCategory>= (data: interfaceEventVenueCategory)=>{
-        const DataForm = new FormData  
-      DataForm.append('category',JSON.stringify(data))
     
-      mutate({updateCategory_id:`${query.id}`,eventCategory:DataForm })
-    };
-
  
-    const[category,setCategory]=useState( [{lang:'en', name:''}])
+    const[category,setCategory]=useState( dataInit.category)
 
 /*Lang*/
-    const[lang ,setlang]=useState(['en'])
+    const[lang ,setlang]=useState(dataInit.category?.map((e)=> e.lang))
     const[SelectValue ,setSelectValue]=useState('en')
    
     const LangSelect:React.ChangeEventHandler<HTMLSelectElement> = (e:any)=>{
@@ -106,7 +109,7 @@ const EventCreateVenueCategory = ({dataInit}) => {
     }
     
 } 
-    console.log(getValues())
+    console.log('values',getValues())
     return (
         <>
             {/* Breadcrumb section */}
@@ -134,7 +137,7 @@ const EventCreateVenueCategory = ({dataInit}) => {
                         <ToastContainer/>
                         <div className="divide-y divide-gray-200">
                             <div className="mt-4 flex justify-end gap-x-3 py-4 px-4 sm:px-6">
-                                <CustomCancel onClick={()=>push(`/${locale}/panel/admin/event`)}/>
+                                <CustomCancel onClick={()=>push(`/${locale}/panel/admin/event/venue/category`)}/>
                                 <CustomSubmit />
                             </div>
                         </div>
