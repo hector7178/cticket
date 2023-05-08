@@ -13,13 +13,21 @@ export const createEventSubcategory = async (subcategory: EventSubcategory) => {
 }
 
 export const readEventSubcategory = async (id: string) => {
-    const { data } = await axios.get(`/events/subcategories/${id}`);
+    const { data } = await axios.get(`/events/subcategories/${id} `);
 
     return data;
 }
 
-export const updateEventSubcategory = async (id: string, subcategory: EventSubcategory) => {
-    const { data } = await axios.put(`/events/subcategories/${id}`, subcategory);
+export const updateEventSubcategory = async (id: string, subcategory:string) => {
+    const { data } = await axios.put(`/events/subcategories/${id}`, subcategory,
+    {
+       
+        headers:{
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+    }
+    );
 
     return data;
 }

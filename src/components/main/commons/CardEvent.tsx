@@ -12,62 +12,95 @@ import { readEventCategory } from '@/api/event/event_category';
 import Link from 'next/link';
 import { EventCategory } from '@/interfaces/event';
 import { readEventVenue } from '@/api/event/event_venue';
+import { useSession } from 'next-auth/react';
+import {
+  useMutationAddFavorite,
+  useMutationRemoveFavorite,
+  useUserFavorites,
+} from '@/hooks/user/user_favorites';
+import { useUserAttends } from '@/hooks/user/user_attends';
+import { useUsers } from '@/hooks/user/user';
+import { useRouter } from 'next/router';
+import { MapPinIcon } from '@heroicons/react/24/outline';
 
 export type props = {
   className?: string;
-  layout: 'grid' | 'column';
+  layout?: 'grid' | 'column';
   image: string;
   name: string;
-  startDate: Date;
-  startTime: string;
-  endTime: string;
+  startDate: any;
+  endDate: any;
   location: string;
   favorite?: boolean;
   willAttend?: boolean;
-  category_id: string;
+  color: string;
   id: string;
-  isLoggedIn?: boolean;
 };
 // TODO: should have time prop
 const CardEvent: React.FC<props> = ({
   className,
   startDate,
-  endTime,
-  startTime,
+  endDate,
   image,
-  layout,
+  layout = 'grid',
   location,
   name,
   willAttend = false,
-  favorite = false,
-  category_id,
+  color,
   id,
-  isLoggedIn,
 }) => {
-  const category = useQuery<EventCategory>({
-    queryKey: ['category'],
-    queryFn: async () => await readEventCategory(category_id),
-    enabled: Boolean(category_id),
-  });
-
-  const eventVenue = useQuery({
-    queryKey: ['eventVenue'],
-    queryFn: async () => await readEventVenue(id),
-    enabled: Boolean(id),
-  });
-  // console.log('single event venue', eventVenue?.data);
+  const { data: session } = useSession();
+  const { data: favorites } = useUserFavorites();
+  const { mutate: addFavorite } = useMutationAddFavorite();
+  const { mutate: removeFavorite } = useMutationRemoveFavorite();
   const locale = useLocale();
+  const { pathname } = useRouter();
+  const favorite = favorites
+    ?.filter((item) => item?.user_id?.id === session.user?.id)
+    .find((item) => item?.events_likes?.find((event) => event?.id == id));
+
+  const attend = favorites
+    ?.filter((item) => item?.user_id?.id == session.user?.id)
+    .find((item) => item?.events_attends?.find((attend) => attend?.id == id));
+
+  const handleAddFavorite = (e) => {
+    e.preventDefault();
+    if (!favorite) {
+      addFavorite({
+        event_id: id,
+      });
+    } else {
+      removeFavorite({
+        event_id: id,
+      });
+    }
+  };
+  const slug = name.replaceAll(' ', '-');
+
+  const handleAddAttend = () => {
+    if (!attend) {
+      addFavorite({
+        event_type: 'attend',
+        event_id: id,
+      });
+    } else {
+      removeFavorite({
+        event_type: 'attend',
+        event_id: id,
+      });
+    }
+  };
   return (
-    <Link
-      href={`/event/${id}`}
+    <div
       className={classNames(
-        'rounded-xl relative shadow-xl overflow-hidden',
+        'card relative shadow-xl overflow-hidden rounded-sm',
         layout == 'column' ? 'flex' : 'block',
         className
       )}
     >
-      {isLoggedIn && (
+      {session && (
         <Button
+          onClick={(e) => handleAddFavorite(e)}
           className={classNames(
             'absolute z-20 top-3',
             layout == 'grid' ? 'right-3' : 'left-3'
@@ -83,40 +116,49 @@ const CardEvent: React.FC<props> = ({
           }
         />
       )}
-      <span
+      <Link
+        href={`/${
+          pathname.includes('search') ? 'event' : 'program'
+        }/${slug}?_id=${id}`}
         className={classNames(
           'relative block',
           layout == 'grid' ? 'aspect-[4/3]' : 'aspect-square w-72 '
         )}
       >
         <Image src={image} alt="" fill className="object-cover" />
-        {isLoggedIn && (
+        {session && (
           <WillAttend
-            changeColor={willAttend}
+            onClick={handleAddAttend}
+            changeColor={Boolean(attend)}
             className={classNames(
               'absolute bottom-3',
               layout == 'grid' ? 'right-3' : 'left-3'
             )}
           />
         )}
-      </span>
+      </Link>
 
-      <span className="flex-1 flex flex-col items-start">
+      <span className="flex flex-col items-start flex-1">
         <span
           className={classNames('block h-5 w-full')}
-          style={{ backgroundColor: category?.data?.color }}
+          style={{ backgroundColor: color }}
         />
 
         <span
           className={classNames(
-            'w-full',
+            'w-full rounded-b-[2rem] border-x-customForm shadow-lg',
             layout == 'column' ? 'flex h-full items-center' : 'block'
           )}
         >
-          <span className="p-5 block">
+          <Link
+            href={`/${
+              pathname.includes('search') ? 'event' : 'program'
+            }/${slug}?_id=${id}`}
+            className="block p-5"
+          >
             <span
               title={name}
-              className="block text-lg font-semibold text-black break-words truncate w-"
+              className="block text-lg font-semibold text-black capitalize break-words truncate w-"
             >
               {name}
             </span>
@@ -126,24 +168,25 @@ const CardEvent: React.FC<props> = ({
                 layout == 'column' ? 'flex gap-3' : 'block'
               )}
             >
-              <span className="block text-customGray">
+              <span className="block text-base font-light text-customGray">
                 {format(parseDate(startDate), 'EEEE dd MMMM yyyy', {
                   locale: locale == 'en' ? enUS : es,
                 })}
               </span>
-              <span className="flex gap-2 text-customGray">
-                {startTime} <span>-</span> {endTime}
+              <span className="flex gap-2 text-base font-light text-customGray">
+                {format(parseDate(startDate), 'HH:mm')} <span>-</span>{' '}
+                {format(parseDate(endDate), 'HH:mm')}
               </span>
             </span>
 
-            <p className="flex items-center gap-2 font-semibold text-black break-words">
-              <Icon name="map-pin" />
+            <p className="flex items-center gap-2 text-base leading-tight break-words text-customGray">
+              <MapPinIcon name="location" className="w-5 h-5" />
               {location}
             </p>
-          </span>
+          </Link>
         </span>
       </span>
-    </Link>
+    </div>
   );
 };
 

@@ -1,14 +1,13 @@
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 // Components
 import {
   LanguageSwitcher,
   Login,
   UserMenu,
 } from '@/components/layout/content/header/toolbar/index';
-// User validation
-import { useUserAuthObserver } from '@/hooks/auth';
 // Helpers
 import { CurrentColor, FormStyles } from '@/helpers';
 // Icons
@@ -17,9 +16,11 @@ import {
   GlobeAltIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
+import PanelAuth from '@/components/main/commons/PanelAuth';
+import MenuUser from '@/components/main/commons/MenuUser';
 
 export const ToolBar = () => {
-  const { user: existUser, queryClient, isLoading } = useUserAuthObserver();
+  const { data: session } = useSession();
   const t = useTranslations('Header_Tool');
   const tc = useTranslations('Common_Forms');
   const currentColor = CurrentColor();
@@ -89,13 +90,13 @@ export const ToolBar = () => {
             </div>
           </div>
         </div>
-        {existUser ? (
+        {session ? (
           <div className="flex basis-1/2 justify-end lg:flex lg:basis-1/6 lg:justify-end my-4">
-            <UserMenu />
+            <MenuUser />
           </div>
         ) : (
           <div className="flex basis-1/2 justify-end lg:flex lg:basis-1/6 lg:justify-end">
-            <Login currentColor={currentColor} />
+            <PanelAuth currentColor={currentColor} />
           </div>
         )}
       </nav>

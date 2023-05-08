@@ -6,16 +6,19 @@ import { CurrentColor } from '@/helpers';
 import { CpuChipIcon, PencilIcon } from '@heroicons/react/20/solid';
 
 type Props = {
-    id: string,
-    name: string,
-    type: string,
-    number: string,
-    exp: string
+    id?: string,
+    name?: string,
+    type?: string,
+    number?: string,
+    expMonth?: number,
+    expYear?: number
 }
 
-export const CustomCard = ({ id, name, type, number, exp }: Props) => {
+export const CustomCard = ({ id, name, type, number, expMonth, expYear }: Props) => {
+
     const currentColor = CurrentColor();
     const t = useTranslations("Panel_Profile_Card");
+    const newExpYear = String(expYear).slice(2)
 
     return (
         <div key={id} className="overflow-hidden rounded-lg bg-white shadow">
@@ -26,7 +29,7 @@ export const CustomCard = ({ id, name, type, number, exp }: Props) => {
                             <CpuChipIcon className='w-6 h-6' aria-hidden="true" />
                         </div>
                         <div className='text-customGreen -mt-3'>
-                            <Link href="/panel/profile/card/create">
+                            <Link href="/panel/profile/card/update">
                                 <div className="border-white bg-white rounded-full w-7 h-7 flex align-middle justify-center py-1">
                                     <PencilIcon className='w-5 h-5' aria-hidden="true" />
                                 </div>
@@ -46,7 +49,7 @@ export const CustomCard = ({ id, name, type, number, exp }: Props) => {
                             {name}
                         </div>
                         <div className="text-customGray">
-                            {exp}
+                            {`${expMonth} / ${newExpYear}`}
                         </div>
                     </div>
                 </div>

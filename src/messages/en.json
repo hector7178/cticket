@@ -77,35 +77,26 @@
       "term": "Terms and Conditions"
     }
   },
-
   "Landing_Comment_Btns": "/////////////////////////////////////// Buttons",
   "btn": {
     "form_back": "Back to form",
-
     "subscribe_me": "Subscribe me",
     "contact_us": "Contact Us",
     "create_event": "Create An Event",
-
     "form_change": "Change",
-
     "form_delete": "Delete",
     "form_delete_account": "Delete Account",
-
     "form_cancel": "Cancel",
     "form_save": "Save",
     "form_send": "Send",
     "form_add": "Add",
     "form_trace": "Trace Route",
-
     "form_clear_filters": "Clear Filters",
     "form_apply_filters": "Apply Filters",
-
     "new_card": "Add new card",
-
     "add_event": "Create Event",
     "add_discount": "Create Discount",
     "add_event_special_category": "Create Spacial Category",
-
     "add_event_category": "Create Category",
     "add_event_subcategory": "Create Subcategory",
     "add_event_subsubcategory": "Create Sub-Subcategory",
@@ -113,28 +104,24 @@
     "add_event_tag": "Create Tags",
     "add_event_venue": "Create Venue",
     "add_event_venue_category": "Create Venue Category",
-
     "add_ticket": "Create Ticket",
     "add_user_app": "Create APP User",
     "add_user_pos": "Create POS User",
-
-    "add_user_system": "Create System User"
+    "add_user_system": "Create System User",
+    "form_create_template": "Create Template",
+    "form_load_template": "Load Template"
   },
-
   "Landing_Comment_Table": "/////////////////////////////////////// Tables",
   "table": {
     "page": "Page",
     "of": "of",
     "results": "results",
-
     "init": "Init",
     "previous": "Previous",
     "next": "Next",
     "end": "End",
-
     "showing": "Showing"
   },
-
   "Landing_Comment_Table_Columns": "/////////////////////////////////////// Tables Columns",
   "table_columns": {
     "status": "Status",
@@ -234,8 +221,8 @@
         "available": "Available",
         "sold": "Sold",
         "attendance": "Attendance",
+        "cost": "Cost",
         "earns": "Earns",
-
         "phase": "Phase",
         "start_at": "Start At",
         "end_at": "End At"
@@ -255,229 +242,192 @@
       }
     }
   },
-
   "Landing_Comment_About": "/////////////////////////////////////// Landing Page About Section",
   "About": {
     "page": "About Us",
-
     "about": "About our company",
     "about_desc": "We are a company focused on the dissemination of cultural events worldwide.",
-
     "mision": "Mision",
     "mision_desc": "Allow to disseminate, promote and find cultural events through a single medium.",
-
     "vision": "Vision",
     "vision_desc": "To be the main and distinctive digital medium for the diffusion and search of events",
-
     "offert": "What we offer?",
-
     "public": "Publish your events for free.",
     "visualize": "View according to your geographical area.",
     "mark": "Mark your events as I am interested or I will attend.",
     "share": "Share your favorite events.",
     "route": "Trace the route to the event."
   },
-
   "Landing_Comment_Advert": "/////////////////////////////////////// Landing Page Advert Section",
   "Advert": {
     "page": "Advertisements",
-
     "question": "Do you want to advertise with us?",
     "answer": "We have the following advertising options",
-
     "target": "Targeted advertising to events",
     "target_desc": "Advertise your events on our website and mobile app by appearing in recommended events.",
-
     "social": "Social Media",
     "social_desc": "We offer you the possibility of creating a specialized campaign to publicize your event on social networks.\n\n We offer you to be advertised on our social networks with the creative support of our marketing team.",
-
     "advert": "Advertisements",
     "advert_desc": "Banners and Recommendations\n\n It appears in the different sections of the website and mobile application, this service can be contracted from the administrative panel as an event promoter.",
-
     "newsletter": "Newsletter",
     "newsletter_desc": "Do you want to appear in our newsletter? We offer you a space for your company in our monthly newsletter.",
-
     "ticket": "Tickets",
     "ticket_desc": "Advertise on our digital and physical tickets."
   },
-
   "Landing_Comment_Contact": "/////////////////////////////////////// Landing Page Contact Section",
   "Contact": {
     "page": "Contact Us",
-
     "title": "Get in touch",
     "subtitle": "We want to know more about you",
-
     "success_title": "Your message has been sent successfully",
     "success_subtitle": "Thank you very much, we will contact you as soon as possible!",
-
     "error_title": "An error occurred",
     "error_subtitle": "Please try again or contact us through our social networks or WhatsApp.",
-
     "address": "Address",
     "phone": "Phones",
     "email": "Emails"
   },
-
   "Landing_Comment_Donation": "/////////////////////////////////////// Landing Page Donation Section",
   "Donation": {
     "page": "Donation",
-
     "question": "Do you want your foundation to receive any of our donations?",
     "answer": "Get in touch with us, we will send you the requirements to include in our donation program.",
-
     "how_question": "How does it work?",
     "how_answer": "The promoter publishes and sells his tickets with us, the promoter proposes, chooses or allows us to choose a foundation from our list.\n\nOnce the net proceeds are obtained, we set aside 2% per ticket and donate it to the chosen foundation.",
-
     "fundations": "Our fundations"
   },
-
   "Landing_Comment_Newsletter": "/////////////////////////////////////// Landing Page Newsletter Section",
   "Newsletter": {
     "page": "Newsletter",
-
     "title": "Subscribe to our newsletter",
     "subtitle": "Join our newsletter to stay up to date with cultural news and upcoming events.",
-
     "success_title": "Thanks for subscribe to our newsletter.",
     "error_title": "An error occurred, please try again.",
-
     "email": "Email address",
     "email_placeholder": "Enter your email",
-
     "weekly": "Weekly Articles",
     "weekly_desc": "Recibe the latest events, news, articles, and resources.",
-
     "spam": "No spam",
     "spam_desc": "We will only send you information related to our services."
   },
-
   "Landing_Comment_Partners": "/////////////////////////////////////// Landing Page Partners Section",
   "Partners": {
     "page": "Partners",
-
     "question": "Do you want to be part of our alliances or partners?",
     "answer": "Communicate through any means of contact and lets work together to take culture to another level.",
-
     "resume": "At CTickets we have the best alliances and strategic partners, which allow us to bring you closer to culture and provide you with the best quality in all our services.",
     "alliances": "Strategic Alliances",
     "partners": "Partners"
   },
-
   "Landing_Comment_Ticket": "/////////////////////////////////////// Landing Page Ticket Section",
   "Ticket": {
     "page": "Ticket Info",
-
     "header_title": "Advanced Event Management",
     "header_subtitle": "Promote, sell and manage tickets for your events.",
     "header_start": "Start now, it's free",
-
     "title": "Your Event, Your Rules",
     "subtitle": "Manage all your events in one place.",
-
     "monitor": "Monitor the scope of your events through an administrative panel",
     "monitor_desc": "Translate data into information, process the one that leads to higher profits and better marketing strategies.",
     "monitor_list_1": "Visits",
     "monitor_list_2": "Likes",
     "monitor_list_3": "Shared",
-
     "sell": "Sell tickets on-line",
     "sell_desc": "We offer the availability of ticket office with the lowest commission in the market.",
     "sell_list_1": "Sell immediately",
     "sell_list_2": "Flexible prices",
     "sell_list_3": "If your even is free, our services are too",
-
     "marketing": "Advertising and Marketing",
     "marketing_desc": "Reach millions of regular event attendees through our mobile app, website, social media, tickets, newsletter and blog.",
     "marketing_list_1": "Competitive prices",
     "marketing_list_2": "Dissemination at the local, state, national or international level",
-
     "design": "Design and Content",
     "design_desc": "Our creative team is at your disposal for the creation and design of content to generate the best possible experience",
     "design_list_1": "Event templates",
     "design_list_2": "Advertisement",
-
     "client": "Attention to the Client",
     "client_desc": "We have your back with our customer service, we also take care of your customers doubts.",
     "client_list_1": "Our team is your team",
     "client_list_2": " Count on us"
   },
-
   "Landing_Comment_Cookie": "/////////////////////////////////////// Landing Page Cookie Section",
   "Cookie": {
     "page": "Cookies Policy"
   },
-
   "Landing_Comment_Privacy": "/////////////////////////////////////// Landing Page Privacy Section",
   "Privacy": {
     "page": "Privacy Policy"
   },
-
   "Landing_Comment_Terms": "/////////////////////////////////////// Landing Page Terms Section",
   "Term": {
     "page": "Terms and Conditions"
   },
-
   "Access_Comment": "/////////////////////////////////////// Access Section",
   "Access": {
     "title": "Sign in",
-
     "subtitle_new": "New to CTickets",
     "subtitle_new_link": "Sign up for free",
     "subtitle_have": "You have an account?",
-
     "forgot": "Forgot password?",
     "signin": "Sign in",
     "signup": "Sign Up",
-    "continue": "Or continue with"
+    "continue": "Or continue with",
+    "firstname": "First name",
+    "surname": "Surname",
+    "password": "Password",
+    "repeat": "Repeat password",
+    "remember": "Remember",
+    "send_link": "Send confirmation link",
+    "back": "Back to Sign In",
+    "email": "Email",
+    "birthday": "Birthday",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "sex": "Sex"
   },
-
   "Panel_Comment": "/////////////////////////////////////// Panel Section",
   "Panel": {
     "title": "Control Panel"
   },
-
   "Panel_Profile_Card_Comment": "/////////////////////////////////////// Panel Profile Card",
   "Panel_Profile_Card": {
     "message": "Please add a debit card, this card will allow us to transfer the money from your tickets during the first 10 days after the event is finished.",
     "credit": "Credit",
     "debit": "Debit"
   },
-
   "Panel_Profile_Category_Comment": "/////////////////////////////////////// Panel Profile Category",
   "Panel_Profile_Category": {
     "message": "Select the categories you want to display on your home page."
   },
-
   "Panel_Profile_Delete_Comment": "/////////////////////////////////////// Panel Profile Delete",
   "Panel_Profile_Delete": {
     "message": "If you delete your account, your private data will be erased permanently and you will not be able to access the mobile application or web page.",
     "confirm_email": "We’ll send an confirmation email for your delete request.",
-
     "why": "Why are you deleting your account?"
   },
-
   "Panel_Profile_Request_Comment": "/////////////////////////////////////// Panel Profile Request",
   "Panel_Profile_Request": {
     "text_drag_n_drop": "or drag and drop",
     "text_up_to": "up to"
   },
-
   "Panel_Event_Comment": "/////////////////////////////////////// Panel Event ",
   "Panel_Event": {
     "discount": "or drag and drop"
   },
-
   "Panel_Event_Discount_Comment": "/////////////////////////////////////// Panel Event Discount",
   "Panel_Event_Discount": {
     "discount": "or drag and drop"
   },
-
   "Panel_Event_Special_Comment": "/////////////////////////////////////// Panel Event Special Category",
   "Panel_Event_Special": {
     "sepcial": "Sepcial Category"
   },
-
+  "Panel_Event_Add_Schedule_Comment:": "/////////////////////////////////////// Panel Event Add Schedule",
+  "Panel_Event_Add_Schedule": {
+    "title": "Add Schedule",
+    "reply": "Reply the information the next days:"
+  },
   "Panel_Comment_Menu": "/////////////////////////////////////// Panel Menu Section",
   "Panel_Menu": {
     "dashboard": "Dashboard",
@@ -487,13 +437,13 @@
     "ticket": "Tickets",
     "admin": "Admin"
   },
-
   "Panel_Comment_SideBar": "/////////////////////////////////////// Panel SideBar Section",
   "Panel_SideBar": {
     "dashboard": "Dashboard",
     "user": "User",
     "actions": {
-      "create": "Create"
+      "create": "Create",
+      "update": "Update"
     },
     "profile": {
       "favorite": "Favorites",
@@ -517,12 +467,16 @@
     "event": {
       "event": "Events",
       "discount": "Discount",
-      "special": "Special Category"
+      "special": "Special Category",
+      "section": "Event Section"
     },
     "ticket": {
       "ticket": "Tickets",
       "list": "List",
       "refund": "Refund",
+      "subscription": {
+        "subscription": "Subscription"
+      },
       "user": {
         "user": "Users",
         "app": "Application",
@@ -551,132 +505,100 @@
       "user": "Users"
     }
   },
-
   "Forms": "/////////////////////////////////////// Forms",
   "Common_Forms": {
     "rs_photo": "user photo",
     "loading": "Loading",
-
     "field_rol": "Rol",
     "field_select_rol": "Select Rol...",
-
     "field_event": "Event",
     "field_select_event": "Select the event...",
-
     "field_event_datetime": "Select event datetime",
     "field_select_event_datetime": "Select event datetime...",
-
     "field_event_seatmap": "Select event seatmap",
     "field_select_event_seatmap": "Select event seatmap...",
-
     "field_cuopon": "Cuopon",
     "field_discount": "Discount",
     "field_limit": "Tickets Limit",
     "field_init_at": "Init at",
     "field_expired_at": "Expires at",
-
     "field_url": "URL",
+    "field_streaming": "Streaming URL",
     "field_type": "Type",
     "field_data_url": "Data URL",
     "field_key": "Key",
-
     "field_name": "Name",
     "field_description": "Description",
-
     "field_facebook": "Facebook",
     "field_instagram": "Instagram",
     "field_twitter": "Twitter",
-
     "field_age_limit": "Age Limit",
     "field_duration": "Duration",
-
     "field_general": "General",
     "field_observations": "Observations",
     "field_service": "Services",
     "field_restriction": "Restrictions",
     "field_limit_access": "Limit Access",
-
     "field_defined": "Defined",
     "field_range": "Range",
     "field_initial_date": "Initial Date",
     "field_final_date": "Final Date",
-
     "field_supplier": "Supplier",
     "field_select_supplier": "Select Supplier...",
-
     "field_special_categories": "Special Categories",
     "field_special_category": "Special Category",
     "field_select_special_category": "Select Special Category...",
-
     "field_categories": "Categories",
     "field_category": "Category",
     "field_select_category": "Select Category...",
-
     "field_subcategories": "Subcategories",
     "field_subcategory": "Subcategory",
     "field_select_subcategory": "Select Subcategory...",
-
     "field_subsubcategories": "Sub-Subategories",
     "field_subsubcategory": "Sub-Subategory",
     "field_select_subsubcategory": "Select Sub-Subategory...",
-
+    "field_select_age_limit": "Age Limit",
     "field_range_date": "Range Date",
     "field_location": "Location",
     "field_select_location": "Select Location",
-
     "field_lang": "Lenguage",
     "field_add_lang": "Add Language",
     "field_search": "Search",
     "auto_search": "search",
     "place_search": "Search...",
-
     "field_pass": "Password",
     "auto_pass": "current-password",
-
     "field_newpass": "New Password",
     "auto_newpass": "new-password",
-
     "field_repass": "Repeat Password",
     "field_remember": "Remember me",
-
     "field_firstname": "First name",
     "auto_firstname": "given name",
-
     "field_surname": "Surname",
     "auto_surname": "family name",
-
     "field_username": "Username",
     "auto_username": "username",
-
     "field_email": "Email",
     "auto_email": "email",
-
     "field_phone": "Phone",
     "auto_phone": "phone",
-
+    "field_phone_type": "Type",
+    "auto_phone_type": "phone type",
     "field_subject": "Subject",
     "auto_subject": "subject",
-
     "field_message": "Message",
     "auto_message": "message",
-
     "field_photo": "Photo",
-
     "field_sex": "Sex",
     "place_sex": "Select your sex",
-
     "field_birthday": "Birthday",
     "auto_birthday": "birthday",
-
     "field_addressname": "Address Name",
     "auto_addressname": "address name",
-
     "field_venuename": "Venue Name",
     "auto_venuename": "venue name",
-
     "field_searchaddress": "Search with Google...",
     "auto_searchaddress": "Search the address",
-
     "field_address": "Address",
     "auto_address": "Enter the adddress",
     "field_address2": "Address 2",
@@ -689,43 +611,84 @@
     "auto_state": "state",
     "field_city": "City",
     "auto_city": "City",
-
     "field_businessname": "Business Name",
     "auto_businessname": "business name",
     "field_rfc": "RFC",
     "auto_rfc": "RFC",
     "field_cfdi": "CFDI",
     "auto_cfdi": "CFDI",
-
     "field_front_id": "Front ID",
     "field_back_id": "Back ID",
     "field_selfie": "Selfie",
     "field_upload_file": "Upload a file",
-
     "field_notification": "Notifications",
     "field_tags": "Tags",
     "auto_tags": "tags",
-
     "field_start": "Start",
     "field_end": "End",
     "field_amount": "Amount",
     "field_porcentage": "Porcentage",
-
     "field_fees": "Fees",
     "field_months_without": "Months Whitout Interests",
     "field_month": "Months",
     "field_months": "Months",
     "field_quota": "Quota",
-
     "field_header": "Upload an image for your Header",
     "field_icon": "Upload an icon for your category",
     "field_color": "Pick a color for your category",
-
     "field_event_image_web": "Upload an image for your Event (Web)",
     "field_event_image_app": "Upload an image for your Event (App)",
-    "field_event_image_flyer": "Upload an image for your Flyer"
-  },
+    "field_event_image_flyer": "Upload an image for your Flyer",
 
+    "field_initial_hour": "Initial Hour",
+    "field_final_hour": "Final Hour",
+
+    "field_low_cost": "Low Cost",
+    "field_regular_cost": "Regular Cost",
+    "field_high_cost": "High Cost",
+
+    "field_monday": "Monday",
+    "field_tuesday": "Tuesday",
+    "field_wednesday": "Wednesday",
+    "field_thursday": "Thursday",
+    "field_friday": "Friday",
+    "field_saturday": "Saturday",
+    "field_sunday": "Sunday",
+
+    "field_requested": "Requested At",
+    "field_accept": "Accept",
+    "field_comment": "Comment",
+    "field_venue": "Venue name",
+    "field_generic_rules": "Generic Rules",
+    "field_children_rules": "Children Rules",
+    "field_accessible": "Accessible Seats",
+    "field_currency": "Currency",
+    "field_cost": "Cost",
+    "field_box_office": "Number",
+    "field_cash": "Cash",
+    "field_credit": "Credit",
+    "field_debit": "Debit Card",
+    "field_day": "Day",
+    "field_event_date": "Date",
+    "field_schedule": "Schedule",
+    "field_resale": "Resale",
+    "field_reserve": "Reserve",
+    "field_starting_date": "Starting Date",
+    "field_ending_date": "Ending Date",
+    "field_cost_porcentage": "Cost Percentage",
+    "field_pay_limit": "Pay Limit (Days)",
+    "field_free_event": "Free Event",
+    "field_charity": "Charity",
+    "field_subscription": "Subscription",
+    "field_sell_limit": "Sell Limit per Person",
+    "field_sale_start": "Sale Start",
+    "field_pre_sale_start": "Pre-sale Start (optional)",
+    "field_enable_months": "Enable months without interest",
+    "field_three_months": "3 Months",
+    "field_six_months": "6 Months",
+    "field_nine_months": "9 Months",
+    "field_date": "Date"
+  },
   "Public_Comment": "/////////////////////////////////////// Public Comment",
   "Public": {
     "commons": {
@@ -751,19 +714,15 @@
     "event": {
       "product_info": "Product Information",
       "share_on": "Share event on",
-
       "cost": "Cost",
       "date": "Date",
       "time": "Time",
       "location": "Location",
       "buy": "Buy Ticket",
-
       "supplier": "Supplier",
-
       "description": "Description",
       "information": "Information",
       "location_map": "Location Map",
-
       "attend": "I will attend"
     },
     "program": {
@@ -772,7 +731,20 @@
   },
   "Main_Comment_Commons": "/////////////////////////////////////// Commons",
   "Ferrors": {
-    "required": "Required"
+    "required": "Required",
+    "select_one_day_at_least": "Select one day of the week at least",
+    "url": "Invalid url",
+    "passwords_not_match": "Passwords does not match"
+  },
+  "Fsuccess": {
+    "schedule_added": "Schedule added",
+    "schedules_added": "Schedules added",
+    "url": "Invalid url",
+    "signin_succesfully": "Sign in succesfully",
+    "deleted": "Deleted",
+    "updated": "Updated",
+    "ticket_added": "Ticket added",
+    "venue_added": "Event Venue added"
   },
   "Main_Comment_Molecules": "/////////////////////////////////////// Molecules",
   "Card_Event_Queue": {
@@ -805,7 +777,6 @@
     "location": "Location",
     "description": "Description"
   },
-
   "Main_Comment_Organisms": "/////////////////////////////////////// Organisms",
   "List_Card_Category": {
     "title": "Categories"
@@ -813,9 +784,10 @@
   "List_Program_Days": {
     "program": "Program"
   },
-
   "Sidebar_Event": {
     "cost": "Cost: {value}",
+    "cost_label": "Cost:",
+    "cost_value": "{value}",
     "date": "Date:",
     "time": "Time:",
     "location": "Location:",
@@ -826,7 +798,8 @@
   "Card_Event_Details": {
     "read_more": "Read more...",
     "shared_event": "Shared event:",
-    "event_details": "Event Details",
+    "description": "Description",
+    "information": "Information",
     "restrictions": "Restrictions:",
     "general": "General:",
     "observations": "Observations:",
@@ -978,5 +951,61 @@
     "search": "Search",
     "subscribe": "Subscribe",
     "email": "Email"
+  },
+  "Panel_Dashboard_Comment": "//////////////////////////////////////// Panel Dashboard Comment",
+  "Panel_Dashboard": {
+    "pending": "Pending Payments",
+
+    "my_ticket": "My Tickets",
+    "old_ticket": "My Old Tickets",
+    "favorite": "Favorites",
+    "assist": "I Will Asist",
+
+    "active": "Active Events",
+    "visit": "Visits",
+    "attend": "Attend",
+    "shared": "Shared",
+
+    "available": "Available",
+    "sold": "Sold",
+    "attendance": "Attendance",
+    "earns": "Earns",
+
+    "sold_ticket": "Sold Tickets",
+    "income": "Incomes",
+    "soft_ticket": "Soft Tickets",
+    "hard_ticket": "Hard Tickets",
+    "email_ticket": "Emailed Tickets",
+
+    "likes": "Likes",
+    "assisted": "Assisted",
+
+    "top_events": "Top 5 Events"
+  },
+  "Toast": {
+    "event_tag": {
+      "create": {
+        "success": "Created Tag Successfully!",
+        "error": "Error while tag is created!"
+      },
+      "update": {
+        "success": "Update Tag Successfully!",
+        "error": "Error while tag is updated!"
+      }
+    }
+  },
+  "Panel_Ticket_Comment": "//////////////////////////////////////// Panel Ticket Comment",
+  "Panel_Ticket": {
+    "ticket": "Ticket",
+    "commission": "Commissions of months without interest (these commissions will be added two the fees):",
+    "for": "for",
+    "template": "Template"
+  },
+  "Panel_Section_Organisms_Comment": "//////////////////////////////////////// Panel Section Comment",
+  "ListCardEventTemplate": {
+    "title": "Select template type",
+    "stadium": "Stadium",
+    "concert": "Concert",
+    "forum": "Forum"
   }
 }

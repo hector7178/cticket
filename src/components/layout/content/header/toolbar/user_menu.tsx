@@ -1,27 +1,20 @@
 /** @format */
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-// Auth
-import { useUserAuthObserver } from '@/hooks/auth';
-import { logout_firebase } from '@/lib/firebase_auth';
 // Helpers
 import { classNames } from '@/helpers';
 // Icons
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { signOut, useSession } from 'next-auth/react';
 
 export const UserMenu = () => {
-  const { user: existUser, queryClient, isLoading } = useUserAuthObserver();
-  const logout_ = () => {
-    queryClient.setQueryData(['user'], () => null);
-    localStorage.clear();
-    logout_firebase();
-  };
+  const { data: session } = useSession();
 
   const userNavigation = [
     { name: 'Your Profile', onclick: () => {}, href: '/panel/profile' },
     { name: 'Settings', onclick: () => {}, href: '/panel/profile/config' },
-    { name: 'Sign out', onClick: logout_, href: '/' },
+    { name: 'Sign out', onClick: () => signOut(), href: '/' },
   ];
 
   return (
@@ -30,7 +23,7 @@ export const UserMenu = () => {
       <Menu as="div" className="relative flex-shrink-0">
         <div className="mr-2">
           <Menu.Button className="flex px-2 rounded-full text-sm text-white focus:bg-sky-900 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-sky-900">
-            <span className="pr-2">email.aquí@gmail.com</span>
+            <span className="pr-2">Ivan Ruíz</span>
             <span className="sr-only">Open user menu</span>
             <ChevronDownIcon className="w-4 h4" />
           </Menu.Button>

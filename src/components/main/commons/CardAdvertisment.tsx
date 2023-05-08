@@ -18,10 +18,10 @@ const CardAdvertisment: React.FC<props> = ({
       className={classNames(
         'relative w-full',
         className,
-        size == 'small' ? 'h-40' : 'h-56'
+        size == 'small' ? 'h-40' : 'h-48'
       )}
     >
-      <Image src={image} alt="" className="object-cover" fill />
+      <Image src={image} alt="" className="object-fill" fill />
     </div>
   );
 };

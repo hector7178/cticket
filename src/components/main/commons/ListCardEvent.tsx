@@ -25,15 +25,20 @@ import {
 } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
 import DrawerSearchFilters from '@/components/main/commons/DrawerSearchFilters';
+import { EventCategory } from '@/interfaces/event';
 
 export type props = {
   className?: string;
   title: string;
   layout?: 'grid' | 'columns' | 'swiper';
   controls?: boolean;
-  items?: CardEventProps[];
+  items: CardEventProps[];
   loading: boolean;
   totalDocs: number;
+  categories?: EventCategory[];
+  isFetchingNextPage?: boolean;
+  hasNextPage?: boolean;
+  fetchNextPage?: () => void;
 } & PaginationProps &
   UseFormReturn<any>;
 
@@ -47,6 +52,10 @@ const ListCardEvent: React.FC<props> = ({
   totalDocs,
   setPageSize,
   setCurrentPage,
+  categories,
+  isFetchingNextPage,
+  hasNextPage,
+  fetchNextPage,
   ...useFormReturn
 }) => {
   const swiperRef = useRef(null);
@@ -159,16 +168,26 @@ const ListCardEvent: React.FC<props> = ({
           <MagnifyingGlassIcon className="w-16 h-16" />
           <p className="font-bold mt-5">{t('not_results')}</p>
         </div>
-      </WrapperLoader>
+      </WrapperLoader>{' '}
       {layout !== 'swiper' && (
-        <Pagination
-          className="mt-5"
-          totalDocs={totalDocs}
-          setPageSize={setPageSize}
-          setCurrentPage={setCurrentPage}
-        />
+        <div className="flex justify-center mt-5">
+          {hasNextPage && (
+            <Button
+              className="mx-auto mt-5"
+              loading={isFetchingNextPage}
+              onClick={() => {
+                if (!isFetchingNextPage) {
+                  fetchNextPage();
+                }
+              }}
+            >
+              Load More
+            </Button>
+          )}
+        </div>
       )}
       <DrawerSearchFilters
+        categories={categories}
         isOpen={drawerFilters}
         close={() => setDrawerFilters(false)}
         {...useFormReturn}

@@ -1,14 +1,15 @@
-import { useTranslations } from "next-intl";
+import { useTranslations } from 'next-intl';
 
-export const CustomCancel = () => {
-    const t = useTranslations("btn");
+export const CustomCancel = (props) => {
+  const t = useTranslations('btn');
 
-    return (
-        <button
-            type="button"
-            className={`inline-flex justify-center rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50`}
-        >
-            {t('form_cancel')}
-        </button>
-    )
-}
+  return (
+    <button
+      {...props}
+      type="button"
+      className={`inline-flex justify-center rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50`}
+    >
+      {t('form_cancel')}
+    </button>
+  );
+};

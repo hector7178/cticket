@@ -45,13 +45,13 @@ const TicketAppUserCreate = () => {
                             <div className="flex-grow space-y-6">
                                 <div className="grid grid-cols-12 gap-6">
                                     <div className="col-span-12">
-                                        <CustomLabel field="email" name={tc('field_email')} />
+                                        <CustomLabel field="username" name={tc('field_username')} />
                                         <input
-                                            type="email"
-                                            name="email"
-                                            id="email"
-                                            autoComplete={tc('auto_email')}
-                                            placeholder={tc('field_email')}
+                                            type="text"
+                                            name="username"
+                                            id="username"
+                                            autoComplete={tc('auto_username')}
+                                            placeholder={tc('field_username')}
                                             className={FormStyles('input')}
                                         />
                                     </div>

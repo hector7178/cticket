@@ -9,23 +9,22 @@ import DateRangePicker from '@/components/commons/DateRangePicker';
 import { format } from 'date-fns';
 import { EventCategory } from '@/interfaces/event';
 import { useRouter } from 'next/router';
+import { CalendarIcon } from '@heroicons/react/20/solid';
 
 export type props = {
   className?: string;
+  categories: EventCategory[];
   close?: () => void;
 } & UseFormReturn;
 
 const SidebarSearch: React.FC<props> = ({
   className,
   close,
+  categories,
   ...useFormReturn
 }) => {
   const { register, control, watch, setValue } = useFormReturn;
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const categories = useQuery<EventCategory[]>({
-    queryKey: ['categories'],
-    queryFn: getEventsCategories,
-  });
   const { push, query, pathname } = useRouter();
   const t = useTranslations('Drawer_Search_Filters');
   const locale = useLocale();
@@ -33,10 +32,11 @@ const SidebarSearch: React.FC<props> = ({
   const sub_category = watch('sub_category');
   const sub_sub_category = watch('sub_sub_category');
   const dateRange = watch('date-range');
-  const categoriesArray = categories?.data
-    ? categories?.data?.map((item) => ({
+  const address = watch('location');
+  const categoriesArray = categories
+    ? categories?.map((item) => ({
         name: item?.category?.find((obj) => obj.lang == locale)?.name,
-        value: item?.category?.find((obj) => obj.lang == locale)?.name,
+        value: item._id,
       }))
     : [];
   const categoriesOptions = [
@@ -59,16 +59,16 @@ const SidebarSearch: React.FC<props> = ({
   ].concat(categoriesArray);
   useEffect(() => {
     if (dateRange?.[0]) {
-      setValue('initial_date', format(new Date(dateRange?.[0]), 'dd/mm/yyyy'));
+      setValue('initial_date', format(new Date(dateRange?.[0]), 'dd/MM/yyyy'));
     }
     if (dateRange?.[1]) {
-      setValue('finish_date', format(new Date(dateRange?.[1]), 'dd/mm/yyyy'));
+      setValue('finish_date', format(new Date(dateRange?.[1]), 'dd/MM/yyyy'));
     }
   }, [dateRange?.[0], dateRange?.[1]]);
   useEffect(() => {
     if (formSubmitted) {
-      let updatedQuery = query;
-      if (category) {
+      let updatedQuery = { ...query };
+      if (category && category !== '') {
         updatedQuery = {
           ...updatedQuery,
           category,
@@ -111,6 +111,18 @@ const SidebarSearch: React.FC<props> = ({
         delete query?.finish_date;
       }
 
+      if (address) {
+        updatedQuery = {
+          ...updatedQuery,
+          address,
+        };
+      } else {
+        const { address, ...rest } = updatedQuery;
+        updatedQuery = {
+          ...rest,
+        };
+      }
+
       push(
         {
           pathname: pathname == '/search' ? '/search' : '/program',
@@ -130,12 +142,13 @@ const SidebarSearch: React.FC<props> = ({
     formSubmitted,
     dateRange?.[0],
     dateRange?.[1],
+    address,
   ]);
   return (
     <div className={classNames('relative h-max', className)}>
       <div
         className={classNames(
-          'flex h-full flex-col overflow-y-auto bg-white py-6 shadow-xl',
+          'flex h-full flex-col overflow-y-auto overflow-x-visible bg-white py-6 shadow-xl',
           !close && 'rounded-xl'
         )}
       >
@@ -151,24 +164,28 @@ const SidebarSearch: React.FC<props> = ({
               />
             )}
           </div>
-          <div className="mt-5 space-y-2">
-            <Title level="h5">{t('category')}</Title>
-            <hr className="border-gray-200" />
-          </div>
+          {pathname.includes('search') && (
+            <>
+              <div className="mt-5 space-y-2">
+                <Title level="h5">{t('category')}</Title>
+                <hr className="border-gray-200" />
+              </div>
 
-          <Select options={categoriesOptions} {...register('category')} />
+              <Select options={categoriesOptions} {...register('category')} />
 
-          <Select
-            label={t('sub_category')}
-            options={subCategoriesOptions}
-            {...register('sub_category')}
-          />
+              <Select
+                label={t('sub_category')}
+                options={subCategoriesOptions}
+                {...register('sub_category')}
+              />
 
-          <Select
-            label={t('sub_sub_category')}
-            options={subsubCategoriesOptions}
-            {...register('sub_sub_category')}
-          />
+              <Select
+                label={t('sub_sub_category')}
+                options={subsubCategoriesOptions}
+                {...register('sub_sub_category')}
+              />
+            </>
+          )}
 
           <div className="mt-5 space-y-2">
             <Title level="h5">{t('dates')}</Title>
@@ -180,12 +197,7 @@ const SidebarSearch: React.FC<props> = ({
               <TextField
                 type="text"
                 readOnly
-                icon={
-                  <Icon
-                    name="calendar-outline"
-                    className="pointer-events-none"
-                  />
-                }
+                icon={<CalendarIcon className="w-5 h-5" />}
                 iconPosition="right"
                 label={t('initial_date')}
                 {...register('initial_date')}
@@ -194,9 +206,7 @@ const SidebarSearch: React.FC<props> = ({
             <TextField
               type="text"
               readOnly
-              icon={
-                <Icon name="calendar-outline" className="pointer-events-none" />
-              }
+              icon={<CalendarIcon className="w-5 h-5" />}
               iconPosition="right"
               label={t('finish_date')}
               {...register('finish_date')}

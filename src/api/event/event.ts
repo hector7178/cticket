@@ -1,31 +1,41 @@
 import axios from '@/lib/axios';
-import { Event } from '@/interfaces/event';
+import { Event, EventNew } from '@/interfaces/event';
 
-export const getEvents = async () => {
-    const { data } = await axios.get(`/events/`);
-    return data;
+export const getEvents = async (pagination) => {
+  const { data } = await axios.get(`/events/`, {
+    params: pagination,
+  });
+  return data;
 };
 
 export const createEvent = async (event: Event) => {
-    const { data } = await axios.post(`/events/`, event);
+  const { data } = await axios.post(`/events/`, event);
 
-    return data;
-}
+  return data;
+};
+
+export const createNewEvent = async (event: EventNew) => {
+  const { data } = await axios.post('/events/newevent', event, {
+    headers: {
+      Accept: 'application/json',
+    },
+  });
+};
 
 export const readEvent = async (id: number) => {
-    const { data } = await axios.get(`/events/${id}`);
+  const { data } = await axios.get(`/events/${id}`);
 
-    return data;
-}
+  return data;
+};
 
-export const updateEvent = async (id: number, event: Event) => {
-    const { data } = await axios.put(`/events/${id}`, event);
+export const updateEvent = async (event: Partial<Event>) => {
+  const { data } = await axios.put(`/events/${event._id}`, event);
 
-    return data;
-}
+  return data;
+};
 
 export const deleteEvent = async (id: number) => {
-    const { data } = await axios.delete(`/events/${id}`);
+  const { data } = await axios.delete(`/events/${id}`);
 
-    return data;
-}
+  return data;
+};

@@ -11,7 +11,12 @@ export type props = {
   setPageSize: any;
 };
 
-const Pagination: React.FC<props> = ({ className, totalDocs, setCurrentPage, setPageSize }) => {
+const Pagination: React.FC<props> = ({
+  className,
+  totalDocs,
+  setCurrentPage,
+  setPageSize,
+}) => {
   const router = useRouter();
   const { page, size } = router.query;
 
@@ -21,7 +26,7 @@ const Pagination: React.FC<props> = ({ className, totalDocs, setCurrentPage, set
   }, [page, size]);
   return (
     <div className={classNames(className, 'text-black')}>
-      <NextPaginate total={totalDocs} sizes={[10, 20, 40, 60, 80, 100]} />
+      <NextPaginate total={totalDocs} sizes={[10, 20, 40, 50, 80, 100]} />
     </div>
   );
 };

@@ -6,8 +6,13 @@ import { useTranslations } from 'next-intl';
 export type props = {
   className?: string;
   changeColor?: boolean;
+  onClick?: () => void;
 };
-const WillAttend: React.FC<props> = ({ className, changeColor = false }) => {
+const WillAttend: React.FC<props> = ({
+  className,
+  changeColor = false,
+  onClick,
+}) => {
   const t = useTranslations('Public');
   return (
     <button
@@ -16,6 +21,10 @@ const WillAttend: React.FC<props> = ({ className, changeColor = false }) => {
         changeColor ? 'bg-customGreenVan text-white' : 'bg-gray-200 text-black',
         className
       )}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick();
+      }}
     >
       <Icon className="w-3 h-3" name="circle-check-outline" />
       {t('event.attend')}

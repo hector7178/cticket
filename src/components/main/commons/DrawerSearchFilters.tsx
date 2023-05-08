@@ -6,11 +6,13 @@ import { UseFormReturn } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { Button, Icon, Select, TextField, Title } from '@/components/commons';
 import SidebarSearch from './SidebarSearch';
+import { EventCategory } from '@/interfaces/event';
 
 export type props = {
   className?: string;
   isOpen: boolean;
   close: () => void;
+  categories: EventCategory[];
 } & UseFormReturn;
 
 const DrawerSearchFilters: React.FC<props> = ({

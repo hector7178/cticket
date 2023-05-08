@@ -10,6 +10,7 @@ export type props = {
   color: string;
   image: string;
   name: string;
+  id: string;
 };
 
 const CardCategory: React.FC<props> = ({
@@ -18,6 +19,7 @@ const CardCategory: React.FC<props> = ({
   image,
   size = 'large',
   name,
+  id,
 }) => {
   const { query, pathname } = useRouter();
   return (
@@ -27,7 +29,7 @@ const CardCategory: React.FC<props> = ({
         pathname: pathname == '/program' ? '/program' : '/search',
         query: {
           ...query,
-          category: name == query?.category ? null : name,
+          category: id,
         },
       }}
       className={classNames(
@@ -37,7 +39,7 @@ const CardCategory: React.FC<props> = ({
     >
       <span
         className={classNames(
-          'absolute inset-x-0 bottom-0 [box-shadow:_0px_4px_15px_rgba(0,0,0,0.15)] rounded-xl bg-white -z-10',
+          'absolute inset-x-0 bottom-0 [box-shadow:_0px_4px_15px_rgba(0,0,0,0.15)] bg-white rounded-xl -z-10',
           size == 'small' ? 'top-20' : 'top-14'
         )}
       ></span>
@@ -47,7 +49,12 @@ const CardCategory: React.FC<props> = ({
           size == 'small' ? 'h-24' : 'h-36'
         )}
       >
-        <Image className="object-cover" fill src={image} alt="" />
+        <Image
+          className="object-cover"
+          fill
+          src={'https://loremflickr.com/640/480/cats'}
+          alt=""
+        />
       </span>
       <span
         className={classNames(

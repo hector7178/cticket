@@ -7,91 +7,101 @@ import ListCardEvent from '@/components/main/commons/ListCardEvent';
 import SidebarSearch from '@/components/main/commons/SidebarSearch';
 import HeaderCategory from '@/components/main/search/HeaderCategory';
 import HeaderSearch from '@/components/main/search/HeaderSearch';
+import { useEvents } from '@/hooks/event/event';
+import { useEventScheduleTimetables } from '@/hooks/event/event_schedules_timetables';
+import {
+  useEventSpecialCategoryList,
+  useEventsSpecialsCategories,
+} from '@/hooks/event/event_special_category';
 import { faker } from '@faker-js/faker';
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-const Program = () => {
+const Program = ({ categories }) => {
   const useFormReturn = useForm<any>({
     defaultValues: {
       initial_date: 'dd/mm/aaaa',
       finish_date: 'dd/mm/aaaa',
     },
   });
-  const { query: queryObj, push, pathname } = useRouter();
+  const { query: queryObj, push } = useRouter();
   const { watch } = useFormReturn;
   const query = watch('query');
   const t = useTranslations('Public');
   const locale = useLocale();
-  const [heroImages, setHeroImages] = useState([]);
-  const [imageAdvertisment, setImageAdvertisment] = useState('');
-  const categories = useQuery({
-    queryKey: ['categories'],
-    queryFn: getEventsCategories,
-  });
 
-  const events = useQuery({
-    queryKey: ['events'],
-    queryFn: getEvents,
-  });
-
-  const category = categories?.data?.find((item) =>
-    item.category.find((obj) => obj.name == queryObj?.category)
-  );
-
+  const specialCategories = useEventsSpecialsCategories();
+  const [filteredResults, setFilteredResults] = useState([]);
   useEffect(() => {
-    setHeroImages(
-      Array.from({ length: 5 }, () => ({
-        image: faker.image.abstract(),
-      }))
-    );
-    setImageAdvertisment(faker.image.cats());
-  }, []);
-  useEffect(() => {
-    if (query) {
-      push(
-        {
-          pathname: '/program',
-          query: {
-            ...queryObj,
-            query: encodeURIComponent(query),
-          },
-        },
-        undefined,
-        { shallow: true }
-      );
-    } else {
-      delete queryObj?.query;
-      push(
-        {
-          pathname: '/program',
-          query: {
-            ...queryObj,
-          },
-        },
-        undefined,
-        { shallow: true }
-      );
-    }
-  }, [query]);
+    const newFilteredResults = specialCategories.data?.items?.filter((item) => {
+      if (queryObj?.initial_date && queryObj?.finish_date) {
+        console.log('filtering by date');
+        const finalDate = new Date(item.final_date);
+        const initialDate = new Date(item.initial_date);
+        return (
+          initialDate >= new Date(queryObj?.initial_date as string) &&
+          finalDate <= new Date(queryObj?.finish_date as string)
+        );
+      } else if (queryObj?.query) {
+        console.log('filtering by query');
+        const category =
+          item?.category?.find((obj) => obj.lang == locale)?.name ||
+          item?.category?.find((obj) => obj.lang == 'es')?.name;
+        return category
+          .toLowerCase()
+          .includes((queryObj?.query as string).toLowerCase());
+      } else if (queryObj?.address) {
+        console.log('filtering by address');
+        const address =
+          `${item.location.city}, ${item.location.state.long_name} ${item.location.country.long_name}`
+            .normalize('NFD') // remove accent marks
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase() // convert to lowercase
+            .replace(/[^a-z0-9\s]/g, '') // remove non-alphanumeric characters
+            .replace(/\s+/g, ' ') // replace multiple spaces with a single space
+            .trim();
+        console.log('address ', address);
+        return address.includes((queryObj?.address as string).toLowerCase());
+      }
+      return true; // include all items by default
+    });
+
+    setFilteredResults(newFilteredResults);
+  }, [
+    queryObj?.query,
+    queryObj?.address,
+    queryObj?.initial_date,
+    queryObj?.finish_date,
+    specialCategories.isLoading,
+  ]);
+  const category = categories?.find((item) => item._id == queryObj?.category);
   return (
     <div className="mb-44 -mt-8">
-      <Hero items={heroImages} />
+      <Hero
+        items={[
+          {
+            image: '/images/slides/search-slide.png',
+            url: '/images/slides/search-slide.png',
+          },
+        ]}
+      />
       <div className="mt-16 space-y-16 section-container">
         <HeaderSearch
-          items={categories?.data?.map((item) => ({
+          items={categories?.map((item) => ({
             name: item.category.find((obj) => obj.lang == locale)?.name,
             color: item.color,
             image: item.picture,
+            id: item._id,
           }))}
           layout="swiper"
           size="small"
           setCurrentPage={() => {}}
           setPageSize={() => {}}
-          totalDocs={12}
+          totalDocs={categories?.length}
           {...useFormReturn}
         />
         {typeof queryObj?.category == 'string' && queryObj?.category !== '' && (
@@ -99,31 +109,43 @@ const Program = () => {
             color={category?.color}
             image={category?.picture}
             name={category?.category?.find((obj) => obj.lang == locale)?.name}
+            id={category?._id}
             size="large"
           />
         )}
         <div className="grid grid-cols-6 gap-5 md:gap-10">
           <SidebarSearch
+            categories={categories}
             className="col-span-2 hidden md:block"
             {...useFormReturn}
           />
           <ListCardEvent
+            categories={categories}
             className="col-span-6 md:col-span-4"
             controls
-            loading={events?.isLoading}
+            loading={specialCategories.isLoading}
             layout="swiper"
             setCurrentPage={() => {}}
             setPageSize={() => {}}
-            totalDocs={10}
-            title={t('home.new_events')}
-            items={events?.data?.items?.map((item) => ({
+            totalDocs={filteredResults?.length}
+            title={
+              query
+                ? t('commons.results', {
+                    length: filteredResults?.length,
+                    query,
+                  })
+                : t('home.new_events')
+            }
+            items={filteredResults?.map((item) => ({
+              // image: item.event_img,
               image: 'https://loremflickr.com/640/480/cats',
-              name: item.content.find((obj) => obj.lang == locale)?.name,
-              startDate: item.created_at,
-              startTime: '1:00',
-              endTime: '12:00',
-              location: 'Location',
-              category_id: item.category_id?.id,
+              name:
+                item.category.find((obj) => obj.lang == locale)?.name ||
+                item.category.find((obj) => obj.lang == 'es')?.name,
+              startDate: item.initial_date,
+              endDate: item.final_date,
+              location: `${item.location.city}, ${item.location.state.long_name} ${item.location.country.long_name}`,
+              color: item.color,
               id: item._id,
             }))}
             {...useFormReturn}
@@ -133,33 +155,32 @@ const Program = () => {
         <hr className="bg-gray-700 border-[1.3px]" />
 
         <ListCardEvent
-          loading={events?.isLoading}
+          categories={categories}
+          loading={specialCategories?.isLoading}
           layout="swiper"
           setCurrentPage={() => {}}
           setPageSize={() => {}}
-          totalDocs={10}
-          title={
-            query
-              ? t('commons.results', {
-                  length: events?.data?.items?.length,
-                  query,
-                })
-              : t('commons.recommended_events')
-          }
-          items={events?.data?.items?.map((item) => ({
+          totalDocs={specialCategories.data?.total}
+          title={t('commons.recommended_events')}
+          items={specialCategories?.data?.items?.map((item) => ({
+            // image: item.event_img,
             image: 'https://loremflickr.com/640/480/cats',
-            name: item.content.find((obj) => obj.lang == locale)?.name,
-            startDate: item.created_at,
-            startTime: '1:00',
-            endTime: '12:00',
-            location: 'Location',
-            category_id: item.category_id?.id,
+            name:
+              item.category.find((obj) => obj.lang == locale)?.name ||
+              item.category.find((obj) => obj.lang == 'es')?.name,
+            startDate: item.initial_date,
+            endDate: item.final_date,
+            location: `${item.location.city}, ${item.location.state.long_name} ${item.location.country.long_name}`,
+            color: item.color,
             id: item._id,
           }))}
           {...useFormReturn}
         />
 
-        <CardAdvertisment image={imageAdvertisment} size="large" />
+        <CardAdvertisment
+          image="/images/advertisements/anunciate-1320x250.png"
+          size="large"
+        />
       </div>
     </div>
   );
@@ -168,9 +189,13 @@ const Program = () => {
 Program.Layout = MainLayout;
 
 export async function getStaticProps({ locale }) {
+  const { data } = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/events/categories/`
+  );
   return {
     props: {
       messages: (await import(`@/messages/${locale}.json`)).default,
+      categories: data,
     },
   };
 }

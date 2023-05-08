@@ -1,11 +1,17 @@
 import { useTranslations } from "next-intl";
 // Table
 import { createColumnHelper } from '@tanstack/react-table';
-import { Checkbox, Icon, Options, SwitchTable } from "./components";
+import { Checkbox, Icon, OptionsEvent, SwitchEvent } from "./components";
 // Helpers
 import { CurrentColor } from '@/helpers';
+//hooks
 
-export function columnsEventCategory() {
+import {useDeleteEventCategory}from '@/hooks/event/event_category'
+
+export function columnsEventCategory(category?: string) {
+
+const { mutate,isLoading,isError,isSuccess}=useDeleteEventCategory()
+
   const tcc = useTranslations("table_columns");
 
   const currentColor = CurrentColor();
@@ -45,21 +51,28 @@ export function columnsEventCategory() {
     }),
     columnHelper.accessor('category', {
       id: 'category',
-      header: () => tcc('admin.event.category'),
+      header: () =>  tcc('admin.event.category'),
       cell: props => props.getValue()
     }),
     columnHelper.accessor('status', {
       id: 'status',
       header: () => tcc('status'),
-      cell: props => (
-        <SwitchTable color={currentColor} />
-      ),
+      cell: props => {
+        return(
+        <SwitchEvent 
+        color={currentColor}
+        id={props.row.original.id} 
+        status={props.row.original.status} 
+        isSuccess={isSuccess}
+        isError={isError}
+        changeStatus={mutate}/>
+      )},
     }),
     columnHelper.accessor('options', {
       id: 'options',
       header: () => tcc('option'),
       cell: props => (
-        <Options id={props.row.original.id} color={currentColor} />
+        <OptionsEvent id={props.row.original.id} color={currentColor} deleteCategory={mutate}/>
       ),
     })
   ]);

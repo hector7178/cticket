@@ -1,9 +1,19 @@
+import { classNames } from '@/helpers';
 type Props = {
-    error?: string
-}
+  className?: string;
+  error?: any;
+};
 
-export const CustomError = ({ error }: Props) => {
-    return (
-        <p className="py-1 text-sm text-customRed">{error}</p>
-    )
-}
+export const CustomError = ({ className, error }: Props) => {
+  return (
+    <p
+      className={classNames(
+        ' text-sm text-customRed',
+        error && 'py-1',
+        className
+      )}
+    >
+      {error}
+    </p>
+  );
+};

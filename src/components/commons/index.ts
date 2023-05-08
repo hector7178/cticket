@@ -14,3 +14,5 @@ export { default as Icon } from './Icon';
 export { default as Map } from './Map';
 export { default as WrapperLoader } from './WrapperLoader';
 export { default as SwiperControls } from './SwiperControls';
+export { default as Dropzone } from './Dropzone';
+export { default as CardUpload } from './CardUpload';

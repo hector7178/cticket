@@ -16,9 +16,8 @@ export type props = {
   className?: string;
 } & UseFormReturn<any>;
 
-const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_API_KEY);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY);
 
-// TODO: move Elements component to `_app`
 const StepCheckoutPayment: React.FC<props> = ({
   className,
   ...useFormReturn
@@ -31,7 +30,7 @@ const StepCheckoutPayment: React.FC<props> = ({
   return (
     <Elements stripe={stripePromise}>
       <div className={classNames('space-y-5', className)}>
-        <Disclosure as="div" className="rounded-xl shadow-lg">
+        <Disclosure as="div" className="shadow-lg rounded-xl">
           <Disclosure.Button
             className={classNames(
               'flex w-full justify-between items-center p-8 gap-10'
@@ -46,8 +45,8 @@ const StepCheckoutPayment: React.FC<props> = ({
             </span>
           </Disclosure.Button>
 
-          <Disclosure.Panel className="m-8 pb-8">
-            <div className="mr-32 grid grid-cols-1 md:grid-cols-2 gap-5">
+          <Disclosure.Panel className="pb-8 m-8">
+            <div className="grid grid-cols-1 gap-5 mr-32 md:grid-cols-2">
               <Select
                 error={errors?.new_card?.message}
                 options={[
@@ -67,7 +66,7 @@ const StepCheckoutPayment: React.FC<props> = ({
               <div></div>
               <div className="flex flex-col">
                 <label
-                  className="input-label mt-auto"
+                  className="mt-auto input-label"
                   htmlFor="card-number-element"
                 >
                   {t('fieldset_card.card_number')}
@@ -80,7 +79,7 @@ const StepCheckoutPayment: React.FC<props> = ({
               <div className="flex gap-5">
                 <div className="flex flex-col flex-1">
                   <label
-                    className="input-label mt-auto"
+                    className="mt-auto input-label"
                     htmlFor="card-expire-element"
                   >
                     {t('fieldset_card.expiration_date')}
@@ -92,7 +91,7 @@ const StepCheckoutPayment: React.FC<props> = ({
                 </div>
                 <div className="flex flex-col flex-1">
                   <label
-                    className="input-label mt-auto"
+                    className="mt-auto input-label"
                     htmlFor="card-cvv-element"
                   >
                     {t('fieldset_card.cvv')}
@@ -139,7 +138,7 @@ const StepCheckoutPayment: React.FC<props> = ({
             <Title className="mt-8" level="h4">
               {t('address_card_data')}
             </Title>
-            <div className="grid mr-32 mt-7 grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 gap-5 mr-32 mt-7 md:grid-cols-2">
               <Select
                 error={errors?.address?.message}
                 options={[
@@ -169,7 +168,7 @@ const StepCheckoutPayment: React.FC<props> = ({
               />
               <div></div>
 
-              <div className="col-span-2 items-end flex gap-5">
+              <div className="flex items-end col-span-2 gap-5">
                 <Select
                   error={errors?.state?.message}
                   options={[
@@ -262,7 +261,7 @@ const StepCheckoutPayment: React.FC<props> = ({
           </Disclosure.Panel>
         </Disclosure>
         {/* 
-        <Disclosure as="div" className="rounded-xl shadow-lg">
+        <Disclosure as="div" className="shadow-lg rounded-xl">
           <Disclosure.Button
             className={classNames(
               'flex w-full justify-between items-center p-8 gap-10'

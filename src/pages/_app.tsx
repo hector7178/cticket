@@ -13,7 +13,7 @@ type CustomAppProps = AppProps & { Component: CustomNextComponent };
 // React Query
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { AuthProvider } from '@/context/auth/auth_provider';
+import { SessionProvider } from 'next-auth/react';
 // React Query Config
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,6 +31,7 @@ import 'react-quill/dist/quill.snow.css';
 import 'swiper/css/bundle';
 // Google Maps
 import { Wrapper } from '@googlemaps/react-wrapper';
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 
 export default function App({ Component, pageProps }: CustomAppProps) {
   const Layout: CustomNextComponent | typeof Fragment = Component.Layout
@@ -39,8 +40,8 @@ export default function App({ Component, pageProps }: CustomAppProps) {
 
   return (
     <NextIntlProvider messages={pageProps.messages}>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
+      <SessionProvider session={pageProps.session}>
+        <QueryClientProvider client={queryClient}>
           <Head>
             <title>CTickets</title>
             <meta
@@ -58,8 +59,8 @@ export default function App({ Component, pageProps }: CustomAppProps) {
             </Wrapper>
           </Layout>
           <ReactQueryDevtools initialIsOpen={true} />
-        </AuthProvider>
-      </QueryClientProvider>
+        </QueryClientProvider>
+      </SessionProvider>
     </NextIntlProvider>
   );
 }

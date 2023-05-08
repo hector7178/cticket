@@ -48,7 +48,7 @@ const Button: FC<props> = ({
     color == "primary"
       ? classNames(
           weight == "solid"
-          ? `btn-primary bg-${currentColor}`
+          ? `btn-primary bg-${currentColor} text-white`
             : weight == "outline"
             ? "btn-primary-outline"
             : weight == "ghost"

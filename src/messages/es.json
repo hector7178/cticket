@@ -66,36 +66,27 @@
       "cookie": "Políticas de Cookies"
     }
   },
-
   "LA_Comment_Btns": "/////////////////////////////////////// Landing Page Contact US Button",
   "btn_contact": "Contáctanos",
-  
   "LA_Comment_About": "/////////////////////////////////////// Landing Page About Section",
   "About": {
     "page": "Acerca de nosotros",
-
     "about": "Nuestra compañía",
     "about_desc": "Somos una empresa enfocada en la difusión de eventos culturales a nivel mundial.",
-
     "mision": "Mision",
     "mision_desc": "Permitir difundir, promocionar y encontrar eventos culturales a través de un único medio.",
-
     "vision": "Vision",
     "vision_desc": "Ser el principal y distintivo medio digital de difusión y búsqueda de eventos.",
-
     "offert": "¿Qué ofrecemos?",
-
     "public": "Pública tus eventos de manera gratuita.",
     "visualize": "Visualiza según tu zona geográfica.",
     "mark": "Marca tus eventos como me interesa o asistiré.",
     "share": "Comparte tus eventos favoritos.",
     "route": "Traza la ruta al evento."
   },
-
   "LA_Comment_Advert": "/////////////////////////////////////// Landing Page Advert Section",
   "Advert": {
     "page": "Publicidad",
-    
     "ijd": ""
   },
   "Main_Comment_Molecules": "/////////////////////////////////////// Molecules",
@@ -109,7 +100,6 @@
     "location": "Ubicacion",
     "description": "Descripción"
   },
-
   "Main_Comment_Organisms": "/////////////////////////////////////// Organisms",
   "List_Card_Category": {
     "title": "Categorías"
@@ -129,7 +119,8 @@
   "Card_Event_Details": {
     "read_more": "Leer mas...",
     "shared_event": "Compartir evento:",
-    "event_details": "Detalle de evento",
+    "description": "Descripción",
+    "information": "Información",
     "restrictions": "Restricciones:",
     "general": "General:",
     "observations": "Observaciones:",
@@ -283,19 +274,15 @@
     "event": {
       "product_info": "Product Information",
       "share_on": "Share event on",
-
       "cost": "Cost",
       "date": "Date",
       "time": "Time",
       "location": "Location",
       "buy": "Buy Ticket",
-
       "supplier": "Supplier",
-
       "description": "Description",
       "information": "Information",
       "location_map": "Location Map",
-
       "attend": "Asistiré"
     },
     "program": {
@@ -305,16 +292,12 @@
   "Landing_Comment_Contact": "/////////////////////////////////////// Landing Page Contact Section",
   "Contact": {
     "page": "Contáctanos",
-
     "title": "Ponerse en contacto",
     "subtitle": "Queremos saber más sobre ti",
-
     "success_title": "Tu mensaje se ha enviado exitosamente",
     "success_subtitle": "¡Muchas gracias, nos pondremos en contacto contigo lo antes posible!",
-
     "error_title": "Ocurrió un error",
     "error_subtitle": "Vuelva a intentarlo o póngase en contacto con nosotros a través de nuestras redes sociales o WhatsApp.",
-
     "address": "Dirección",
     "phone": "Teléfono",
     "email": "Email"
@@ -322,27 +305,20 @@
   "Landing_Comment_Donation": "/////////////////////////////////////// Landing Page Donation Section",
   "Donation": {
     "page": "Donación",
-
     "question": "¿Quieres que tu fundación reciba alguna de nuestras donaciones?",
     "answer": "Ponte en contacto con nosotros, te enviaremos los requisitos para incluir en nuestro programa de donaciones.",
-
     "how_question": "¿Como funciona?",
     "how_answer": "El promotor publica y vende sus entradas con nosotros, el promotor propone, elige o nos permite elegir una fundación de nuestra lista.\n\nUna vez obtenidos los ingresos netos, reservamos un 2% por entrada y lo donamos a la fundación elegida.",
-
     "fundations": "Nuestras fundaciones"
   },
   "Newsletter": {
     "page": "Boletin informativo",
-
     "title": "Suscríbete a nuestro boletín",
     "subtitle": "Únase a nuestro boletín para mantenerse al día con noticias culturales y próximos eventos.",
-
     "success_title": "Gracias por suscribirte a nuestro boletín.",
     "error_title": "Ha ocurrido un error. Por favor intente de nuevo.",
-
     "email": "Dirección de correo electrónico",
     "email_placeholder": "Ingresa tu correo electrónico",
-
     "weekly": "Artículos semanales",
     "weekly_desc": "Recibe los últimos eventos, noticias, artículos y recursos.",
     "spam": "No es spam",
@@ -351,36 +327,29 @@
   "Landing_Comment_Ticket": "/////////////////////////////////////// Landing Page Ticket Section",
   "Ticket": {
     "page": "Información del boleto",
-
     "header_title": "Gestión avanzada de eventos",
     "header_subtitle": "Promociona, vende y gestiona las entradas de tus eventos.",
     "header_start": "Empieza ahora, es gratis",
-
     "title": "Tu evento, tus reglas",
     "subtitle": "Gestiona todos tus eventos en un solo lugar.",
-
     "monitor": "Monitorea el alcance de tus eventos a través de un panel administrativo",
     "monitor_desc": "Traduzca los datos en información, procese la que genere mayores ganancias y mejores estrategias de marketing.",
     "monitor_list_1": "Visitas",
     "monitor_list_2": "Me gusta",
     "monitor_list_3": "Compartido",
-
     "sell": "Vender boletos en línea",
     "sell_desc": "Ofrecemos la disponibilidad de boletería con la comisión más baja del mercado.",
     "sell_list_1": "Vender inmediatamente",
     "sell_list_2": "Precios flexibles",
     "sell_list_3": "Si tu evento es gratis, nuestros servicios también lo son",
-
     "marketing": "Publicidad y Marketing",
     "marketing_desc": "Llegue a millones de asistentes habituales a eventos a través de nuestra aplicación móvil, sitio web, redes sociales, entradas, boletín informativo y blog.",
     "marketing_list_1": "Precios competitivos",
     "marketing_list_2": "Difusión a nivel local, estatal, nacional o internacional",
-
     "design": "Diseño y Contenido",
     "design_desc": "Nuestro equipo creativo está a tu disposición para la creación y diseño de contenidos para generar la mejor experiencia posible",
     "design_list_1": "Plantillas de eventos",
     "design_list_2": "Anuncio",
-
     "client": "Atención al cliente",
     "client_desc": "Te respaldamos con nuestro servicio de atención al cliente, también atendemos las dudas de tus clientes.",
     "client_list_1": "Nuestro equipo es tu equipo",
@@ -390,127 +359,94 @@
   "Common_Forms": {
     "rs_photo": "foto de usuario",
     "loading": "Cargando",
-
     "field_rol": "Rol",
     "field_select_rol": "Selecciona Rol...",
-
     "field_event": "Evento",
     "field_select_event": "Selecciona el Evento...",
-
     "field_event_datetime": "Seleccionar fecha y hora del evento",
     "field_select_event_datetime": "Seleccionar fecha y hora del evento...",
-
     "field_event_seatmap": "Seleccionar mapa de asientos del evento",
     "field_select_event_seatmap": "Seleccionar mapa de asientos del evento...",
-
     "field_cuopon": "Cupón",
     "field_discount": "Descuento",
     "field_limit": "Límite de Boletos",
     "field_init_at": "Iniciar en",
     "field_expired_at": "Caduca a las",
-
     "field_url": "URL",
     "field_type": "Tipo",
     "field_data_url": "URL de Datos",
     "field_key": "Llave",
-
     "field_name": "Nombre",
     "field_description": "Descripción",
-
     "field_facebook": "Facebook",
     "field_instagram": "Instagram",
     "field_twitter": "Twitter",
-
     "field_age_limit": "Límite de edad",
     "field_duration": "Duración",
-
     "field_general": "General",
     "field_observations": "Observaciones",
     "field_service": "Servicios",
     "field_restriction": "Restricciones",
     "field_limit_access": "Límite de acceso",
-
     "field_defined": "Definido",
     "field_range": "Rango",
     "field_initial_date": "Fecha inicial",
     "field_final_date": "Fecha final",
-
     "field_supplier": "Proveedor",
     "field_select_supplier": "Selecciona Proveedor...",
-
     "field_special_categories": "Categorías Especiales",
     "field_special_category": "Categorías Especiales",
     "field_select_special_category": "Selecciona Categorías Especiales...",
-
     "field_categories": "Categorías",
     "field_category": "Categoría",
     "field_select_category": "Selecciona una Categoría...",
-
     "field_subcategories": "Subcategorías",
     "field_subcategory": "Subcategorías",
     "field_select_subcategory": "Selecciona Subcategorías...",
-
     "field_subsubcategories": "Sub-Subcategorías",
     "field_subsubcategory": "Sub-Subcategorías",
     "field_select_subsubcategory": "Selecciona Sub-Subcategorías...",
-
     "field_range_date": "Rango de fecha",
     "field_location": "Ubicación",
     "field_select_location": "Selecciona Ubicación",
-
     "field_lang": "Idioma",
     "field_add_lang": "Añade Idioma",
     "field_search": "Buscar",
     "auto_search": "buscar",
     "place_search": "Buscar...",
-
     "field_pass": "Contraseña",
     "auto_pass": "contraseña-actual",
-
     "field_newpass": "Nueva Contraseña",
     "auto_newpass": "nueva-contraseña",
-
     "field_repass": "Repetir Contraseña",
     "field_remember": "Recordar",
-
     "field_firstname": "Primer nombre",
     "auto_firstname": "nombre de pila",
-
     "field_surname": "Apellido",
     "auto_surname": "nombre de familia",
-
     "field_username": "Nombre de Usuario",
     "auto_username": "nombre-de-usuario",
-
     "field_email": "Email",
     "auto_email": "email",
-
     "field_phone": "Teléfono",
     "auto_phone": "teléfono",
-
+    "field_phone_type": "Type",
+    "auto_phone_type": "phone type",
     "field_subject": "Asunto",
     "auto_subject": "asunto",
-
     "field_message": "Mensaje",
     "auto_message": "mensaje",
-
     "field_photo": "Foto",
-
     "field_sex": "Sexo",
     "place_sex": "Selecciona tu sexo",
-
     "field_birthday": "Cumpleaños",
     "auto_birthday": "cumpleaños",
-
     "field_addressname": "Nombre de Diracción",
     "auto_addressname": "nombre de diracción",
-
     "field_venuename": "Nombre del lugar",
     "auto_venuename": "nombre del lugar",
-
     "field_searchaddress": "Buscar con google Google...",
     "auto_searchaddress": "Buscar la dirección",
-
     "field_address1": "Dirección",
     "auto_address1": "Ingresa Dirección",
     "field_address2": "Dirección 2",
@@ -523,38 +459,31 @@
     "auto_state": "estado",
     "field_city": "Ciudad",
     "auto_city": "Ciudad",
-
     "field_businessname": "Nombre de Negocio",
     "auto_businessname": "nombre de negocio",
     "field_rfc": "RFC",
     "auto_rfc": "RFC",
     "field_cfdi": "CFDI",
     "auto_cfdi": "CFDI",
-
     "field_front_id": "Identificación Frontal",
     "field_back_id": "Identificación Trasera",
     "field_selfie": "Autofoto",
     "field_upload_file": "Cargar un archivo",
-
     "field_notification": "Notificaciones",
     "field_tags": "Etiquetas",
     "auto_tags": "etiquetas",
-
     "field_start": "Comenzar",
     "field_end": "Terminar",
     "field_amount": "Cantidad",
     "field_porcentage": "Porcentage",
-
     "field_fees": "Tarifas",
     "field_months_without": "Meses sin intereses",
     "field_month": "Meses",
     "field_months": "Meses",
     "field_quota": "Quota",
-
     "field_header": "Sube una imagen para tu encabezado",
     "field_icon": "Sube un icono para tu categoría",
     "field_color": "Elige un color para tu categoría",
-
     "field_event_image_web": "Sube una imagen para tu Evento (Web)",
     "field_event_image_app": "Sube una imagen para tu Evento (App)",
     "field_event_image_flyer": "Sube una imagen para tu Flyer"
@@ -562,31 +491,23 @@
   "Landing_Comment_Btns": "/////////////////////////////////////// Buttons",
   "btn": {
     "form_back": "Regresar al Formulario",
-
     "subscribe_me": "Suscríbete",
     "contact_us": "Contáctanos",
     "create_event": "Crea un evento",
-
     "form_change": "Cambiar",
-
     "form_delete": "Borrar",
     "form_delete_account": "Borrar Cuenta",
-
     "form_cancel": "Cancelar",
     "form_save": "Guardar",
     "form_send": "Enviar",
     "form_add": "Añadir",
     "form_trace": "Trazar Ruta",
-
     "form_clear_filters": "Limpiar Filtros",
     "form_apply_filters": "Aplicar Filtros",
-
     "new_card": "Añadir nueva tarjeta",
-
     "add_event": "Crear Evento",
     "add_discount": "Crear Descuento",
     "add_event_special_category": "Crear Categoría Especial",
-
     "add_event_category": "Crear Categoría",
     "add_event_subcategory": "Crear Subcategoría",
     "add_event_subsubcategory": "Crear Sub-Subcategoría",
@@ -594,24 +515,33 @@
     "add_event_tag": "Crear etiquetas",
     "add_event_venue": "Crear Lugar",
     "add_event_venue_category": "Crear Categoría de Lugar",
-
     "add_ticket": "Crear Boleto",
     "add_user_app": "Crear Usuario APP",
     "add_user_pos": "Crear Usuario POS",
-
     "add_user_system": "Crear Usuario de Sistema"
   },
   "Access_Comment": "/////////////////////////////////////// Access Section",
   "Access": {
     "title": "Iniciar Sesión",
-
     "subtitle_new": "Nuevo en CTickets",
     "subtitle_new_link": "Registrate gratuitamente",
     "subtitle_have": "¿Tienes una cuenta?",
-
     "forgot": "¿Olvidaste la contraseña?",
     "signin": "Iniciar Sesión",
     "signup": "Registrarse",
-    "continue": "O continúa con"
+    "continue": "O continúa con",
+    "firstname": "Primer nombre",
+    "surname": "Apellido",
+    "password": "Contraseña",
+    "repeat": "Repetir contraseña",
+    "remember": "Recordar",
+    "send_link": "Enviar link de confirmación",
+    "back": "Volver a Iniciar Sesión",
+    "email": "Email",
+    "birthday": "Cumpleaños",
+    "male": "Hombre",
+    "female": "Mujer",
+    "other": "Otro",
+    "sex": "Sexo"
   }
 }

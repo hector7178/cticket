@@ -117,5 +117,18 @@ module.exports = {
     "focus-within:border-customPurple",
     "focus-within:border-customRed",
     "focus-within:border-customYellow",
+
+    "hover:border-customBlue",
+    "hover:border-customBlueFresh",
+    "hover:border-customBlueNight",
+    "hover:border-customDaisy",
+    "hover:border-customGreen",
+    "hover:border-customGreenLight",
+    "hover:border-customGreenVan",
+    "hover:border-customOrange",
+    "hover:border-customPink",
+    "hover:border-customPurple",
+    "hover:border-customRed",
+    "hover:border-customYellow",
   ],
 };

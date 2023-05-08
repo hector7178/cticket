@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { classNames } from '@/helpers';
 import { Map, Title, Button, Icon } from '@/components/commons';
 import { useTranslations } from 'next-intl';
-
+import { CurrentColor } from '@/helpers';
+import { CustomTag } from '@/components/commons/customTag';
+import { MapPinIcon } from '@heroicons/react/24/outline';
 export type props = {
   className?: string;
   location: string;
@@ -17,6 +19,7 @@ const CardEventLocation: React.FC<props> = ({
   tags,
 }) => {
   const [userLocation, setUserLocation] = useState(null);
+  const currentColor = CurrentColor();
   const t = useTranslations('Card_Event_Location');
   async function handleTraceRoute() {
     const getUserLocation = (): Promise<google.maps.LatLngLiteral> => {
@@ -67,9 +70,14 @@ const CardEventLocation: React.FC<props> = ({
   }
 
   return (
-    <div className={classNames('flex flex-col space-y-5', className)}>
+    <div className={classNames('flex flex-col space-y-5 mt-6', className)}>
       <div className="flex items-center justify-between">
-        <Title level="h6">{t('location_map')}</Title>
+        <div className="flex items-center">
+          <MapPinIcon className={`w-5 h-5 text-${currentColor}`} />
+          <Title className="px-2 pt-1" level="h6">
+            {t('location_map')}
+          </Title>
+        </div>
         <Button
           iconLeft={<Icon name="routes-solid" />}
           onClick={handleTraceRoute}
@@ -80,7 +88,7 @@ const CardEventLocation: React.FC<props> = ({
       <div>
         <p>{location}</p>
         <Map
-          className="mt-3 w-full h-[300px]"
+          className="w-full h-[300px]"
           origin={userLocation || origin}
           destination={origin}
           zoom={15}
@@ -88,12 +96,7 @@ const CardEventLocation: React.FC<props> = ({
       </div>
       <div className="flex flew-wrap gap-5">
         {tags?.map((tag, idx) => (
-          <div
-            key={idx}
-            className="rounded-lg shadow-sm px-4 py-2 bg-primary-500"
-          >
-            {tag}
-          </div>
+          <CustomTag key={idx} name={tag} />
         ))}
       </div>
     </div>
