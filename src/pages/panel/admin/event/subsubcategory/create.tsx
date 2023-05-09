@@ -60,7 +60,7 @@ const EventCreateSubsubcategory = () => {
             } )
             push(`/${locale}/panel/admin/event/subsubcategory`)   
         }else if(isError && isSubmitted){
-            reset();
+           
             
             toast.error(' Error, No created :(',{
                     position:toast.POSITION.TOP_RIGHT,
@@ -82,6 +82,9 @@ const EventCreateSubsubcategory = () => {
      
   
       const onDrop=useCallback((acceptedFile)=>{
+        if(isSubmitted===true){
+            reset()
+        }
       const file= acceptedFile[0]
           setUpload(file.name)
           setImageUpload(file)
@@ -97,6 +100,9 @@ const EventCreateSubsubcategory = () => {
   //input file config
       
       const handleSelectFile=(e)=>{
+            if(isSubmitted===true){
+            reset()
+        }
               const file=e.target.files[0]
               setUpload(file.name)
              setImageUpload(file)
@@ -141,6 +147,9 @@ const EventCreateSubsubcategory = () => {
    
     
     const handleSelected=(e)=>{
+        if(isSubmitted===true){
+            reset()
+        }
         const id= dataCate.find((pre)=> pre.category===e.target.value)?.id
         const subcategorySelect= dataSub.filter((item)=>{
           if(item.id.id===id){
@@ -151,6 +160,9 @@ const EventCreateSubsubcategory = () => {
     }
 
     const SubCatSelect=(e)=>{
+        if(isSubmitted===true){
+            reset()
+        }
         const subcategorySelect= dataSubcategory.filter((item)=>{
             if(item.category===e.target.value){
               return item

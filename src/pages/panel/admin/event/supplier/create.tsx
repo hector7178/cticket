@@ -37,10 +37,10 @@ const EventCreateSuplier = () => {
     const { locales,push,locale } = useRouter();
     const tc = useTranslations("Common_Forms");
     const{mutate,isError,isSuccess}=useCreateEventSupplier()
-    const { register,handleSubmit,setValue, formState: { errors, isSubmitted },reset,getValues } = useForm<EventSupplier>({resolver:yupResolver(YupSchema)});
+    const { register,handleSubmit,setValue, formState: { errors, isSubmitSuccessful, isValid },reset,getValues } = useForm<EventSupplier>({resolver:yupResolver(YupSchema)});
 
      useEffect(()=>{
-        if (isSuccess && isSubmitted){
+        if (isSuccess && isSubmitSuccessful){
             toast.success('Event supplier created :)',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -50,10 +50,9 @@ const EventCreateSuplier = () => {
                 
             } )
             push(`/${locale}/panel/admin/event/supplier`)   
-        }else if(isError && isSubmitted){
-            reset(); 
-            
-            toast.error(' Error, No created :(',{
+        }else if(isError && isSubmitSuccessful){
+            reset()
+                toast.error(' Error, No created :(',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
                         tittle:'error create',

@@ -26,7 +26,13 @@ export const readEventCategory = async (id: string) => {
 }
 
 export const updateEventCategory = async (id: string, category: FormData) => {
-    const { data } = await axios.put(`/events/categories/${id}`, category);
+    const { data } = await axios.put(`/events/categories/${id}`, category, {
+       
+        headers:{
+            'Content-Type':'multipart/form-data',
+            'accept': 'application/json'},
+        
+    });
 
     return data;
 }

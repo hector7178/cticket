@@ -55,7 +55,7 @@ const EventCreateSubcategory = () => {
             } )
             push(`/${locale}/panel/admin/event/subcategory`)   
         }else if(isError && isSubmitted){
-            reset();
+            
 
             toast.error(' Error, No created:(',{
             position:toast.POSITION.TOP_RIGHT,
@@ -95,7 +95,7 @@ const EventCreateSubcategory = () => {
     };
  
   
-    const[category,setCategory]=useState( [{lang:'en', name:''}])
+    const[category,setCategory]=useState( [{lang:'en', name:undefined}])
 
 /*Lang*/
     const[lang ,setlang]=useState(['en'])
@@ -109,7 +109,7 @@ const EventCreateSubcategory = () => {
     const onAppend=()=>{
         if(!(lang.includes(SelectValue))){
         setlang([...lang, SelectValue])
-        setCategory([...category,{lang:SelectValue, name:''}])
+        setCategory([...category,{lang:SelectValue, name:undefined}])
         }
     }
     const onDelete=(e, exp, index)=>{
@@ -123,6 +123,9 @@ const EventCreateSubcategory = () => {
     }
 /*Name*/
     const handleName:React.ChangeEventHandler<HTMLInputElement> = (e:any)=>{
+    if(isSubmitted===true){
+            reset()
+    }
     const Name=e.target.value;
     const id=e.target.id;
     if(category.find((e)=>e.lang===id)){
@@ -163,14 +166,16 @@ console.log('errors', errors)
                                 </select>
                             </div>
                             <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6 flex flex-col gap-4">
-                            <div >
-                                {errors?.subcategory?.map((e,i)=>{
-                                            return (<span key={i} className='text-[#e74c3c] w-full flex justify-end'>{e.name.message}</span>)
-                                })}
-                            </div>
+                            
                              {
                             lang.map((exp, index)=>{
-                                return (<EventInputLang 
+                                return ( <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6 "><span  className='text-[#e74c3c] w-full flex justify-end'>{
+                                    Array.isArray(errors?.subcategory)?
+                                        errors.subcategory[index]?
+                                            errors.subcategory[index]["name"]?errors.subcategory[index]["name"].message:null
+                                        :null
+                                    :null}</span>
+                                    <EventInputLang 
                                     key={index} 
                                     index={index} 
                                     lang={exp} 
@@ -178,7 +183,7 @@ console.log('errors', errors)
                                     num={category?.length}
                                     onClick={(e)=>onDelete(e, exp,index)} 
                                     category={category}
-                                    />)
+                                    /></div>)
                             })
                             }
                             </div>

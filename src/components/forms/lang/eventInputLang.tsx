@@ -30,7 +30,7 @@ export const EventInputLang = ({
   show?:boolean;
 }) => {
   const t = useTranslations('Common_Forms');
-  const[Show,setShow]=useState(true)
+  
   
   return (
     
@@ -41,6 +41,7 @@ export const EventInputLang = ({
           <CustomLabel field="name" name={t('field_name')} />
           <input
             onChange={onChange}
+            name='name'
             type="text"
             defaultValue={category?.find((e)=>e.lang===lang)?.name}
             id={lang}

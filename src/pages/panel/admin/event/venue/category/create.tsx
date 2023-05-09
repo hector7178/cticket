@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import AdminLayout from "@/components/layout/admin";
 import { HeadingSelect } from '@/components/headers/admin/headingSelect';
 // Forms
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldError, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { CustomCancel, CustomLabel, CustomSubmit } from '@/components/forms';
@@ -19,13 +19,13 @@ import { ToastContainer, toast } from 'react-toastify';
 const EventCreateVenueCategory = () => {
 
     
-    const YupSchema= yup.object({
-       
-        category:yup.array().of(yup.object({
-                lang:yup.string().required('Lang is required'),
-                name:yup.string().min(3,'Name required').required('Name is Required')
-            }).required('Venue category is required ')
-        )
+    const YupSchema= yup.object().shape({
+        category:yup.array().of(
+            yup.object().shape({
+                lang:yup.string().required('lang required'),
+                name:yup.string().min(2,'min 3 caracters').required('Name is Required')
+            })
+        ).required('Category isrequired'),
    })
     const{push,locale}=useRouter()
     const t = useTranslations("Panel_SideBar");
@@ -40,14 +40,17 @@ const EventCreateVenueCategory = () => {
     const {mutate,isLoading,isError,isSuccess}=useCreateEventVenueCategory()
     
 
-    const onSubmit:SubmitHandler< interfaceEventVenueCategory>= (data: interfaceEventVenueCategory)=>{
+    const onSubmit:SubmitHandler< interfaceEventVenueCategory>=   (data)=>{
+      
       const DataForm = JSON.stringify(data)
       mutate(DataForm )
     };
 
-    const { register, handleSubmit,setValue, formState: { errors,isSubmitted }, reset, getValues} = useForm< interfaceEventVenueCategory>({resolver:yupResolver(YupSchema)});
+    const { register, handleSubmit,setValue, formState: { errors,isSubmitted, isValid }, reset, getValues} = useForm({resolver:yupResolver(YupSchema)});
   
     useEffect(()=>{
+   
+     
         if (isSuccess && isSubmitted){
             toast.success('Event venue category updated :)',{
                     position:toast.POSITION.TOP_RIGHT,
@@ -57,9 +60,9 @@ const EventCreateVenueCategory = () => {
                     }
                 
             } )
-            push(`/${locale}/panel/admin/event/category`)   
+            push(`/${locale}/panel/admin/event/venue/category`)   
         }else if(isError && isSubmitted){
-            reset();
+           
 
             toast.error(' Error, No updated :(',{
                     position:toast.POSITION.TOP_RIGHT,
@@ -69,13 +72,13 @@ const EventCreateVenueCategory = () => {
                     }
                 } )
         }
-    },[onSubmit])
+    
+    },[isSuccess, isError])
 
     
-    const[category,setCategory]=useState( [{lang:'en', name:''}])
-console.log('error',errors.category)
-console.log('error',isError)
-console.log('error',isSubmitted)
+    const[category,setCategory]=useState( [{lang:'en', name:undefined}])
+    
+
 /*Lang*/
     const[lang ,setlang]=useState(['en'])
     const[SelectValue ,setSelectValue]=useState('en')
@@ -88,7 +91,7 @@ console.log('error',isSubmitted)
     const onAppend=()=>{
         if(!(lang.includes(SelectValue))){
         setlang([...lang, SelectValue])
-        setCategory([...category,{lang:SelectValue, name:''}])
+        setCategory([...category,{lang:SelectValue, name:undefined}])
         }
     }
     const onDelete=(e, exp, index)=>{
@@ -102,6 +105,9 @@ console.log('error',isSubmitted)
     }
 /*Name*/
     const handleName:React.ChangeEventHandler<HTMLInputElement> = (e:any)=>{
+        if(isSubmitted===true){
+            reset()
+        }
     const Name=e.target.value;
     const id=e.target.id;
     if(category.find((e)=>e.lang===id)){
@@ -115,7 +121,8 @@ console.log('error',isSubmitted)
     }
     
 } 
-console.log(getValues())
+console.log('values', getValues())
+console.log('submit', errors)
     return (
         <>
             {/* Breadcrumb section */}
@@ -125,16 +132,23 @@ console.log(getValues())
             <div className="flex flex-1 pt-6">
                 <div className="w-screen min-h-0 overflow-hidden">
                     <form className="divide-y divide-gray-200 lg:col-span-9"  onSubmit={handleSubmit(onSubmit)} method="POST">
+                        <div >
+                                
+                        </div>
                         <div className="py-6 grid grid-cols-12 gap-6">
-                             <div >
-                                {errors?.category?.map((e,i)=>{
-                                            return (<span key={i} className='text-[#e74c3c] w-full flex justify-end'>{e.name.message}</span>)
-                                })}
-                                <CustomLabel field='category' name='category'/>
-                            </div>
+                             
                             {
                             lang.map((exp, index)=>{
-                                return (<EventInputLang 
+                                console.log(exp, index)
+                                return (<div className="w-full col-span-4">
+                                    <span  className='text-[#e74c3c] w-full flex justify-end'>{
+                                    Array.isArray(errors?.category)?
+                                        errors.category[index]?
+                                            errors.category[index]["name"]?errors.category[index]["name"].message:null
+                                        :null
+                                    :null}</span>
+                    
+                                    <EventInputLang 
                                     key={index} 
                                     index={index} 
                                     lang={exp} 
@@ -142,7 +156,7 @@ console.log(getValues())
                                     num={category?.length}
                                     onClick={(e)=>onDelete(e, exp,index)} 
                                     category={category}
-                                    />)
+                                    /></div>)
                             })
                             }
 
@@ -150,7 +164,7 @@ console.log(getValues())
                         <ToastContainer/>
                         <div className="divide-y divide-gray-200">
                             <div className="mt-4 flex justify-end gap-x-3 py-4 px-4 sm:px-6">
-                                <CustomCancel onClick={()=>push(`/${locale}/panel/admin/event`)} />
+                                <CustomCancel onClick={()=>push(`/${locale}/panel/admin/event/venue/category`)} />
                                 <CustomSubmit />
                             </div>
                         </div>

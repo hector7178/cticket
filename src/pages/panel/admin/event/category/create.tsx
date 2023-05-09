@@ -64,7 +64,7 @@ if (isSuccess && isSubmitted){
     } )
     push(`/${locale}/panel/admin/event/category`)   
 }else if(isError && isSubmitted){
-    reset();
+    
     toast.error(' Error, No created:(',{
             position:toast.POSITION.TOP_RIGHT,
             data:{
@@ -139,7 +139,7 @@ if (isSuccess && isSubmitted){
    
     
     
-    const[category,setCategory]=useState( [{lang:'en', name:''}])
+    const[category,setCategory]=useState( [{lang:'en', name:undefined}])
 
 /*Lang*/
     const[lang ,setlang]=useState(['en'])
@@ -154,7 +154,7 @@ if (isSuccess && isSubmitted){
     const onAppend=()=>{
         if(!(lang.includes(SelectValue))){
         setlang([...lang, SelectValue])
-        setCategory([...category,{lang:SelectValue, name:''}])
+        setCategory([...category,{lang:SelectValue, name:undefined}])
         }
     }
     const onDelete=(e, exp, index)=>{
@@ -168,6 +168,9 @@ if (isSuccess && isSubmitted){
     }
 /*Name*/
     const handleName:React.ChangeEventHandler<HTMLInputElement> = (e:any)=>{
+        if(isSubmitted===true){
+            reset()
+        }
     const Name=e.target.value;
     const id=e.target.id;
     if(category.find((e)=>e.lang===id)){
@@ -238,15 +241,18 @@ if (isSuccess && isSubmitted){
                                 />
                             </div>
                             <div className="col-span-12 sm:col-span-8 md:col-span-8 lg:col-span-8 flex-col">
-                                {errors?.category?.map((e, i)=>{
-                                            return (<span key={i} className='text-[#e74c3c]'>{e.name.message}</span>)
-                                })}
+                                
                             </div>
                             {
                             lang.map((exp, index)=>{
                                 return (
                                  <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6 flex-col">
-                                    
+                                    {<span  className='text-[#e74c3c] w-full flex justify-end'>{
+                                    Array.isArray(errors?.category)?
+                                        errors.category[index]?
+                                            errors.category[index]["name"]?errors.category[index]["name"].message:null
+                                        :null
+                                    :null}</span>}
                                     <EventInputLang
                                     key={index} 
                                     index={index} 

@@ -7,7 +7,13 @@ export const getEventsVenuesCategories = async () => {
 };
 
 export const createEventVenueCategory = async (venue_category: string) => {
-    const { data } = await axios.post(`/events/venues/categories/`, venue_category);
+    const { data } = await axios.post(`/events/venues/categories/`, venue_category ,{
+       
+        headers:{
+            'Content-Type':'application/json',
+            'accept': 'application/json'},
+        
+    } );
 
     return data;
 }

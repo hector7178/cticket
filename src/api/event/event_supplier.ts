@@ -25,13 +25,13 @@ export const readEventSupplier = async (id: string) => {
 }
 
 export const updateEventSupplier = async (id: string, supplier: string) => {
-    const { data } = await axios.put(`/events/suppliers/${id}`, supplier, {
+    const { data } = await axios.put(`/events/suppliers/${id}`, supplier,{
        
         headers:{
             'Content-Type':'application/json',
             'accept': 'application/json'},
         
-    });
+    } );
 
     return data;
 }
