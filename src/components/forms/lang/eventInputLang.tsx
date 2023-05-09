@@ -43,6 +43,7 @@ export const EventInputLang = ({
             onChange={onChange}
             name='name'
             type="text"
+            value={category?.find((e)=>e.lang===lang)?.name}
             defaultValue={category?.find((e)=>e.lang===lang)?.name}
             id={lang}
             autoComplete={t('field_name')}

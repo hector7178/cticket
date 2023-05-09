@@ -45,7 +45,7 @@ const EventCreateSubcategory = ({dataInit}) => {
             } )
             push(`/${locale}/panel/admin/event/subcategory`)   
         }else if(isError && isSubmitted){
-            reset();
+            isSubmitted && reset()
             toast.error(' Error, No updated :(',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -113,6 +113,7 @@ const EventCreateSubcategory = ({dataInit}) => {
     if(category.find((e)=>e.lang===id)){
         const arr=category.slice()
         arr.find((e)=>e.lang===id).name=Name
+        setCategory(arr)
         setValue('subcategory', arr)
         
     }else{

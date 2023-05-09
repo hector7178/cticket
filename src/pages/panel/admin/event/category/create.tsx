@@ -38,12 +38,12 @@ const EventCreateCategory = () => {
     const YupSchema= yup.object().shape({
         category:yup.array().of(
             yup.object().shape({
-                lang:yup.string().required('lang required'),
-                name:yup.string().min(2,'name required').required('Name is Required')
+                lang:yup.string().required('Lang required'),
+                name:yup.string().min(3,'Name required, min 3 caracters').required('Name is required')
             })
         ),
-        color:yup.string().required('Color is Required'),
-        picture:yup.string().required('Foto is Required')
+        color:yup.string().required('Color is required'),
+        picture:yup.string().required('Picture is required')
 
     })
     
@@ -89,6 +89,7 @@ if (isSuccess && isSubmitted){
         setValue('picture', file.name)
         const link= URL.createObjectURL(file)
         setUrl(link)
+       
       
     },[]) 
     
@@ -98,6 +99,7 @@ if (isSuccess && isSubmitted){
 //input file config
     
     const handleSelectFile=(e)=>{
+        
             const file=e.target.files[0]
             setUpload(file.name)
             SetFileUpload(file)
@@ -122,6 +124,7 @@ if (isSuccess && isSubmitted){
 /*input color config*/
     const [initColor, setInitColor]=useState<string>('#ffffff');
     const  onChangeColor=(color:any)=>{ 
+        
         setInitColor(color.hex)
         setValue('color', initColor )
     }
@@ -139,7 +142,7 @@ if (isSuccess && isSubmitted){
    
     
     
-    const[category,setCategory]=useState( [{lang:'en', name:undefined}])
+    const[category,setCategory]=useState( [{lang:'en', name:''}])
 
 /*Lang*/
     const[lang ,setlang]=useState(['en'])
@@ -154,7 +157,7 @@ if (isSuccess && isSubmitted){
     const onAppend=()=>{
         if(!(lang.includes(SelectValue))){
         setlang([...lang, SelectValue])
-        setCategory([...category,{lang:SelectValue, name:undefined}])
+        setCategory([...category,{lang:SelectValue, name:''}])
         }
     }
     const onDelete=(e, exp, index)=>{
@@ -168,14 +171,14 @@ if (isSuccess && isSubmitted){
     }
 /*Name*/
     const handleName:React.ChangeEventHandler<HTMLInputElement> = (e:any)=>{
-        if(isSubmitted===true){
-            reset()
-        }
+       
     const Name=e.target.value;
     const id=e.target.id;
+        
     if(category.find((e)=>e.lang===id)){
         const arr=category.slice()
         arr.find((e)=>e.lang===id).name=Name
+        setCategory(arr)
         setValue('category', arr)
         
     }else{
@@ -185,7 +188,7 @@ if (isSuccess && isSubmitted){
     
 } 
 
-
+console.log('values', getValues())
     return (
         <>
             {/* Breadcrumb section */}
@@ -244,9 +247,9 @@ if (isSuccess && isSubmitted){
                                 
                             </div>
                             {
-                            lang.map((exp, index)=>{
+                            category.map((exp, index)=>{
                                 return (
-                                 <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6 flex-col">
+                                 <div key={index} className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6 flex-col">
                                     {<span  className='text-[#e74c3c] w-full flex justify-end'>{
                                     Array.isArray(errors?.category)?
                                         errors.category[index]?
@@ -256,10 +259,10 @@ if (isSuccess && isSubmitted){
                                     <EventInputLang
                                     key={index} 
                                     index={index} 
-                                    lang={exp} 
+                                    lang={exp.lang} 
                                     onChange={handleName}
                                     num={category?.length}
-                                    onClick={(e)=>onDelete(e, exp,index)} 
+                                    onClick={(e)=>onDelete(e, exp.lang,index)} 
                                     category={category}
                                     /></div>)
                             

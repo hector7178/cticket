@@ -46,7 +46,7 @@ const EventCreateVenueCategory = ({dataInit}) => {
             push(`/${locale}/panel/admin/event/venue/category`)   
         }else if(isError && isSubmitted ){
 
-            reset();
+            isSubmitted && reset()
             
             toast.error(' Error, No updated :(',{
                     position:toast.POSITION.TOP_RIGHT,
@@ -56,7 +56,7 @@ const EventCreateVenueCategory = ({dataInit}) => {
                     }
                 } )
         }
-    },[onSubmit]);
+    },[isSuccess, isError]);
 
     const breadcrumb = [
         { page: t('admin.admin'), href: '/panel/admin' },

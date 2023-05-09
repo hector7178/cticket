@@ -55,7 +55,9 @@ const EventCreateSubsubcategory = ({dataInit}) =>  {
             } )
             push(`/${locale}/panel/admin/event/subsubcategory`)   
         }else if(isError && isSubmitted){
-            reset();
+
+            isSubmitted && reset()
+           
             toast.error(' Error, No updated :(',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{

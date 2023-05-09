@@ -58,7 +58,7 @@ const EventCreateSuplier = ({dataInit}) => {
             } )
             push(`/${locale}/panel/admin/event/supplier`)   
         }else if(isError && isSubmitted){
-            reset();
+            isSubmitted && reset()
 
             toast.error(' Error, No updated :(',{
                     position:toast.POSITION.TOP_RIGHT,
@@ -68,7 +68,7 @@ const EventCreateSuplier = ({dataInit}) => {
                     }
                 } )
         }
-    },[onSubmit])
+    },[isSuccess, isError])
   
 
     const [initColor, setInitColor]=useState<string>(dataInit.color);

@@ -105,7 +105,7 @@ if (isSuccess && isSubmitted){
     } )
     push(`/${locale}/panel/admin/event/category`)   
 }else if(isError && isSubmitted){
-    reset();
+    isSubmitted && reset()
     toast.error(' Error, No updated:(',{
             position:toast.POSITION.TOP_RIGHT,
             data:{
@@ -172,6 +172,7 @@ if (isSuccess && isSubmitted){
     if(category.find((e)=>e.lang===id)){
         const arr=category.slice()
         arr.find((e)=>e.lang===id).name=Name
+        setCategory(arr)
         setValue('category', arr)
         
     }else{

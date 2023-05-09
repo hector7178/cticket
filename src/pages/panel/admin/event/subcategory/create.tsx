@@ -29,7 +29,7 @@ const EventCreateSubcategory = () => {
         subcategory:yup.array().of(
             yup.object().shape({
                 lang:yup.string().required('Lang is required'),
-                name:yup.string().min(3,'Name required').required('Name is Required')
+                name:yup.string().min(3,'Name required, min 3 caracters').required('Name is Required')
             }),
         ),
         category_id:yup.string().required('Category is Required')
@@ -95,7 +95,7 @@ const EventCreateSubcategory = () => {
     };
  
   
-    const[category,setCategory]=useState( [{lang:'en', name:undefined}])
+    const[category,setCategory]=useState( [{lang:'en', name:''}])
 
 /*Lang*/
     const[lang ,setlang]=useState(['en'])
@@ -109,7 +109,7 @@ const EventCreateSubcategory = () => {
     const onAppend=()=>{
         if(!(lang.includes(SelectValue))){
         setlang([...lang, SelectValue])
-        setCategory([...category,{lang:SelectValue, name:undefined}])
+        setCategory([...category,{lang:SelectValue, name:''}])
         }
     }
     const onDelete=(e, exp, index)=>{
@@ -123,14 +123,13 @@ const EventCreateSubcategory = () => {
     }
 /*Name*/
     const handleName:React.ChangeEventHandler<HTMLInputElement> = (e:any)=>{
-    if(isSubmitted===true){
-            reset()
-    }
+    
     const Name=e.target.value;
     const id=e.target.id;
     if(category.find((e)=>e.lang===id)){
         const arr=category.slice()
         arr.find((e)=>e.lang===id).name=Name
+        setCategory(arr)
         setValue('subcategory', arr)
         
     }else{
@@ -168,7 +167,7 @@ console.log('errors', errors)
                             <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6 flex flex-col gap-4">
                             
                              {
-                            lang.map((exp, index)=>{
+                            category.map((exp, index)=>{
                                 return ( <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6 "><span  className='text-[#e74c3c] w-full flex justify-end'>{
                                     Array.isArray(errors?.subcategory)?
                                         errors.subcategory[index]?
@@ -178,10 +177,10 @@ console.log('errors', errors)
                                     <EventInputLang 
                                     key={index} 
                                     index={index} 
-                                    lang={exp} 
+                                    lang={exp.lang} 
                                     onChange={handleName}
                                     num={category?.length}
-                                    onClick={(e)=>onDelete(e, exp,index)} 
+                                    onClick={(e)=>onDelete(e, exp.lang,index)} 
                                     category={category}
                                     /></div>)
                             })

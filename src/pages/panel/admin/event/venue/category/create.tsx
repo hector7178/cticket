@@ -76,7 +76,7 @@ const EventCreateVenueCategory = () => {
     },[isSuccess, isError])
 
     
-    const[category,setCategory]=useState( [{lang:'en', name:undefined}])
+    const[category,setCategory]=useState( [{lang:'en', name:''}])
     
 
 /*Lang*/
@@ -91,7 +91,7 @@ const EventCreateVenueCategory = () => {
     const onAppend=()=>{
         if(!(lang.includes(SelectValue))){
         setlang([...lang, SelectValue])
-        setCategory([...category,{lang:SelectValue, name:undefined}])
+        setCategory([...category,{lang:SelectValue, name:''}])
         }
     }
     const onDelete=(e, exp, index)=>{
@@ -105,14 +105,13 @@ const EventCreateVenueCategory = () => {
     }
 /*Name*/
     const handleName:React.ChangeEventHandler<HTMLInputElement> = (e:any)=>{
-        if(isSubmitted===true){
-            reset()
-        }
+        
     const Name=e.target.value;
     const id=e.target.id;
     if(category.find((e)=>e.lang===id)){
         const arr=category.slice()
         arr.find((e)=>e.lang===id).name=Name
+        setCategory(arr)
         setValue('category', arr)
         
     }else{
@@ -121,8 +120,6 @@ const EventCreateVenueCategory = () => {
     }
     
 } 
-console.log('values', getValues())
-console.log('submit', errors)
     return (
         <>
             {/* Breadcrumb section */}

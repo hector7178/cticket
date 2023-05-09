@@ -41,7 +41,7 @@ const EventCreateSubsubcategory = () => {
     const YupSchema= yup.object().shape({
         category_id:yup.string().required('Category is Required'),
         subcategory_id:yup.string().required('Sub category is Required'),
-        sub_subcategory:yup.string().required('Sub sub Category is Required'),
+        sub_subcategory:yup.string().min(2,'Min 2 caracters').required('Sub sub Category is Required'),
         picture:yup.string().required('Picture is Required')
 
     })
@@ -82,9 +82,7 @@ const EventCreateSubsubcategory = () => {
      
   
       const onDrop=useCallback((acceptedFile)=>{
-        if(isSubmitted===true){
-            reset()
-        }
+       
       const file= acceptedFile[0]
           setUpload(file.name)
           setImageUpload(file)
@@ -100,15 +98,14 @@ const EventCreateSubsubcategory = () => {
   //input file config
       
       const handleSelectFile=(e)=>{
-            if(isSubmitted===true){
-            reset()
-        }
-              const file=e.target.files[0]
-              setUpload(file.name)
-             setImageUpload(file)
-              setValue('picture', ImageURL(file.name))
-              const link= URL.createObjectURL(file)
-              setUrl(link)
+           
+            const file=e.target.files[0]
+            setUpload(file.name)
+            setImageUpload(file)
+            setValue('picture', ImageURL(file.name))
+            const link= URL.createObjectURL(file)
+            setUrl(link)
+           
       }
       
 
@@ -147,22 +144,19 @@ const EventCreateSubsubcategory = () => {
    
     
     const handleSelected=(e)=>{
-        if(isSubmitted===true){
-            reset()
-        }
+        
         const id= dataCate.find((pre)=> pre.category===e.target.value)?.id
         const subcategorySelect= dataSub.filter((item)=>{
-          if(item.id.id===id){
+        if(item.id.id===id){
             return item
         }
         })
         setDataSubcategory(subcategorySelect)
+    
     }
 
     const SubCatSelect=(e)=>{
-        if(isSubmitted===true){
-            reset()
-        }
+        
         const subcategorySelect= dataSubcategory.filter((item)=>{
             if(item.category===e.target.value){
               return item
@@ -176,6 +170,7 @@ const EventCreateSubsubcategory = () => {
         })
         setValue('category_id',subcategorySelectId[0]?.id?.id)
         setValue('subcategory_id',subcategorySelect[0]?.subId)
+       
     }
     
 
@@ -185,7 +180,7 @@ const EventCreateSubsubcategory = () => {
         dataForm.append('picture' , imageUpload )
       mutate(dataForm)
     };
-    console.log(getValues())
+    
 
     return (
         <>
