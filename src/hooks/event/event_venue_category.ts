@@ -80,15 +80,16 @@ export function useDeleteEventVenueCategory() {
         return deleteEventVenueCategory(id)},{onSuccess: (data,categoryDel)=>{
           console.log('delete',data)
         return queryClient.setQueryData([key], (prev:any)=>{
-             prev?.map((dat)=>{
+            const arr= prev?.map((dat)=>{
               if(dat._id===categoryDel){
-               return dat.status=!dat.status
+                
+                dat.status=!dat.status
+               return dat
               }else{
                 return dat
               }
-              
             })
-         return prev
+          return arr
         })
       }}
   )

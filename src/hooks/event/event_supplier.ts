@@ -81,15 +81,16 @@ export function useDeleteEventSupplier( ) {
   const {mutate, isLoading, isError, isSuccess}= useMutation(
     deleteEventSupplier,{onSuccess: (data,supplierDel)=>{
     return queryClient.setQueryData([key], (prev:any)=>{
-      return prev?.map((dat)=>{
-        if(dat._id===supplierDel){
-          dat.status = !dat.status
-         return dat
-        }else{
-          return dat
-        }
-      })
-     })
+              const arr= prev?.map((dat)=>{
+              if(dat._id===supplierDel){
+                
+                dat.status=!dat.status
+               return dat
+              }else{
+                return dat
+              }
+            })
+          return arr})
 }}
 )
 return {mutate, isLoading, isError, isSuccess};

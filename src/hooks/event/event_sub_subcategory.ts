@@ -70,14 +70,16 @@ export  function useDeleteEventSubSubCategory( ) {
   const {mutate, isLoading, isError, isSuccess}= useMutation((id:string)=>{
         return deleteSubSubcategory(id)},{onSuccess: (data,categoryDel)=>{
          return  queryClient.setQueryData([key], (prev:any)=>{
-           prev?.map((dat)=>{
+              const arr= prev?.map((dat)=>{
               if(dat._id===categoryDel){
-               return dat.status=!dat.status
+                
+                dat.status=!dat.status
+               return dat
               }else{
                 return dat
               }
-             })
-           return prev})
+            })
+          return arr})
       }}
   )
 return {mutate, isLoading, isError, isSuccess};

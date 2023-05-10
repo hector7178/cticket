@@ -77,6 +77,7 @@ export function useUpdateEventCategory(  ) {
         
          
       return await updateEventCategory(values.id, values.category )},{onSuccess: (data,value)=>{
+        
           queryClient.setQueryData([key], (prev:any)=>{const newArray = prev?.map((item)=>{
              if( item._id===value.id){
                  return  data
@@ -99,16 +100,19 @@ export function useDeleteEventCategory( ) {
 
   const {mutate, isLoading, isError, isSuccess}= useMutation((id:string)=>{
         return deleteEventCategory(id)},{onSuccess: (data,categoryDel)=>{
+         
          return queryClient.setQueryData([key], (prev:any)=>{
-           prev?.map((dat)=>{
+          
+         const arr= prev?.map((dat)=>{
               if(dat._id===categoryDel){
-               return dat.status=!dat.status
+                
+                dat.status=!dat.status
+               return dat
               }else{
                 return dat
               }
             })
-           return prev 
-        })
+          return arr})
       }}
   )
 return {mutate, isLoading, isError, isSuccess};

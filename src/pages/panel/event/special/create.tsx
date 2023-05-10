@@ -43,33 +43,70 @@ const EventCreateSpecialCategory = () => {
         { page: t('event.special'), href: '/panel/event/special' },
         { page: t('actions.create'), href: '' }
     ]
-    
+    const YupSchema= yup.object().shape({
+        
+        user_id:yup.string().required(''),
+        category: yup.array().of(
+            yup.object().shape({
+                lang:yup.string().required('lang required'),
+                name:yup.string().min(2,'min 3 caracters').required('Name is Required'),
+                description:yup.string().required('description required'),
+            })
+        ),
+        header_img: yup.string().required(''),
+        event_img: yup.string().required(''),
+        color: yup.string().required(''),
+        initial_date: yup.string().required(''),
+        final_date: yup.string().required(''),
+        location: yup.object().shape({
+        latitude: yup.string().required(''),
+        longitude: yup.string().required(''),
+        city: yup.string().required(''),
+        state: yup.object().shape({
+            long_name: yup.string().required(''),
+            short_name: yup.string().required(''),
+        }),
+        country: yup.object().shape({
+            long_name:yup.string().required(''),
+            short_name: yup.string().required(''),
+        }),
+        }),
+        description: yup.string().required(''),
+   })
+    const methods = useForm<createEventSpecialCategory>({resolver:yupResolver(YupSchema)});
     const {mutate, isLoading, isError, isSuccess}= useCreateEventSpecialCategory()
     const user=useMe()
     const {locale, push}=useRouter()
+    console.log('errors', methods.formState.errors)
+   
     useEffect(()=>{
-        if (isSuccess){
-            toast.success('Event Special created :)',{
+   
+     
+        if (isSuccess && methods.formState.isSubmitted){
+            toast.success('Special event successfull create :)',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
-                        tittle:'success Updated',
+                        tittle:'Special event successfull create ',
                         text:'This is a success message '
                     }
                 
             } )
-            push(`/${locale}/panel/admin/event/category`)   
-        }else if(isError){
+            push(`/${locale}/panel/admin/event/venue/category`)   
+        }else if(isError && methods.formState.isSubmitted){
+           
+
             toast.error(' Error, No created :(',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
-                        tittle:'error Updated',
+                        tittle:'error create',
                         text:'This is a error message' 
                     }
                 } )
         }
-    },[isSuccess,isError])
     
-    const methods = useForm<createEventSpecialCategory>();
+    },[isSuccess, isError])
+    
+    
     
  //input file config   
     const [upload, setUpload ]=useState('');
