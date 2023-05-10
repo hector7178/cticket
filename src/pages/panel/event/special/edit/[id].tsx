@@ -65,7 +65,7 @@ const EventCreateSpecialCategory = ({dataInit}) => {
                     }
                 
             } )
-            push(`/${locale}/panel/admin/event/special`)   
+            push(`/${locale}/panel/event/special`)   
         }else if(isError && methods.formState.isSubmitted){
             toast.error(' Error, No updated :(',{
                     position:toast.POSITION.TOP_RIGHT,
@@ -428,8 +428,8 @@ console.log('value',methods.getValues())
                         {/* Buttons section */}
                         <div className="divide-y divide-gray-200">
                             <div className="mt-4 flex justify-end gap-x-3 py-4 px-4 sm:px-6">
-                                <CustomCancel onClick={()=>push(`/${locale}/panel/admin/event`)} />
-                                <CustomSubmit />
+                                <CustomCancel onClick={()=>push(`/${locale}/panel/event/special`)} />
+                                <CustomSubmit disabled={isLoading}/>
                             </div>
                         </div>
                     </form>
