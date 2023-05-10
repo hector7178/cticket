@@ -268,8 +268,8 @@ export interface createEventSpecialCategory {
   
   user_id: string;
   category: Content[];
-  header_img: string | ArrayBuffer;
-  event_img: string | ArrayBuffer;
+  header_img: string;
+  event_img: string;
   color: string;
   initial_date: string;
   final_date: string;

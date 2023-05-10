@@ -38,7 +38,7 @@ type locationTypes={
 }
 
 const EventCreateSpecialCategory = ({dataInit}) => {
-    console.log(dataInit)
+    console.log('data',dataInit)
     const t = useTranslations("Panel_SideBar");
     const tp = useTranslations('Panel_Profile_Request');
     const tc = useTranslations("Common_Forms");
@@ -54,6 +54,7 @@ const EventCreateSpecialCategory = ({dataInit}) => {
     const {mutate, isLoading, isError, isSuccess}= useUpdateEventSpecialCategory()
     const user=useMe()
     const{query,locale, push}=useRouter()
+    
     useEffect(()=>{
         if (isSuccess && methods.formState.isSubmitted){
             toast.success('Event Special updated :)',{
@@ -64,7 +65,7 @@ const EventCreateSpecialCategory = ({dataInit}) => {
                     }
                 
             } )
-            push(`/${locale}/panel/admin/event/`)   
+            push(`/${locale}/panel/admin/event/special`)   
         }else if(isError && methods.formState.isSubmitted){
             toast.error(' Error, No updated :(',{
                     position:toast.POSITION.TOP_RIGHT,
@@ -100,14 +101,14 @@ const EventCreateSpecialCategory = ({dataInit}) => {
    }
    reader.readAsDataURL(Header_event)
   }
-   
+  
    
    
 
     const handleSelectFile=(e)=>{
                const file=e.target.files[0]
                setUpload(file.name)
-               methods.setValue('header_img', ImageURL(file.name))
+               methods.setValue('header_img', file.name)
                setHeader_event(file)
        }
        
@@ -115,17 +116,17 @@ const EventCreateSpecialCategory = ({dataInit}) => {
       
             const files=e.target.files[0]
             setUpload2(files.name)
-            methods.setValue('event_img', ImageURL(files.name) )  
+            methods.setValue('event_img', files.name)  
             setEvent_img(files)
             
     };
 
     //location 
-    const[positionMarker,setMarkerPosition]=useState({lat:6.4238,lng:-66.5897})
+    const[positionMarker,setMarkerPosition]=useState<{lat:number,lng:number}>({lat:parseFloat(dataInit.location.latitude),lng:parseFloat(dataInit.location.longitude)})
      const[dataMarker,setDataPosition]=useState(null)
-     const[dataCountry,setDataCountry]=useState<locationTypes>({long_name: '', short_name: '',types:[]})
-     const[dataCity,setDataCity]=useState('')
-     const[dataState,setDataState]=useState<locationTypes>({long_name: '', short_name: '',types:[]})
+     const[dataCountry,setDataCountry]=useState<locationTypes>({long_name: dataInit.location.country.long_name, short_name: dataInit.location.country.short_name,types:[]})
+     const[dataCity,setDataCity]=useState(dataInit.location.city)
+     const[dataState,setDataState]=useState<locationTypes>({long_name: dataInit.location.state.long_name, short_name: dataInit.location.state.short_name,types:[]})
      
      useEffect(()=>{
         const geostatus= new window.google.maps.Geocoder()
@@ -143,11 +144,17 @@ const EventCreateSpecialCategory = ({dataInit}) => {
         const lng= e.latLng.lng()
 
         setMarkerPosition({lat,lng})
+        
 
         const location=data?.find((e)=>e.type?.find((e)=>e==='postal_code'))?.data
-        setDataCountry(location.find((e)=>e.types.find((e)=>e==='country')))
-        setDataCity(location.find((e)=>e.types.find((e)=>e==='administrative_area_level_2'))?.long_name)
-        setDataState(location.find((e)=>e.types.find((e)=>e==='administrative_area_level_1')))
+        console.log('location',location)
+        setDataCountry(location?.find((e)=>e.types.find((e)=>e==='country')))
+        setDataCity(location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_2'))?.long_name?
+        location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_2'))?.long_name
+        :
+        location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_1'))?.long_name
+        )
+        setDataState(location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_1')))
         methods.setValue('location.latitude',lat)
         methods.setValue('location.longitude',lng)
         methods.setValue('location.country', {long_name:dataCountry?.long_name,short_name:dataCountry?.short_name} )
@@ -163,11 +170,10 @@ const EventCreateSpecialCategory = ({dataInit}) => {
  
 
 /*input color config*/
-    const [initColor, setInitColor]=useState<string>('#ffffff');
+    const [initColor, setInitColor]=useState<string>(dataInit.color);
     const  onChangeColor=(color:any)=>{ 
         setInitColor(color.hex)
         methods.setValue('color', initColor )
-        methods.setValue('user_id',user?.data?._id)
        
     }
 
@@ -175,8 +181,9 @@ const EventCreateSpecialCategory = ({dataInit}) => {
     const onSubmit:SubmitHandler<createEventSpecialCategory>= (data:createEventSpecialCategory)=>{
         const DataForm=new FormData
         DataForm.append("event_special_category", JSON.stringify(data))
-        DataForm.append("header_img", Header_event)
-        DataForm.append("event_img", Event_img)
+
+        Header_event && DataForm.append("header_img", Header_event)
+        Event_img && DataForm.append("event_img", Event_img)
         mutate({id:`${query.id}`,SpecialCategory:DataForm})
     };
    
@@ -184,10 +191,10 @@ const EventCreateSpecialCategory = ({dataInit}) => {
     
 
 
- const[category,setCategory]=useState( [{lang:'en', name:''}])
+ const[category,setCategory]=useState( dataInit.category)
 
 /*Lang*/
-    const[lang ,setlang]=useState(['en'])
+    const[lang ,setlang]=useState(dataInit.category.map((e)=>e.lang))
     const[SelectValue ,setSelectValue]=useState('en')
 
     const LangSelect:React.ChangeEventHandler<HTMLSelectElement> = (e:any)=>{
@@ -211,7 +218,7 @@ const [mapSearch,setMapSearch]=useState('')
 const search=(e)=>{
 setMapSearch(e.target.value)
 }
-const[initialDate,setinitialDate]=useState('')
+const[initialDate,setinitialDate]=useState(dataInit.initial_date)
 const dateInit=(e)=>{
     setinitialDate(e.target.value)
     methods.setValue('initial_date',e.target.value )
@@ -219,6 +226,10 @@ const dateInit=(e)=>{
 const dateEnd=(e)=>{
     methods.setValue('final_date', e.target.value )
 }
+ useEffect(()=>{
+        methods.setValue("header_img",dataInit.header_img)
+        methods.setValue("event_img",dataInit.event_img)
+},[])
 
 console.log('value',methods.getValues())
     return (
@@ -230,7 +241,7 @@ console.log('value',methods.getValues())
             <FormProvider {...methods}>
             <div className="flex flex-1 pt-6">
                 <div className="w-screen min-h-0 overflow-hidden">
-                    <form className="divide-y divide-gray-200 lg:col-span-9"  onSubmit={methods.handleSubmit(onSubmit)} method="POST">
+                    <form className="divide-y divide-gray-200 lg:col-span-9"  onSubmit={methods.handleSubmit(onSubmit)} method="PUT">
                         <div className="py-6 grid grid-cols-12 gap-6">
                             <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-12">
                             <CustomLabel field="header-upload" name={tc('field_header')} required />
@@ -239,26 +250,16 @@ console.log('value',methods.getValues())
                                      const file=acceptedFiles[0]
                                      setUpload(file?.name)
                                      setHeader_event(file)
-                                     methods.setValue('header_img', ImageURL(file?.name))
+                                     methods.setValue('header_img', file?.name)
                                      
                                     
                                      
                                 return (<div {...getRootProps()}className="mt-2 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 h-60">
                                 <div className="space-y-1 text-center">
-                                        {upload===undefined?<svg
-                                            className="mx-auto h-28 w-12 text-gray-400"
-                                            stroke="currentColor"
-                                            fill="none"
-                                            viewBox="0 0 48 48"
-                                            aria-hidden="true"
-                                        >
-                                            <path
-                                                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                                                strokeWidth={2}
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            />
-                                        </svg>:
+                                        {upload===undefined?
+                                        <Image src={ImageURL(dataInit.header_img)} alt='Event image' className="mx-auto" width={140} height={100}></Image>
+                                    
+                                        :
                                        <Image src={url} alt='Event image' className="mx-auto" width={140} height={100}></Image>
                                     }
                                         
@@ -288,27 +289,16 @@ console.log('value',methods.getValues())
                             {({getRootProps,getInputProps,acceptedFiles})=>{ 
                                      const file=acceptedFiles[0]
                                      setUpload2(file?.name)
-                                     methods.setValue('event_img', ImageURL(file?.name))
+                                     methods.setValue('event_img', file?.name)
                                      setEvent_img(file)
                                          
                                     
                                     
                                return ( <div {...getRootProps()} className="relative mt-2 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 h-60">
                                     <div className="space-y-1 text-center">
-                                            {upload2===undefined?<svg
-                                                className="mx-auto h-28 w-12 text-gray-400"
-                                                stroke="currentColor"
-                                                fill="none"
-                                                viewBox="0 0 48 48"
-                                                aria-hidden="true"
-                                            >
-                                                <path
-                                                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                                                    strokeWidth={2}
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                />
-                                            </svg>:
+                                        {upload2===undefined?
+                                        <Image src={ImageURL(dataInit.event_img)} alt='Event image' className="mx-auto" width={70} height={60}></Image>
+                                        :
                                         <Image src={url2} alt='Event image' className="mx-auto" width={70} height={60}></Image>
                                         }
                                             
@@ -340,6 +330,7 @@ console.log('value',methods.getValues())
                                 <div>
                                     <CustomLabel field="front_id" name={tc('field_color')} required />
                                     <SketchPicker 
+
                                     onChange={onChangeColor}
                                     color={initColor}
                                     />
@@ -348,13 +339,13 @@ console.log('value',methods.getValues())
                               
                             </div>
                             <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-12 gap-6 flex flex-row lg:mb-16 mb-6">
-                                <div>
+                                <div className="w-full ">
                                     <CustomLabel field="initial_date" name={tc('field_initial_date')}/>
-                                    <input type='date' onChange={dateInit} min={'2023-04-26'} max={'2026-04-26'} placeholder='Selecciona Fecha inicial'  className={FormStyles('input')} />
+                                    <input type='date' defaultValue={dataInit.initial_date} onChange={dateInit} min={'2023-04-26'} max={'2026-04-26'} placeholder='Selecciona Fecha inicial'  className={FormStyles('input')} />
                                 </div>
-                                <div>
+                                <div className="w-full ">
                                     <CustomLabel field="final_date" name={tc('field_final_date')}/>
-                                    <input type='date' onChange={dateEnd} min={initialDate} max={'2026-04-26'} placeholder='Selecciona Fecha final'  className={FormStyles('input')} />
+                                    <input type='date' defaultValue={dataInit.final_date} onChange={dateEnd} min={initialDate} max={'2026-04-26'} placeholder='Selecciona Fecha final'  className={FormStyles('input')} />
                                 </div>
                             </div>
                             <div className="col-span-12 sm:col-span-4 md:col-span-4 lg:col-span-4">
@@ -421,8 +412,7 @@ console.log('value',methods.getValues())
                             
                             })
                             }
-                        </div>
-                        <div className="col-span-12 sm:col-span-8 md:col-span-6 lg:col-span-6">
+                            <div className="col-span-6 sm:col-span-6 md:col-span-6 lg:col-span-6">
                             <CustomLabel field="description" name='description' required />
                             <input
                                 type="text"
@@ -430,7 +420,9 @@ console.log('value',methods.getValues())
                                 placeholder={tc("field_description")}
                                 className={FormStyles('input')}
                             />
+                            </div>
                         </div>
+                        
                         
                         <ToastContainer/>
                         {/* Buttons section */}
@@ -460,6 +452,13 @@ export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
 
 export async function getStaticProps({ locale,params }: GetStaticPropsContext) {
     const { data } = await axios.get(`/events/specials/categories/${params.id}`);
+    delete data.created_at
+    delete data.updated_at
+    delete data._id
+    delete data.status
+    data.user_id=data.user_id.id
+
+
     
     return {
         props: {

@@ -68,7 +68,7 @@ export function useUpdateEventSpecialCategory( ) {
          
     return updateEventSpecialCategory(values.id, values.SpecialCategory )},{onSuccess: (data,value)=>{
         return queryClient.setQueryData([key], (prev:any)=>{
-          const newArray= prev.map((item)=>{
+          const newArray= prev?.map((item)=>{
            if(item._id===value.id){
             return data
            }else{
