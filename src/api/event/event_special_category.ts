@@ -19,7 +19,13 @@ export const createEventSpecialCategory = async (
 ) => {
   const { data } = await axios.post(
     `/events/specials/categories/`,
-    special_category
+    special_category, {
+       
+        headers:{
+            'Content-Type':'multipart/form-data',
+            'accept': 'application/json'},
+        
+    } 
   );
 
   return data;
@@ -37,7 +43,13 @@ export const updateEventSpecialCategory = async (
 ) => {
   const { data } = await axios.put(
     `/events/specials/categories/${id}`,
-    special_category
+    special_category, {
+       
+        headers:{
+            'Content-Type':'multipart/form-data',
+            'accept': 'application/json'},
+        
+    } 
   );
 
   return data;

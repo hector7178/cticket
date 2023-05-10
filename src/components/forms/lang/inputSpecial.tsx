@@ -68,11 +68,19 @@ export const InputSpecial = ({ index = 0, control, onClick,lang}: Props) => {
   const baseErrors = formMethods?.formState?.errors?.['category']?.[index];
   return (
     <div className="col-span-12 sm:col-span-12 lg:col-span-6">
-      <div className="h-[120vw] sm:h-[60vw] lg:h-[27vw] gap-x-16 gap-y-10 border-2">
+      <div className="h-fit sm:h-fit lg:h-fit gap-x-16 gap-y-10 border-2">
         <div className="inputCoverAd relative space-y-1 px-5 pt-10 pb-10">
           <div className="grid grid-cols-12 gap-6 ">
             <div className="col-span-12">
+               <div className='col-span-10 md:col-span-6 flex flex-row gap-4 justify-between'>
+                
               <CustomLabel field="name" name={t('field_name')} />
+              {baseErrors?.['name'] && (
+                <CustomError
+                  error={baseErrors?.['name']?.message}
+                />
+              )}
+              </div>
               <input
                 type="text"
                 name="name"
@@ -84,15 +92,18 @@ export const InputSpecial = ({ index = 0, control, onClick,lang}: Props) => {
                     `category.${index}.name`
                 ) || {})}
               />
-              {baseErrors?.['name'] && (
-                <CustomError
-                  className="mt-2"
-                  error={baseErrors?.['name']?.message}
-                />
-              )}
+             
             </div>
             <div className="col-span-12">
+              <div className='col-span-10 md:col-span-6 flex flex-row gap-4 justify-between'>
+               
               <CustomLabel field="description" name={t('field_description')} />
+              {baseErrors?.['description'] && (
+                <CustomError
+                  error={baseErrors?.['description']?.message}
+                />
+              )}
+              </div>
               <Controller
                 control={control}
                 name={`category.${index}.description`}
@@ -103,16 +114,11 @@ export const InputSpecial = ({ index = 0, control, onClick,lang}: Props) => {
                     onChange={onChange}
                     value={value}
                     theme="snow"
-                    className="h-40 sm:h-40"
+                    className="h-auto sm:h-auto"
                   />
                 )}
               />
-              {baseErrors?.['description'] && (
-                <CustomError
-                  className="mt-24"
-                  error={baseErrors?.['description']?.message}
-                />
-              )}
+             
             </div>
           </div>
           <div className="absolute -top-5 w-fit bg-white px-2 py-1 text-xl font-black uppercase text-customShadow">

@@ -45,39 +45,40 @@ const EventCreateSpecialCategory = () => {
     ]
     const YupSchema= yup.object().shape({
         
-        user_id:yup.string().required(''),
+        
         category: yup.array().of(
             yup.object().shape({
-                lang:yup.string().required('lang required'),
-                name:yup.string().min(2,'min 3 caracters').required('Name is Required'),
-                description:yup.string().required('description required'),
+                lang:yup.string().required('Lang required'),
+                name:yup.string().min(3,'Min 3 caracters').required('Name is Required'),
+                description:yup.string().required('Description required'),
             })
         ),
-        header_img: yup.string().required(''),
-        event_img: yup.string().required(''),
-        color: yup.string().required(''),
-        initial_date: yup.string().required(''),
-        final_date: yup.string().required(''),
+        header_img: yup.string().required('Picture required'),
+        event_img: yup.string().required('Picture required' ),
+        color: yup.string().required('Color is required'),
+        initial_date: yup.string().required('Date is required'),
+        final_date: yup.string().required('Date is required'),
         location: yup.object().shape({
-        latitude: yup.string().required(''),
-        longitude: yup.string().required(''),
-        city: yup.string().required(''),
-        state: yup.object().shape({
-            long_name: yup.string().required(''),
-            short_name: yup.string().required(''),
+            latitude: yup.string().required(''),
+            longitude: yup.string().required(''),
+            city: yup.string().required('City is required'),
+            state: yup.object().shape({
+                long_name: yup.string().required('State is required'),
+                short_name: yup.string().required(''),
+            }),
+            country: yup.object().shape({
+                long_name:yup.string().required('Country is required'),
+                short_name: yup.string().required(''),
+            }),
         }),
-        country: yup.object().shape({
-            long_name:yup.string().required(''),
-            short_name: yup.string().required(''),
-        }),
-        }),
-        description: yup.string().required(''),
+        description: yup.string().min(5,'Min 25 caracters').max(300,' Max caracters').required('Description required'),
    })
     const methods = useForm<createEventSpecialCategory>({resolver:yupResolver(YupSchema)});
     const {mutate, isLoading, isError, isSuccess}= useCreateEventSpecialCategory()
     const user=useMe()
     const {locale, push}=useRouter()
-    console.log('errors', methods.formState.errors)
+    console.log('errors', methods.getValues())
+    console.log('user', user)
    
     useEffect(()=>{
    
@@ -91,7 +92,7 @@ const EventCreateSpecialCategory = () => {
                     }
                 
             } )
-            push(`/${locale}/panel/admin/event/venue/category`)   
+            push(`/${locale}/panel/event/special/`)   
         }else if(isError && methods.formState.isSubmitted){
            
 
@@ -106,7 +107,9 @@ const EventCreateSpecialCategory = () => {
     
     },[isSuccess, isError])
     
-    
+    useEffect(()=>{
+         methods.setValue('user_id',user?.data?._id)
+    },[])
     
  //input file config   
     const [upload, setUpload ]=useState('');
@@ -176,9 +179,9 @@ const EventCreateSpecialCategory = () => {
         setMarkerPosition({lat,lng})
 
         const location=data?.find((e)=>e.type?.find((e)=>e==='postal_code'))?.data
-        setDataCountry(location.find((e)=>e.types.find((e)=>e==='country')))
-        setDataCity(location.find((e)=>e.types.find((e)=>e==='administrative_area_level_2'))?.long_name)
-        setDataState(location.find((e)=>e.types.find((e)=>e==='administrative_area_level_1')))
+        setDataCountry(location?.find((e)=>e.types.find((e)=>e==='country')))
+        setDataCity(location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_2'))?.long_name)
+        setDataState(location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_1')))
         methods.setValue('location.latitude',lat)
         methods.setValue('location.longitude',lng)
         methods.setValue('location.country', {long_name:dataCountry?.long_name,short_name:dataCountry?.short_name} )
@@ -198,7 +201,7 @@ const EventCreateSpecialCategory = () => {
     const  onChangeColor=(color:any)=>{ 
         setInitColor(color.hex)
         methods.setValue('color', initColor )
-        methods.setValue('user_id',user?.data?._id)
+       
        
     }
 
@@ -261,6 +264,7 @@ console.log('value',methods.getValues())
                         <div className="py-6 grid grid-cols-12 gap-6">
                             <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-12">
                             <CustomLabel field="header-upload" name={tc('field_header')} required />
+                            <span className='text-[#e74c3c]'>{methods.formState.errors?.header_img?.message}</span>
                             <Dropzone noClick>
                                 {({getInputProps,getRootProps,acceptedFiles})=>{
                                      const file=acceptedFiles[0]
@@ -311,6 +315,7 @@ console.log('value',methods.getValues())
                             </Dropzone>
                             </div>
                             <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6">
+                            <span className='text-[#e74c3c]'>{methods.formState.errors?.event_img?.message}</span>
                             <Dropzone>
                             {({getRootProps,getInputProps,acceptedFiles})=>{ 
                                      const file=acceptedFiles[0]
@@ -366,6 +371,7 @@ console.log('value',methods.getValues())
                             <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6">
                                 <div>
                                     <CustomLabel field="front_id" name={tc('field_color')} required />
+                                    <span className='text-[#e74c3c]'>{methods.formState.errors?.color?.message}</span>
                                     <SketchPicker 
                                     onChange={onChangeColor}
                                     color={initColor}
@@ -377,10 +383,12 @@ console.log('value',methods.getValues())
                             <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-12 gap-6 flex flex-row lg:mb-16 mb-6">
                                 <div className="w-full ">
                                     <CustomLabel field="initial_date" name={tc('field_initial_date')}/>
+                                    <span className='text-[#e74c3c]'>{methods.formState.errors?.initial_date?.message}</span>
                                     <input type='date' onChange={dateInit} min={'2023-04-26'} max={'2026-04-26'} placeholder='Selecciona Fecha inicial'  className={FormStyles('input')} />
                                 </div>
                                 <div className="w-full ">
                                     <CustomLabel field="final_date" name={tc('field_final_date')}/>
+                                    <span className='text-[#e74c3c]'>{methods.formState.errors?.final_date?.message}</span>
                                     <input type='date' onChange={dateEnd} min={initialDate} max={'2026-04-26'} placeholder='Selecciona Fecha final'  className={FormStyles('input')} />
                                 </div>
                             
@@ -388,6 +396,7 @@ console.log('value',methods.getValues())
                             <div className="col-span-12 sm:col-span-4 md:col-span-4 lg:col-span-4">
                                 <div>
                                     <CustomLabel field="searchaddress" name={tc('field_searchaddress')} />
+                                    
                                     <input
                                         type="text"
                                         name="searchaddress"
@@ -400,6 +409,7 @@ console.log('value',methods.getValues())
                                     />
                                 </div>
                                 <div className='py-6'>
+                                    <span className='text-[#e74c3c]'>{methods.formState.errors?.location?.country?.long_name?.message}</span>
                                     <CustomLabel field="country" name={tc('field_country')} required />
                                     <input
                                         type="text"
@@ -412,6 +422,7 @@ console.log('value',methods.getValues())
                                     />
                                 </div>
                                 <div>
+                                    <span className='text-[#e74c3c]'>{methods.formState.errors?.location?.state?.long_name?.message}</span>
                                     <CustomLabel field="state" name={tc('field_state')} required />
                                     <input
                                         type="text"
@@ -424,6 +435,7 @@ console.log('value',methods.getValues())
                                     />
                                 </div>
                                 <div className='py-6'>
+                                    <span className='text-[#e74c3c]'>{methods.formState.errors?.location?.city?.message}</span>
                                     <CustomLabel field="city" name={tc('field_city')} required />
                                     <input
                                         type="text"
@@ -437,6 +449,8 @@ console.log('value',methods.getValues())
                             </div>
                             <div className="col-span-12 sm:col-span-8 md:col-span-8 lg:col-span-8">
                                 <div className="relative isolate bg-white">
+                                    <span className='text-[#e74c3c] flex text-end'>{methods.formState.errors.location?'Select location':null}</span>
+                                    
                                     <span>{tc('field_searchaddress')}</span>
                                     <div className="flex justify-start w-screen" style={{height:'400px', width:'600px'}}>
                                      <Map searchAddress={mapSearch} center={positionMarker} markerPosition={{lat:50,lng:50}} handleMapClick={handleMapClick} />
@@ -446,12 +460,19 @@ console.log('value',methods.getValues())
                             
                          {
                             lang.map((e, index)=>{
-                               return(  <InputSpecial index={index} key={index} lang={e} control={methods.control} onClick={()=>onDelete(e,index)}/>)
+                               return(  <InputSpecial 
+                                index={index} 
+                                key={index} 
+                                lang={e} 
+                                control={methods.control} 
+                                onClick={()=>onDelete(e,index)}
+                                />)
                             
                             })
                         }
                         <div className="col-span-12 sm:col-span-8 md:col-span-6 lg:col-span-6">
-                            <CustomLabel field="description" name='description' required />
+                            <span className='text-[#e74c3c]'>{methods.formState.errors?.description?.message}</span>
+                                <CustomLabel field="description" name='description' required />
                                     <input
                                         type="text"
                                         {...methods.register('description')}
@@ -465,7 +486,7 @@ console.log('value',methods.getValues())
                         {/* Buttons section */}
                         <div className="divide-y divide-gray-200">
                             <div className="mt-4 flex justify-end gap-x-3 py-4 px-4 sm:px-6">
-                                <CustomCancel onClick={()=>push(`/${locale}/panel/admin/event`)} />
+                                <CustomCancel onClick={()=>push(`/${locale}/panel/event/special/`)} />
                                 <CustomSubmit />
                             </div>
                         </div>

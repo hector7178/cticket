@@ -50,13 +50,13 @@ const EventCreateSpecialCategory = ({dataInit}) => {
         { page: t('event.special'), href: '/panel/event/special' },
         { page: t('actions.update'), href: '' }
     ]
-
+    const methods = useForm<createEventSpecialCategory>({defaultValues:dataInit});
     const {mutate, isLoading, isError, isSuccess}= useUpdateEventSpecialCategory()
     const user=useMe()
     const{query,locale, push}=useRouter()
     useEffect(()=>{
-        if (isSuccess){
-            toast.success('Event supplier updated :)',{
+        if (isSuccess && methods.formState.isSubmitted){
+            toast.success('Event Special updated :)',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
                         tittle:'success Updated',
@@ -65,7 +65,7 @@ const EventCreateSpecialCategory = ({dataInit}) => {
                 
             } )
             push(`/${locale}/panel/admin/event/`)   
-        }else if(isError){
+        }else if(isError && methods.formState.isSubmitted){
             toast.error(' Error, No updated :(',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -76,7 +76,7 @@ const EventCreateSpecialCategory = ({dataInit}) => {
         }
     },[isSuccess,isError])
     
-    const methods = useForm<createEventSpecialCategory>({defaultValues:dataInit});
+    
  //input file config   
     const [upload, setUpload ]=useState('');
     const [upload2, setUpload2 ]=useState('');
