@@ -274,8 +274,8 @@ export interface createEventSpecialCategory {
   initial_date: string;
   final_date: string;
   location: {
-    latitude: string;
-    longitude: string;
+    latitude: number;
+    longitude: number;
     city: string;
     state: {
       long_name: string;

@@ -122,6 +122,9 @@ const EventCreateSpecialCategory = ({dataInit}) => {
     };
 
     //location 
+
+    const [mapSearch,setMapSearch]=useState('')
+
     const[positionMarker,setMarkerPosition]=useState<{lat:number,lng:number}>({lat:parseFloat(dataInit.location.latitude),lng:parseFloat(dataInit.location.longitude)})
      const[dataMarker,setDataPosition]=useState(null)
      const[dataCountry,setDataCountry]=useState<locationTypes>({long_name: dataInit.location.country.long_name, short_name: dataInit.location.country.short_name,types:[]})
@@ -131,18 +134,29 @@ const EventCreateSpecialCategory = ({dataInit}) => {
      useEffect(()=>{
         const geostatus= new window.google.maps.Geocoder()
         positionMarker===null?null:geostatus?.geocode({location:positionMarker}).then((res)=>setDataPosition(res.results))
-     },[positionMarker])
+        methods.setValue('location.latitude',positionMarker.lat)
+        methods.setValue('location.longitude',positionMarker.lng)
+        methods.setValue('location.country', {long_name:dataCountry?.long_name,short_name:dataCountry?.short_name} )
+        methods.setValue('location.city', dataCity)
+        methods.setValue('location.state', {long_name:dataState?.long_name,short_name:dataState?.short_name})
+     
+    
+    },[positionMarker])
 
-     const data= dataMarker?.map((e)=>{
+    const data= dataMarker?.map((e)=>{
         const data={type:e.types,data:e.address_components}
         
         return data
-     })
+    })
+
+    const search=(e)=>{
+        setMapSearch(e.target.value)
+    }
     
-        const handleMapClick= (e)=>{
+    const handleMapClick= (e)=>{
         const lat= e.latLng.lat()
         const lng= e.latLng.lng()
-
+        setMapSearch('')
         setMarkerPosition({lat,lng})
         
 
@@ -155,12 +169,7 @@ const EventCreateSpecialCategory = ({dataInit}) => {
         location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_1'))?.long_name
         )
         setDataState(location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_1')))
-        methods.setValue('location.latitude',lat)
-        methods.setValue('location.longitude',lng)
-        methods.setValue('location.country', {long_name:dataCountry?.long_name,short_name:dataCountry?.short_name} )
-        methods.setValue('location.city', dataCity)
-        methods.setValue('location.state', {long_name:dataState?.long_name,short_name:dataState?.short_name})
-     
+        
     }
 
    
@@ -204,20 +213,19 @@ const EventCreateSpecialCategory = ({dataInit}) => {
     const onAppend=()=>{
         if(!(lang.includes(SelectValue))){
         setlang([...lang, SelectValue])
-        setCategory([...category,{lang:SelectValue, name:''}])
+        setCategory([...category,{lang:SelectValue, name:'',description:''}])
         }
     }
-    const onDelete=(exp, index)=>{
-        if(index > 0 ){
+    const onDelete=(e, exp, index)=>{
+        if(category.length >= 2 ){
         setlang((e)=>e.filter((f)=>f !== exp))
         setCategory(category.filter((e)=>e.lang!==exp))
+        methods.setValue('category', category.filter((e)=>e.lang!==exp))
+        
         }
     }
 
-const [mapSearch,setMapSearch]=useState('')
-const search=(e)=>{
-setMapSearch(e.target.value)
-}
+
 const[initialDate,setinitialDate]=useState(dataInit.initial_date)
 const dateInit=(e)=>{
     setinitialDate(e.target.value)
@@ -368,10 +376,11 @@ console.log('value',methods.getValues())
                                         type="text"
                                         name="country"
                                         id="country"
-                                        value={dataCountry?.long_name}
+                                        defaultValue={dataCountry?.long_name}
                                         autoComplete={tc('auto_country')}
                                         placeholder={tc('field_country')}
                                         className={FormStyles('input')}
+                                        disabled
                                     />
                                 </div>
                                 <div>
@@ -380,10 +389,11 @@ console.log('value',methods.getValues())
                                         type="text"
                                         name="state"
                                         id="state"
-                                        value={dataState?.long_name}
+                                        defaultValue={dataState?.long_name}
                                         autoComplete={tc('auto_state')}
                                         placeholder={tc('field_state')}
                                         className={FormStyles('input')}
+                                        disabled
                                     />
                                 </div>
                                 <div className='py-6'>
@@ -391,10 +401,11 @@ console.log('value',methods.getValues())
                                     <input
                                         type="text"
                                         id="city"
-                                        value={dataCity}
+                                        defaultValue={dataCity}
                                         autoComplete={tc('auto_city')}
                                         placeholder={tc('field_city')}
                                         className={FormStyles('input')}
+                                        disabled
                                     />
                                 </div>
                             </div>
@@ -407,8 +418,16 @@ console.log('value',methods.getValues())
                                 </div>
                             </div>
                             {
-                            lang.map((e, index)=>{
-                               return(  <InputSpecial index={index} key={index} lang={e} control={methods.control} onClick={()=>onDelete(e,index)}/>)
+                            category.map((exp, index)=>{
+                               return(  <InputSpecial 
+                                index={index} 
+                                key={index} 
+                                lang={exp?.lang} 
+                                control={methods.control} 
+                                num={category?.length}
+                                onClick={(e)=>onDelete(e, exp?.lang,index)}
+                                />
+                                 )
                             
                             })
                             }

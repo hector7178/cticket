@@ -54,13 +54,14 @@ const formats = [
 type Props = {
   index?: number,
   control?:any,
-  onClick?:React.MouseEventHandler;
-  lang:string;
+  onClick?:React.MouseEventHandler,
+  lang:string,
+  num:number,
 
 
 };
 
-export const InputSpecial = ({ index = 0, control, onClick,lang}: Props) => {
+export const InputSpecial = ({ index = 0, control, onClick, lang, num}: Props) => {
   
   const formMethods = useFormContext();
   const t = useTranslations('Common_Forms');
@@ -124,8 +125,9 @@ export const InputSpecial = ({ index = 0, control, onClick,lang}: Props) => {
           <div className="absolute -top-5 w-fit bg-white px-2 py-1 text-xl font-black uppercase text-customShadow">
             {lang}
           </div>
-           {index > 0? < XMarkIcon
+           {num >= 2? < XMarkIcon
             onClick={onClick}
+            id={`${index}`}
             name="delete"
             width='1.5rem'
             height='1.5rem'

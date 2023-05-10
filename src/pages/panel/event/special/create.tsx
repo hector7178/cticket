@@ -59,8 +59,8 @@ const EventCreateSpecialCategory = () => {
         initial_date: yup.string().required('Date is required'),
         final_date: yup.string().required('Date is required'),
         location: yup.object().shape({
-            latitude: yup.string().required(''),
-            longitude: yup.string().required(''),
+            latitude: yup.number().required(''),
+            longitude: yup.number().required(''),
             city: yup.string().required('City is required'),
             state: yup.object().shape({
                 long_name: yup.string().required('State is required'),
@@ -107,10 +107,7 @@ const EventCreateSpecialCategory = () => {
     
     },[isSuccess, isError])
     
-    useEffect(()=>{
-         methods.setValue('user_id',user?.data?._id)
-    },[])
-    
+   
  //input file config   
     const [upload, setUpload ]=useState('');
     const [upload2, setUpload2 ]=useState('');
@@ -155,6 +152,9 @@ const EventCreateSpecialCategory = () => {
     };
 
     //location 
+
+    const [mapSearch,setMapSearch]=useState('')
+
     const[positionMarker,setMarkerPosition]=useState({lat:6.4238,lng:-66.5897})
      const[dataMarker,setDataPosition]=useState(null)
      const[dataCountry,setDataCountry]=useState<locationTypes>({long_name: '', short_name: '',types:[]})
@@ -164,30 +164,40 @@ const EventCreateSpecialCategory = () => {
      useEffect(()=>{
         const geostatus= new window.google.maps.Geocoder()
         positionMarker===null?null:geostatus?.geocode({location:positionMarker}).then((res)=>setDataPosition(res.results))
-     },[positionMarker])
+        methods.setValue('location.latitude', positionMarker.lat)
+        methods.setValue('location.longitude', positionMarker.lng )
+        methods.setValue('location.country', {long_name:dataCountry?.long_name,short_name:dataCountry?.short_name} )
+        methods.setValue('location.city', dataCity)
+        methods.setValue('location.state', {long_name:dataState?.long_name,short_name:dataState?.short_name})
+     
+    
+    },[positionMarker])
 
-     const data= dataMarker?.map((e)=>{
+    const data= dataMarker?.map((e)=>{
         const data={type:e.types,data:e.address_components}
         
         return data
-     })
+    })
+    const search=(e)=>{
+        setMapSearch(e.target.value)
+    }
     
-        const handleMapClick= (e)=>{
+    const handleMapClick= (e)=>{
         const lat= e.latLng.lat()
         const lng= e.latLng.lng()
+        setMapSearch('')
 
         setMarkerPosition({lat,lng})
 
         const location=data?.find((e)=>e.type?.find((e)=>e==='postal_code'))?.data
         setDataCountry(location?.find((e)=>e.types.find((e)=>e==='country')))
-        setDataCity(location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_2'))?.long_name)
+        setDataCity(location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_2'))?.long_name?
+        location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_2'))?.long_name
+        :
+        location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_1'))?.long_name
+        )
         setDataState(location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_1')))
-        methods.setValue('location.latitude',lat)
-        methods.setValue('location.longitude',lng)
-        methods.setValue('location.country', {long_name:dataCountry?.long_name,short_name:dataCountry?.short_name} )
-        methods.setValue('location.city', dataCity)
-        methods.setValue('location.state', {long_name:dataState?.long_name,short_name:dataState?.short_name})
-     
+       
     }
 
    
@@ -206,7 +216,7 @@ const EventCreateSpecialCategory = () => {
     }
 
 /*Lang*/
- const[category,setCategory]=useState( [{lang:'en', name:''}])
+ const[category,setCategory]=useState( [{lang:'en', name:'',description:''}])
 
 /*Lang*/
     const[lang ,setlang]=useState(['en'])
@@ -219,20 +229,19 @@ const EventCreateSpecialCategory = () => {
     const onAppend=()=>{
         if(!(lang.includes(SelectValue))){
         setlang([...lang, SelectValue])
-        setCategory([...category,{lang:SelectValue, name:''}])
+        setCategory([...category,{lang:SelectValue, name:'',description:''}])
         }
     }
-    const onDelete=(exp, index)=>{
-        if(index > 0 ){
+    const onDelete=(e, exp, index)=>{
+        if(category.length >= 2 ){
         setlang((e)=>e.filter((f)=>f !== exp))
         setCategory(category.filter((e)=>e.lang!==exp))
+        methods.setValue('category', category.filter((e)=>e.lang!==exp))
+        
         }
     }
 
-const [mapSearch,setMapSearch]=useState('')
-const search=(e)=>{
-setMapSearch(e.target.value)
-}
+
 const[initialDate,setinitialDate]=useState('')
 const dateInit=(e)=>{
     setinitialDate(e.target.value)
@@ -241,6 +250,10 @@ const dateInit=(e)=>{
 const dateEnd=(e)=>{
     methods.setValue('final_date', e.target.value )
 }
+useEffect(()=>{
+         methods.setValue('user_id',user?.data?._id)
+},[positionMarker])
+    
 /*submit form*/ 
     const onSubmit:SubmitHandler<createEventSpecialCategory>= (data:createEventSpecialCategory)=>{
         const DataForm=new FormData
@@ -459,13 +472,14 @@ console.log('value',methods.getValues())
                             </div>
                             
                          {
-                            lang.map((e, index)=>{
+                            category.map((exp, index)=>{
                                return(  <InputSpecial 
                                 index={index} 
                                 key={index} 
-                                lang={e} 
+                                lang={exp.lang} 
                                 control={methods.control} 
-                                onClick={()=>onDelete(e,index)}
+                                num={category.length}
+                                onClick={(e)=>onDelete(e,exp.lang,index)}
                                 />)
                             
                             })

@@ -45,7 +45,7 @@ export function useCreateEventSpecialCategory() {
   const {mutate, isLoading, isError, isSuccess}= useMutation(
      createEventSpecialCategory, {onSuccess: (data, event_SpecialCategory) => {
       queryClient.setQueryData([key], (prevEventSpecialCategory:any) =>{
-      return prevEventSpecialCategory?.push(event_SpecialCategory)}
+      return prevEventSpecialCategory.items?.push(data)}
       );
     },
   }); 
@@ -66,17 +66,11 @@ export function useUpdateEventSpecialCategory( ) {
   const {mutate, isLoading, isError, isSuccess}= useMutation((values:{id:string,SpecialCategory:FormData})=>{
         
          
-    return updateEventSpecialCategory(values.id, values.SpecialCategory )},{onSuccess: (data,value)=>{
+    return updateEventSpecialCategory(values.id, values.SpecialCategory )},{onSuccess: (dataRes,value)=>{
         return queryClient.setQueryData([key], (prev:any)=>{
+          const {data}=useQueryEventsSpecialsCategories('','','')
+          console.log(prev, data )
           
-          const newArray= prev.items?.map((item)=>{
-           if(item._id===value.id){
-            return data
-           }else{
-            return item
-           }
-          })
-          return newArray
         })
     }}
 )
