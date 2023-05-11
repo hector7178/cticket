@@ -44,18 +44,10 @@ export function useCreateEventSpecialCategory() {
 
   const {mutate, isLoading, isError, isSuccess}= useMutation(
      createEventSpecialCategory, {onSuccess: (dataRes, event_SpecialCategory) => {
-      return queryClient.setQueryData([key], async (prevEventSpecialCategory:any) =>{
-        const data= await getEventsSpecialsCategory('','','')
-        const edited=data?.items?.find((e)=>e._id===dataRes._id)
-          const arr= await prevEventSpecialCategory?.items?.map((e)=>{
-              if(e._id===dataRes._id){
-                  return e=edited
-              }else{
-                 return e
-              }
-          })
-        
-        return  arr}
+      return queryClient.setQueryData([key],  (prevEventSpecialCategory:any) =>{
+        return prevEventSpecialCategory?.push(dataRes)
+      }
+
       );
     },
   }); 

@@ -259,7 +259,7 @@ const dateEnd=(e)=>{
 }
 useEffect(()=>{
          methods.setValue('user_id',user?.data?._id)
-},[positionMarker])
+},[handleMapClick])
     
 /*submit form*/ 
     const onSubmit:SubmitHandler<createEventSpecialCategory>= (data:createEventSpecialCategory)=>{
