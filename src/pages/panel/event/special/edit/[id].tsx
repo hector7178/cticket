@@ -82,8 +82,8 @@ const EventCreateSpecialCategory = ({dataInit}) => {
     const [upload, setUpload ]=useState('');
     const [upload2, setUpload2 ]=useState('');
     
-    const[url,setUrl]=useState('');
-    const[url2,setUrl2]=useState<string >('');
+    const[url,setUrl]=useState<string>();
+    const[url2,setUrl2]=useState<string >();
 
    const [Header_event,setHeader_event]=useState<File>()
    const [Event_img,setEvent_img]=useState<File>()   
@@ -150,12 +150,12 @@ const EventCreateSpecialCategory = ({dataInit}) => {
             return data
         })
         const location=data?.find((e)=>e.type?.find((e)=>e==='postal_code'))?.data;
-        const country=location?.find((e)=>e.types.find((e)=>e==='country'));
-        const city= location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_2'))?
-        location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_2'))?.long_name
+        const country=location?.find((e)=>e.types?.find((e)=>e==='country'));
+        const city= location?.find((e)=>e.types?.find((e)=>e==='administrative_area_level_2'))?
+        location?.find((e)=>e.types?.find((e)=>e==='administrative_area_level_2'))?.long_name
         :
-        location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_1'))?.long_name;
-        const state=location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_1'));
+        location?.find((e)=>e.types?.find((e)=>e==='administrative_area_level_1'))?.long_name;
+        const state=location?.find((e)=>e.types?.find((e)=>e==='administrative_area_level_1'));
 
         setDataCountry(country)
         setDataCity(city)
@@ -257,7 +257,7 @@ const dateEnd=(e)=>{
                             <CustomLabel field="header-upload" name={tc('field_header')} required />
                             <Dropzone noClick>
                                 {({getInputProps,getRootProps,acceptedFiles})=>{
-                                     const file=acceptedFiles[0]
+                                    if(file=acceptedFiles[0] !== ''|| undefined) const file=acceptedFiles[0]
                                      setUpload(file?.name)
                                      setHeader_event(file)
                                      methods.setValue('header_img', file?.name)
@@ -270,7 +270,7 @@ const dateEnd=(e)=>{
                                         <Image src={ImageURL(dataInit.header_img)} alt='Event image' className="mx-auto" width={140} height={100}></Image>
                                     
                                         :
-                                       <Image src={url} alt='Event image' className="mx-auto" width={140} height={100}></Image>
+                                      url && <Image src={url} alt='Event image' className="mx-auto" width={140} height={100}></Image>
                                     }
                                         
                                     <div className="flex text-sm text-gray-600">
@@ -297,10 +297,13 @@ const dateEnd=(e)=>{
                             <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6">
                             <Dropzone>
                             {({getRootProps,getInputProps,acceptedFiles})=>{ 
-                                     const file=acceptedFiles[0]
-                                     setUpload2(file?.name)
-                                     methods.setValue('event_img', file?.name)
-                                     setEvent_img(file)
+                                     
+                                    if(acceptedFiles[0]?.name !== '' || undefined){ 
+                                        const file=acceptedFiles[0]
+                                        setUpload2(file?.name)
+                                        methods.setValue('event_img', file?.name)
+                                        setEvent_img(file)
+                                    }
                                          
                                     
                                     
@@ -309,7 +312,7 @@ const dateEnd=(e)=>{
                                         {upload2===undefined?
                                         <Image src={ImageURL(dataInit.event_img)} alt='Event image' className="mx-auto" width={70} height={60}></Image>
                                         :
-                                        <Image src={url2} alt='Event image' className="mx-auto" width={70} height={60}></Image>
+                                        url2 && <Image src={url2} alt='Event image' className="mx-auto" width={70} height={60}></Image>
                                         }
                                             
                                         <div className="flex text-sm text-gray-600">
