@@ -43,9 +43,19 @@ export function useCreateEventSpecialCategory() {
   const queryClient=useQueryClient();
 
   const {mutate, isLoading, isError, isSuccess}= useMutation(
-     createEventSpecialCategory, {onSuccess: (data, event_SpecialCategory) => {
-      queryClient.setQueryData([key], (prevEventSpecialCategory:any) =>{
-      return prevEventSpecialCategory.items?.push(data)}
+     createEventSpecialCategory, {onSuccess: (dataRes, event_SpecialCategory) => {
+      return queryClient.setQueryData([key], async (prevEventSpecialCategory:any) =>{
+        const data= await getEventsSpecialsCategory('','','')
+        const edited=data?.items?.find((e)=>e._id===dataRes._id)
+          const arr= await prevEventSpecialCategory?.items?.map((e)=>{
+              if(e._id===dataRes._id){
+                  return e=edited
+              }else{
+                 return e
+              }
+          })
+        
+        return  arr}
       );
     },
   }); 
@@ -67,9 +77,13 @@ export function useUpdateEventSpecialCategory( ) {
         
          
     return updateEventSpecialCategory(values.id, values.SpecialCategory )},{onSuccess: (dataRes,value)=>{
-        return queryClient.setQueryData([key], (prev:any)=>{
-          const {data}=useQueryEventsSpecialsCategories('','','')
-          console.log(prev, data )
+        return queryClient.setQueryData([key], async (prev:any)=>{
+          const data= await getEventsSpecialsCategory('','','')
+          if(prev?.items){
+            prev.items=data?.items
+          }
+
+          return prev
           
         })
     }}

@@ -38,7 +38,7 @@ type locationTypes={
 }
 
 const EventCreateSpecialCategory = ({dataInit}) => {
-    console.log('data',dataInit)
+   
     const t = useTranslations("Panel_SideBar");
     const tp = useTranslations('Panel_Profile_Request');
     const tc = useTranslations("Common_Forms");
@@ -239,7 +239,7 @@ const dateEnd=(e)=>{
         methods.setValue("event_img",dataInit.event_img)
 },[])
 
-console.log('value',methods.getValues())
+
     return (
         <>
             {/* Breadcrumb section */}
@@ -376,7 +376,7 @@ console.log('value',methods.getValues())
                                         type="text"
                                         name="country"
                                         id="country"
-                                        defaultValue={dataCountry?.long_name}
+                                        value={dataCountry?.long_name}
                                         autoComplete={tc('auto_country')}
                                         placeholder={tc('field_country')}
                                         className={FormStyles('input')}
@@ -389,7 +389,7 @@ console.log('value',methods.getValues())
                                         type="text"
                                         name="state"
                                         id="state"
-                                        defaultValue={dataState?.long_name}
+                                        value={dataState?.long_name}
                                         autoComplete={tc('auto_state')}
                                         placeholder={tc('field_state')}
                                         className={FormStyles('input')}
@@ -401,7 +401,7 @@ console.log('value',methods.getValues())
                                     <input
                                         type="text"
                                         id="city"
-                                        defaultValue={dataCity}
+                                        value={dataCity}
                                         autoComplete={tc('auto_city')}
                                         placeholder={tc('field_city')}
                                         className={FormStyles('input')}

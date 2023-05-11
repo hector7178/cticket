@@ -33,6 +33,7 @@ type locationTypes={
 }
 
 const EventCreateSpecialCategory = () => {
+    const geostatus= new window.google.maps.Geocoder()
     const t = useTranslations("Panel_SideBar");
     const tp = useTranslations('Panel_Profile_Request');
     const tc = useTranslations("Common_Forms");
@@ -77,8 +78,7 @@ const EventCreateSpecialCategory = () => {
     const {mutate, isLoading, isError, isSuccess}= useCreateEventSpecialCategory()
     const user=useMe()
     const {locale, push}=useRouter()
-    console.log('errors', methods.getValues())
-    console.log('user', user)
+   
    
     useEffect(()=>{
    
@@ -157,54 +157,61 @@ const EventCreateSpecialCategory = () => {
 
     const[positionMarker,setMarkerPosition]=useState({lat:6.4238,lng:-66.5897})
      const[dataMarker,setDataPosition]=useState(null)
-     const[dataCountry,setDataCountry]=useState<locationTypes>({long_name: '', short_name: '',types:[]})
+     const[dataCountry,setDataCountry]=useState<{long_name:string,short_name:string,types:string[]}>({long_name: '', short_name: '',types:[]})
      const[dataCity,setDataCity]=useState('')
-     const[dataState,setDataState]=useState<locationTypes>({long_name: '', short_name: '',types:[]})
-     
-     useEffect(()=>{
-        const geostatus= new window.google.maps.Geocoder()
-        positionMarker===null?null:geostatus?.geocode({location:positionMarker}).then((res)=>setDataPosition(res.results))
-        methods.setValue('location.latitude', positionMarker.lat)
-        methods.setValue('location.longitude', positionMarker.lng )
-        methods.setValue('location.country', {long_name:dataCountry?.long_name,short_name:dataCountry?.short_name} )
-        methods.setValue('location.city', dataCity)
-        methods.setValue('location.state', {long_name:dataState?.long_name,short_name:dataState?.short_name})
+     const[dataState,setDataState]=useState<{long_name:string,short_name:string,types:string[]}>({long_name: '', short_name: '',types:[]})
      
     
-    },[positionMarker])
 
     const data= dataMarker?.map((e)=>{
         const data={type:e.types,data:e.address_components}
         
         return data
     })
+
+    console.log('location',dataMarker)
     const search=(e)=>{
         setMapSearch(e.target.value)
     }
     
     const handleMapClick= (e)=>{
-        const lat= e.latLng.lat()
-        const lng= e.latLng.lng()
+        
+        const lat= parseFloat(e.latLng.lat())
+        const lng= parseFloat(e.latLng.lng())
         setMapSearch('')
 
         setMarkerPosition({lat,lng})
 
-        const location=data?.find((e)=>e.type?.find((e)=>e==='postal_code'))?.data
-        setDataCountry(location?.find((e)=>e.types.find((e)=>e==='country')))
-        setDataCity(location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_2'))?.long_name?
+        geostatus?.geocode({location:{lat:lat,lng:lng}}).then((res)=>{ 
+        const data=res.results.map((e)=>{const data={type:e.types,data:e.address_components}
+        return data
+        })
+        const location=data?.find((e)=>e.type?.find((e)=>e==='postal_code'))?.data;
+        const country=location?.find((e)=>e.types.find((e)=>e==='country'));
+        const city= location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_2'))?
         location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_2'))?.long_name
         :
-        location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_1'))?.long_name
+        location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_1'))?.long_name;
+        const state=location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_1'));
+
+        setDataCountry(country)
+        setDataCity(city)
+        setDataState(state)
+        methods.setValue('location.country', {long_name:country.long_name,short_name:country.short_name} )
+        methods.setValue('location.city', city)
+        methods.setValue('location.state', {long_name:state.long_name,short_name:state.short_name})
+
+        }
+        
+        
         )
-        setDataState(location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_1')))
        
+        
+        methods.setValue('location.latitude', lat)
+        methods.setValue('location.longitude', lng )
     }
 
-   
-
-    
-    
- 
+  
 
 /*input color config*/
     const [initColor, setInitColor]=useState<string>('#ffffff');
@@ -428,10 +435,12 @@ console.log('value',methods.getValues())
                                         type="text"
                                         name="country"
                                         id="country"
+                                        {...methods.register('location.country')}
                                         value={dataCountry?.long_name}
                                         autoComplete={tc('auto_country')}
                                         placeholder={tc('field_country')}
                                         className={FormStyles('input')}
+                                        disabled
                                     />
                                 </div>
                                 <div>
@@ -441,10 +450,12 @@ console.log('value',methods.getValues())
                                         type="text"
                                         name="state"
                                         id="state"
+                                        {...methods.register('location.state')}
                                         value={dataState?.long_name}
                                         autoComplete={tc('auto_state')}
                                         placeholder={tc('field_state')}
                                         className={FormStyles('input')}
+                                        disabled
                                     />
                                 </div>
                                 <div className='py-6'>
@@ -453,10 +464,12 @@ console.log('value',methods.getValues())
                                     <input
                                         type="text"
                                         id="city"
+                                        {...methods.register('location.city')}
                                         value={dataCity}
                                         autoComplete={tc('auto_city')}
                                         placeholder={tc('field_city')}
                                         className={FormStyles('input')}
+                                        disabled
                                     />
                                 </div>
                             </div>
