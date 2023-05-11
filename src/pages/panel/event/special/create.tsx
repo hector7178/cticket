@@ -270,7 +270,6 @@ useEffect(()=>{
      mutate(DataForm)
 };
 
-console.log('value',methods.getValues())
     return (
         <>
             {/* Breadcrumb section */}
