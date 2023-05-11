@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
 // Components
@@ -62,10 +62,13 @@ type Props = {
 };
 
 export const InputSpecial = ({ index = 0, control, onClick, lang, num}: Props) => {
+  useEffect(()=>{
+    formMethods?.setValue(`category.${index}.lang`,lang)
+  },[lang, index])
   
   const formMethods = useFormContext();
   const t = useTranslations('Common_Forms');
-  formMethods?.setValue(`category.${index}.lang`,lang);
+  
   const baseErrors = formMethods?.formState?.errors?.['category']?.[index];
   return (
     <div className="col-span-12 sm:col-span-12 lg:col-span-6">

@@ -112,8 +112,8 @@ const EventCreateSpecialCategory = () => {
     const [upload, setUpload ]=useState('');
     const [upload2, setUpload2 ]=useState('');
     
-    const[url,setUrl]=useState('');
-    const[url2,setUrl2]=useState<string >('');
+    const[url,setUrl]=useState<string>();
+    const[url2,setUrl2]=useState<string>();
 
    const [Header_event,setHeader_event]=useState<File>()
    const [Event_img,setEvent_img]=useState<File>()   
@@ -187,12 +187,12 @@ const EventCreateSpecialCategory = () => {
         return data
         })
         const location=data?.find((e)=>e.type?.find((e)=>e==='postal_code'))?.data;
-        const country=location?.find((e)=>e.types.find((e)=>e==='country'));
-        const city= location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_2'))?
-        location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_2'))?.long_name
+        const country=location?.find((e)=>e.types?.find((e)=>e==='country'));
+        const city= location?.find((e)=>e.types?.find((e)=>e==='administrative_area_level_2'))?
+        location?.find((e)=>e.types?.find((e)=>e==='administrative_area_level_2'))?.long_name
         :
-        location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_1'))?.long_name;
-        const state=location?.find((e)=>e.types.find((e)=>e==='administrative_area_level_1'));
+        location?.find((e)=>e.types?.find((e)=>e==='administrative_area_level_1'))?.long_name;
+        const state=location?.find((e)=>e.types?.find((e)=>e==='administrative_area_level_1'));
 
         setDataCountry(country)
         setDataCity(city)
@@ -287,10 +287,11 @@ console.log('value',methods.getValues())
                             <span className='text-[#e74c3c]'>{methods.formState.errors?.header_img?.message}</span>
                             <Dropzone noClick>
                                 {({getInputProps,getRootProps,acceptedFiles})=>{
+                                    if(acceptedFiles[0]?.name  !== ''){
                                      const file=acceptedFiles[0]
                                      setUpload(file?.name)
                                      setHeader_event(file)
-                                     methods.setValue('header_img', file?.name)
+                                     methods.setValue('header_img', file?.name)}
                                      
                                     
                                      
@@ -310,7 +311,7 @@ console.log('value',methods.getValues())
                                                 strokeLinejoin="round"
                                             />
                                         </svg>:
-                                       <Image src={url} alt='Event image' className="mx-auto" width={140} height={100}></Image>
+                                      url && <Image src={url} alt='Event image' className="mx-auto" width={140} height={100}></Image>
                                     }
                                         
                                     <div className="flex text-sm text-gray-600">
@@ -338,10 +339,11 @@ console.log('value',methods.getValues())
                             <span className='text-[#e74c3c]'>{methods.formState.errors?.event_img?.message}</span>
                             <Dropzone>
                             {({getRootProps,getInputProps,acceptedFiles})=>{ 
+                                if(acceptedFiles[0]?.name!==''){
                                      const file=acceptedFiles[0]
                                      setUpload2(file?.name)
                                      methods.setValue('event_img', file?.name)
-                                     setEvent_img(file)
+                                     setEvent_img(file)}
                                          
                                     
                                     
@@ -361,7 +363,7 @@ console.log('value',methods.getValues())
                                                     strokeLinejoin="round"
                                                 />
                                             </svg>:
-                                        <Image src={url2} alt='Event image' className="mx-auto" width={70} height={60}></Image>
+                                        url2 && <Image src={url2} alt='Event image' className="mx-auto" width={70} height={60}></Image>
                                         }
                                             
                                         <div className="flex text-sm text-gray-600">

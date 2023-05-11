@@ -21,13 +21,14 @@ export function useEventsSpecialsCategories() {
 }
 
 export function useQueryEventsSpecialsCategories(searchkey:string , searchword:string,sortby:string) {
-  return useQuery<WithDocs<EventSpecialCategory>>([key], ()=> getEventsSpecialsCategory(searchkey, searchword, sortby));
+  return useQuery<EventSpecialCategory>([key], ()=> getEventsSpecialsCategory(searchkey, searchword, sortby));
 }
 
 export function useEventSpecialCategory(event_special_category_id: string) {
-  return useQuery<EventSpecialCategory>([key, event_special_category_id], () =>
+  const {data,isError, isLoading, isSuccess}= useQuery<EventSpecialCategory>([key, event_special_category_id], () =>
     readEventSpecialCategory(event_special_category_id as any)
   );
+  return {data,isError, isLoading, isSuccess}
 }
 
 export function useEventSpecialCategoryDateRange(
@@ -69,15 +70,22 @@ export function useUpdateEventSpecialCategory( ) {
         
          
     return updateEventSpecialCategory(values.id, values.SpecialCategory )},{onSuccess: (dataRes,value)=>{
-        return queryClient.setQueryData([key], async (prev:any)=>{
-          const data= await getEventsSpecialsCategory('','','')
-          if(prev?.items){
-            prev.items=data?.items
+        return queryClient.setQueryData([key],(prev:any)=>{ 
+          console.log('respuesta',dataRes)
+          console.log('prev',prev)
+          let arr=prev
+          if(arr?.items){
+            arr.items = prev?.items?.map((item)=>{
+             if( item._id===dataRes._id){
+                 return  dataRes
+             }else{
+                  return item
+              }
+            })
+            return arr
           }
-
-          return prev
-          
         })
+     
     }}
 )
 return {mutate, isLoading, isError, isSuccess};
@@ -93,7 +101,8 @@ export function useDeleteEventSpecialCategory( ) {
   const {mutate, isLoading, isError, isSuccess}= useMutation((id:string)=>{
     return deleteEventSpecialCategory(id)},{onSuccess: (data,catDel)=>{
     return queryClient.setQueryData([key], (prev:any)=>{
-      const arr= prev?.map((dat)=>{
+      let arr=prev
+      arr.items= prev.items?.map((dat)=>{
               if(dat._id===catDel){
                 
                 dat.status=!dat.status
@@ -102,7 +111,7 @@ export function useDeleteEventSpecialCategory( ) {
                 return dat
               }
             })
-          return arr})
+        return arr})
 }}
 )
 return {mutate, isLoading, isError, isSuccess}

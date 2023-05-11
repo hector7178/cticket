@@ -272,6 +272,7 @@ export interface createEventSpecialCategory {
   event_img: string;
   color: string;
   initial_date: string;
+  created_at:string;
   final_date: string;
   location: {
     latitude: number;

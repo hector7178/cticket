@@ -11,13 +11,14 @@ import { Heading } from '@/components/headers/admin/heading';
 // Import Interface
 import { EventCategory } from '@/interfaces/event';
 import { useEventSpecialCategory, useQueryEventsSpecialsCategories } from '@/hooks/event/event_special_category';
-
+import { useUsers} from '@/hooks/user/user';
 
 
 const EventSpecialCategory = () => {
     const ts = useTranslations("Panel_SideBar");
     const tb = useTranslations("btn");
-    const dataCategory=useQueryEventsSpecialsCategories('', '', '')?.data?.items
+    const {data}=useQueryEventsSpecialsCategories('', '', '')
+    const user=useUsers()
     const locale = useLocale();
     const breadcrumb = [
         { page: ts('event.event'), href: '/panel/event' },
@@ -28,12 +29,13 @@ const EventSpecialCategory = () => {
 
     
     let dataTableE = [];
-    dataCategory?.map((item) => {
+    console.log(data)
+    data?.items?.map((item) => {
         let dataIn = {
             id:item._id,
             category: item.category?.find((obj) => obj.lang == locale)?.name,
             owner:item.user_id?.['firstname'],
-            created:item.initial_date,
+            created:item.created_at?.split('T')[0],
             status:item.status
         }
         dataTableE.push(dataIn)
@@ -71,6 +73,8 @@ EventSpecialCategory.Layout = AdminLayout;
 export default EventSpecialCategory;
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
+
+    
     return {
         props: {
             messages: (await import(`@/messages/${locale}.json`)).default,
