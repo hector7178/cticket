@@ -38,23 +38,32 @@ const EventCreateCategory = () => {
     const YupSchema= yup.object().shape({
         category:yup.array().of(
             yup.object().shape({
-                lang:yup.string().required('Lang required'),
-                name:yup.string().min(3,'Name required, min 3 caracters').required('Name is required')
+                lang:yup.string().required(tc('Lang_required')),
+                name:yup.string().min(3, tc('Min_3_caracters')).required(tc('Name_is_required'))
             })
         ),
-        color:yup.string().required('Color is required'),
-        picture:yup.string().required('Picture is required')
+        color:yup.string().required(tc('Color_is_required')),
+        picture:yup.string().required(tc('Picture_required'))
 
     })
     
 
-const { register, handleSubmit,setValue, formState: { errors, isSubmitted }, reset,getValues } = useForm<EventCategory>({resolver:yupResolver(YupSchema)});
+const { register, handleSubmit,setValue, formState: { errors, isSubmitted ,isValid }, reset,getValues } = useForm<EventCategory>({resolver:yupResolver(YupSchema)});
 const {mutate, isLoading, isError, isSuccess}= useCreateEventCategory()
 
 
 useEffect(()=>{
-if (isSuccess && isSubmitted){
-    toast.success('Event category created :)',{
+    if(!isValid && isSubmitted){
+             toast.error(' Error in form :(',{
+                    position:toast.POSITION.TOP_RIGHT,
+                    data:{
+                        tittle:'error form',
+                        text:'This is a error message' 
+                    }
+                } )
+            
+    } else if (isSuccess && isSubmitted){
+        toast.success('Event category created :)',{
             position:toast.POSITION.TOP_RIGHT,
             data:{
                 tittle:'success Updated',
@@ -74,7 +83,7 @@ if (isSuccess && isSubmitted){
         } )
 }
 
-},[isSuccess,isError])
+},[isSuccess,isError,isSubmitted])
 
     //drop file
     const [upload, setUpload ]=useState('');

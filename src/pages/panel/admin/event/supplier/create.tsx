@@ -19,12 +19,15 @@ import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify';
 
 const EventCreateSuplier = () => {
+    
+    const tc = useTranslations("Common_Forms");
+
     const YupSchema= yup.object().shape({
        
         user_id: yup.string(),
-        name: yup.string().required('Name is required'),
-        url: yup.string().required('URL is required'),
-        color: yup.string().required('Color is required'),
+        name: yup.string().required(tc('Name_is_required')),
+        url: yup.string().required(tc('URL_is_required')),
+        color: yup.string().required(tc('Color_is_required')),
         data: yup.object({
                 type: yup.string(),
                 url: yup.string(),
@@ -35,12 +38,20 @@ const EventCreateSuplier = () => {
 
     const t = useTranslations("Panel_SideBar");
     const { locales,push,locale } = useRouter();
-    const tc = useTranslations("Common_Forms");
     const{mutate,isError,isSuccess}=useCreateEventSupplier()
-    const { register,handleSubmit,setValue, formState: { errors, isSubmitSuccessful, isValid },reset,getValues } = useForm<EventSupplier>({resolver:yupResolver(YupSchema)});
+    const { register,handleSubmit,setValue, formState: { errors, isSubmitSuccessful, isValid, isSubmitted },reset,getValues } = useForm<EventSupplier>({resolver:yupResolver(YupSchema)});
 
      useEffect(()=>{
-        if (isSuccess && isSubmitSuccessful){
+         if(!isValid && isSubmitted){
+             toast.error(' Error in form :(',{
+                    position:toast.POSITION.TOP_RIGHT,
+                    data:{
+                        tittle:'error form',
+                        text:'This is a error message' 
+                    }
+                } )
+            
+        }else if (isSuccess && isSubmitSuccessful){
             toast.success('Event supplier created :)',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -60,7 +71,7 @@ const EventCreateSuplier = () => {
                     }
                 } )
         }
-    },[isSuccess,isError])
+    },[isSuccess,isError,isSubmitted])
 
     const breadcrumb = [
         { page: t('admin.admin'), href: '/panel/admin' },

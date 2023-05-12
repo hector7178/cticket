@@ -64,7 +64,7 @@ const EventCreateSpecialCategory = ({dataInit}) => {
                         text:'This is a success message '
                     }
                 
-            } )
+            } );
             push(`/${locale}/panel/event/special`)   
         }else if(isError && methods.formState.isSubmitted){
             toast.error(' Error, No updated :(',{
@@ -79,17 +79,17 @@ const EventCreateSpecialCategory = ({dataInit}) => {
     
     
  //input file config   
-    const [upload, setUpload ]=useState('');
-    const [upload2, setUpload2 ]=useState('');
-    
+    const [upload, setUpload ]=useState<string>();
+    const [upload2, setUpload2 ]=useState<string>();
+   
     const[url,setUrl]=useState<string>();
     const[url2,setUrl2]=useState<string >();
-
+   
    const [Header_event,setHeader_event]=useState<File>()
    const [Event_img,setEvent_img]=useState<File>()   
    if(Event_img!==undefined){
      const reader=new FileReader
-    reader.onload=(e)=>{
+        reader.onload=(e)=>{
         setUrl2(`${e.target.result}`)
     }
     reader.readAsDataURL(Event_img)
@@ -242,9 +242,8 @@ const dateEnd=(e)=>{
 },[])
 
 
-    return (
-        <>
-            {/* Breadcrumb section */}
+return (<>
+            
             <div>
                 <HeadingSelect breadcrumb={breadcrumb} langBread onChange={LangSelect} onAppend={onAppend}/>
             </div>
@@ -257,27 +256,28 @@ const dateEnd=(e)=>{
                             <CustomLabel field="header-upload" name={tc('field_header')} required />
                             <Dropzone noClick>
                                 {({getInputProps,getRootProps,acceptedFiles})=>{
-                                    if(file=acceptedFiles[0] !== ''|| undefined) const file=acceptedFiles[0]
+                                    if(acceptedFiles[0]?.name !== undefined){ 
+                                    const file=acceptedFiles[0]
                                      setUpload(file?.name)
                                      setHeader_event(file)
                                      methods.setValue('header_img', file?.name)
-                                     
+                                     }
                                     
                                      
                                 return (<div {...getRootProps()}className="mt-2 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 h-60">
                                 <div className="space-y-1 text-center">
-                                        {upload===undefined?
-                                        <Image src={ImageURL(dataInit.header_img)} alt='Event image' className="mx-auto" width={140} height={100}></Image>
+                                    {upload===undefined ?
+                                    <Image src={ImageURL(dataInit.header_img)} alt='Event image' className="mx-auto" width={140} height={100}></Image>
                                     
                                         :
-                                      url && <Image src={url} alt='Event image' className="mx-auto" width={140} height={100}></Image>
+                                      (url && <Image src={url} alt='Event image' className="mx-auto" width={140} height={100}></Image>)
                                     }
                                         
                                     <div className="flex text-sm text-gray-600">
                                     <label
                                     className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
                                     >
-                                    { upload===undefined?  <span  >{tc('field_upload_file')}</span>:<span className='flex flex-row gap-2'>{ upload}<ArrowPathIcon width='1.5rem' height='1.5rem'/></span>}
+                                    { upload===(undefined ||'')?  <span  >{tc('field_upload_file')}</span>:<span className='flex flex-row gap-2'>{ upload}<ArrowPathIcon width='1.5rem' height='1.5rem'/></span>}
                                             
                                     </label> 
                                     <input 
@@ -297,8 +297,8 @@ const dateEnd=(e)=>{
                             <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6">
                             <Dropzone>
                             {({getRootProps,getInputProps,acceptedFiles})=>{ 
-                                     
-                                    if(acceptedFiles[0]?.name !== '' || undefined){ 
+                                    
+                                    if(acceptedFiles[0]?.name !== undefined){ 
                                         const file=acceptedFiles[0]
                                         setUpload2(file?.name)
                                         methods.setValue('event_img', file?.name)
@@ -309,10 +309,11 @@ const dateEnd=(e)=>{
                                     
                                return ( <div {...getRootProps()} className="relative mt-2 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 h-60">
                                     <div className="space-y-1 text-center">
-                                        {upload2===undefined?
+                                        {upload2 === undefined?
                                         <Image src={ImageURL(dataInit.event_img)} alt='Event image' className="mx-auto" width={70} height={60}></Image>
                                         :
-                                        url2 && <Image src={url2} alt='Event image' className="mx-auto" width={70} height={60}></Image>
+                                         url2 && <Image src={url2} alt='Event image' className="mx-auto" width={70} height={60}></Image>
+                                       
                                         }
                                             
                                         <div className="flex text-sm text-gray-600">

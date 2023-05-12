@@ -24,27 +24,37 @@ import { ToastContainer, toast } from 'react-toastify';
 
 
 const EventCreateSubcategory = () => {
+    const t = useTranslations("Panel_SideBar");
+    const tc = useTranslations("Common_Forms");
 
      const YupSchema= yup.object().shape({
         subcategory:yup.array().of(
             yup.object().shape({
-                lang:yup.string().required('Lang is required'),
-                name:yup.string().min(3,'Name required, min 3 caracters').required('Name is Required')
+                lang:yup.string().required(tc('Lang_required')),
+                name:yup.string().min(3, tc('Min_3_caracters')).required(tc('Name_is_required'))
             }),
         ),
-        category_id:yup.string().required('Category is Required')
+        category_id:yup.string().required(tc('Category_is_required'))
 
     })
     const {data}=useCategories();
     const{ mutate,isLoading,isError,isSuccess}=useCreateEventSubcategory()
     const { locales,push } = useRouter();
     const dataColor= CurrentColor();
-    const t = useTranslations("Panel_SideBar");
-    const tc = useTranslations("Common_Forms");
     const locale = useLocale();
-    const { register, handleSubmit,setValue, formState: { errors, isSubmitted}, reset, getValues } = useForm<EventSubcategory>({resolver:yupResolver(YupSchema)});
+    const { register, handleSubmit,setValue, formState: { errors, isSubmitted, isValid}, reset, getValues } = useForm<EventSubcategory>({resolver:yupResolver(YupSchema)});
     useEffect(()=>{
-        if (isSuccess && isSubmitted){
+
+        if(!isValid && isSubmitted){
+             toast.error(' Error in form :(',{
+                    position:toast.POSITION.TOP_RIGHT,
+                    data:{
+                        tittle:'error form',
+                        text:'This is a error message' 
+                    }
+                } )
+            
+        } else if (isSuccess && isSubmitted){
             toast.success('Event sub category created :)',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -64,7 +74,7 @@ const EventCreateSubcategory = () => {
                 text:'This is a error message  ' 
             }
         } )
-    }},[isSuccess, isError])
+    }},[isSuccess, isError, isSubmitted])
     
 
     let dataTableE=[]

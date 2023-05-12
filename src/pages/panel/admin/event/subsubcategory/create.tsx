@@ -39,17 +39,27 @@ const EventCreateSubsubcategory = () => {
         { page: t('actions.create'), href: '' }
     ]
     const YupSchema= yup.object().shape({
-        category_id:yup.string().required('Category is Required'),
-        subcategory_id:yup.string().required('Sub category is Required'),
-        sub_subcategory:yup.string().min(2,'Min 2 caracters').required('Sub sub Category is Required'),
-        picture:yup.string().required('Picture is Required')
+        category_id:yup.string().required(tc('Category_is_required')),
+        subcategory_id:yup.string().required(tc('Sub_category_is_required')),
+        sub_subcategory:yup.string().min(3, tc('Min_3_caracters')).required(tc('Sub_sub_Category_is_required')),
+        picture:yup.string().required(tc('Picture_required'))
 
     })
-    const { register, handleSubmit,setValue, formState: { errors, isSubmitted }, reset, getValues } = useForm<EventSubsubcategory>({resolver:yupResolver(YupSchema)});
+    const { register, handleSubmit,setValue, formState: { errors, isSubmitted, isValid }, reset, getValues } = useForm<EventSubsubcategory>({resolver:yupResolver(YupSchema)});
     const{ mutate,isSuccess,isError}=useCreateEventSubSubcategory()
 
     useEffect(()=>{
-        if (isSuccess && isSubmitted){
+
+         if(!isValid && isSubmitted){
+             toast.error(' Error in form :(',{
+                    position:toast.POSITION.TOP_RIGHT,
+                    data:{
+                        tittle:'error form',
+                        text:'This is a error message' 
+                    }
+                } )
+            
+        }else if (isSuccess && isSubmitted){
             toast.success('Event sub sub category created :)',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -71,7 +81,8 @@ const EventCreateSubsubcategory = () => {
                 } )
         }
 
-    },[isSuccess,isError])
+    },[isSuccess,isError,isSubmitted])
+
     const locale = useLocale();
     
       //drop file

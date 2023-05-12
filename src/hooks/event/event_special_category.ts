@@ -71,9 +71,9 @@ export function useUpdateEventSpecialCategory( ) {
          
     return updateEventSpecialCategory(values.id, values.SpecialCategory )},{onSuccess: (dataRes,value)=>{
         return queryClient.setQueryData([key],(prev:any)=>{ 
-          console.log('respuesta',dataRes)
-          console.log('prev',prev)
+           console.log('dataRes' ,dataRes)
           let arr=prev
+        
           if(arr?.items){
             arr.items = prev?.items?.map((item)=>{
              if( item._id===dataRes._id){

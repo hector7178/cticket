@@ -49,30 +49,30 @@ const EventCreateSpecialCategory = () => {
         
         category: yup.array().of(
             yup.object().shape({
-                lang:yup.string().required('Lang required'),
-                name:yup.string().min(3,'Min 3 caracters').required('Name is Required'),
-                description:yup.string().required('Description required'),
+                lang:yup.string().required(tc('Lang_required')),
+                name:yup.string().min(3,tc('Min_3_caracters')).required(tc('Name_is_required')),
+                description:yup.string().required(tc('Description_required')),
             })
         ),
-        header_img: yup.string().required('Picture required'),
-        event_img: yup.string().required('Picture required' ),
-        color: yup.string().required('Color is required'),
-        initial_date: yup.string().required('Date is required'),
-        final_date: yup.string().required('Date is required'),
+        header_img: yup.string().required(tc('Picture_required')),
+        event_img: yup.string().required(tc('Picture_required') ),
+        color: yup.string().required(tc('Color_is_required')),
+        initial_date: yup.string().required(tc('Date_is_required')),
+        final_date: yup.string().required(tc('Date_is_required')),
         location: yup.object().shape({
             latitude: yup.number().required(''),
             longitude: yup.number().required(''),
-            city: yup.string().required('City is required'),
+            city: yup.string().required(tc('City_is_required')),
             state: yup.object().shape({
-                long_name: yup.string().required('State is required'),
+                long_name: yup.string().required(tc('State_is_required')),
                 short_name: yup.string().required(''),
             }),
             country: yup.object().shape({
-                long_name:yup.string().required('Country is required'),
+                long_name:yup.string().required(tc('Country_is_required')),
                 short_name: yup.string().required(''),
             }),
         }),
-        description: yup.string().min(5,'Min 25 caracters').max(300,' Max caracters').required('Description required'),
+        description: yup.string().min(5, tc('Min_25_caracters')).max(300, tc('Max_caracters')).required(tc('Description_required')),
    })
     const methods = useForm<createEventSpecialCategory>({resolver:yupResolver(YupSchema)});
     const {mutate, isLoading, isError, isSuccess}= useCreateEventSpecialCategory()
@@ -80,11 +80,21 @@ const EventCreateSpecialCategory = () => {
     const {locale, push}=useRouter()
    
    
+    console.log(methods.formState.isValid, methods.formState.isSubmitted)
     useEffect(()=>{
    
      
-        if (isSuccess && methods.formState.isSubmitted){
-            toast.success('Special event successfull create :)',{
+        if(!(methods.formState.isValid )&& methods.formState.isSubmitted){
+             toast.error(' Error in form :(',{
+                    position:toast.POSITION.TOP_RIGHT,
+                    data:{
+                        tittle:'error form',
+                        text:'This is a error message' 
+                    }
+                } )
+            
+        }else if (isSuccess && methods.formState.isSubmitted){
+            toast.success('Special event successfull created :)',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
                         tittle:'Special event successfull create ',
@@ -105,7 +115,7 @@ const EventCreateSpecialCategory = () => {
                 } )
         }
     
-    },[isSuccess, isError])
+    },[isSuccess, isError, methods.formState.isSubmitted])
     
    
  //input file config   
@@ -169,7 +179,6 @@ const EventCreateSpecialCategory = () => {
         return data
     })
 
-    console.log('location',dataMarker)
     const search=(e)=>{
         setMapSearch(e.target.value)
     }
@@ -197,9 +206,9 @@ const EventCreateSpecialCategory = () => {
         setDataCountry(country)
         setDataCity(city)
         setDataState(state)
-        methods.setValue('location.country', {long_name:country.long_name,short_name:country.short_name} )
+        methods.setValue('location.country', {long_name:country?.long_name,short_name:country?.short_name} )
         methods.setValue('location.city', city)
-        methods.setValue('location.state', {long_name:state.long_name,short_name:state.short_name})
+        methods.setValue('location.state', {long_name:state?.long_name,short_name:state?.short_name})
 
         }
         

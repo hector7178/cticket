@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { GetStaticPropsContext } from "next";
 import { useLocale, useTranslations } from "next-intl";
+import axios from '@/lib/axios';
 // Layout and Header
 import AdminLayout from "@/components/layout/admin";
 import { BasicTable } from '@/components/admin/tables';
@@ -14,7 +15,7 @@ import { useEventSpecialCategory, useQueryEventsSpecialsCategories } from '@/hoo
 import { useUsers} from '@/hooks/user/user';
 
 
-const EventSpecialCategory = () => {
+const EventSpecialCategory = ({dataInit}) => {
     const ts = useTranslations("Panel_SideBar");
     const tb = useTranslations("btn");
     const {data}=useQueryEventsSpecialsCategories('', '', '')
@@ -29,12 +30,12 @@ const EventSpecialCategory = () => {
 
     
     let dataTableE = [];
-    console.log(data)
+    console.log(dataInit)
     data?.items?.map((item) => {
         let dataIn = {
             id:item._id,
             category: item.category?.find((obj) => obj.lang == locale)?.name,
-            owner:item.user_id?.['firstname'],
+            owner:item.user_id?.['firstname'] || dataInit.items?.find((e)=>e._id===item.user_id.id)?.firstname,
             created:item.created_at?.split('T')[0],
             status:item.status
         }
@@ -73,11 +74,12 @@ EventSpecialCategory.Layout = AdminLayout;
 export default EventSpecialCategory;
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
-
+const { data } = await axios.get('/users/?page=1&size=100&searchkey=search_key&searchword=search_word&sortby=key_sort&descending=true')
     
     return {
         props: {
             messages: (await import(`@/messages/${locale}.json`)).default,
+            dataInit:data
         },
     };
 }

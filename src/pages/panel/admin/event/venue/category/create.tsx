@@ -17,18 +17,19 @@ import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify';
 
 const EventCreateVenueCategory = () => {
+    const tc = useTranslations("Common_Forms");
+    const t = useTranslations("Panel_SideBar");
 
-    
     const YupSchema= yup.object().shape({
         category:yup.array().of(
             yup.object().shape({
-                lang:yup.string().required('lang required'),
-                name:yup.string().min(2,'min 3 caracters').required('Name is Required')
+                lang:yup.string().required( tc('Lang_required')),
+                name:yup.string().min(3, tc('Min_3_caracters')).required(tc('Name_is_required'))
             })
-        ).required('Category isrequired'),
+        ).required(tc('Category_is_required')),
    })
     const{push,locale}=useRouter()
-    const t = useTranslations("Panel_SideBar");
+    
 
     const breadcrumb = [
         { page: t('admin.admin'), href: '/panel/admin' },
@@ -49,9 +50,16 @@ const EventCreateVenueCategory = () => {
     const { register, handleSubmit,setValue, formState: { errors,isSubmitted, isValid }, reset, getValues} = useForm({resolver:yupResolver(YupSchema)});
   
     useEffect(()=>{
-   
-     
-        if (isSuccess && isSubmitted){
+         if(!isValid && isSubmitted){
+             toast.error(' Error in form :(',{
+                    position:toast.POSITION.TOP_RIGHT,
+                    data:{
+                        tittle:'error form',
+                        text:'This is a error message' 
+                    }
+                } )
+            
+        }else if (isSuccess && isSubmitted){
             toast.success('Event venue category updated :)',{
                     position:toast.POSITION.TOP_RIGHT,
                     data:{
@@ -73,7 +81,7 @@ const EventCreateVenueCategory = () => {
                 } )
         }
     
-    },[isSuccess, isError])
+    },[isSuccess, isError, isSubmitted])
 
     
     const[category,setCategory]=useState( [{lang:'en', name:''}])
@@ -135,8 +143,7 @@ const EventCreateVenueCategory = () => {
                         <div className="py-6 grid grid-cols-12 gap-6">
                              
                             {
-                            lang.map((exp, index)=>{
-                                console.log(exp, index)
+                            category.map((exp, index)=>{
                                 return (<div className="w-full col-span-4">
                                     <span  className='text-[#e74c3c] w-full flex justify-end'>{
                                     Array.isArray(errors?.category)?
@@ -148,10 +155,10 @@ const EventCreateVenueCategory = () => {
                                     <EventInputLang 
                                     key={index} 
                                     index={index} 
-                                    lang={exp} 
+                                    lang={exp.lang} 
                                     onChange={handleName}
                                     num={category?.length}
-                                    onClick={(e)=>onDelete(e, exp,index)} 
+                                    onClick={(e)=>onDelete(e, exp.lang,index)} 
                                     category={category}
                                     /></div>)
                             })
