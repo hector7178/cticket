@@ -123,10 +123,8 @@ const EventCreateSubsubcategory = () => {
 //data subcategory
     const { isLoading, data}=useSubCategories();
     let dataSub=[]
-    if(isLoading){
-        null
-    }else{
-    data?.map((item) => {
+   
+    !isLoading && data?.map((item) => {
         let dataIn = {
             id: item.category_id,
             category: item.subcategory?.find((obj) => obj.lang == locale)?.name,
@@ -134,14 +132,12 @@ const EventCreateSubsubcategory = () => {
         }
         dataSub.push(dataIn)  
     })
-    }
+    
 //data category
     const category=useCategories();
     let dataCate=[]
-    if(category.isLoading){
-        null
-    }else{
-    category.data?.map((item) => {
+   
+    !category.isLoading && category.data?.map((item) => {
         let dataIn = {
             id: item._id,
             category: item.category?.find((obj) => obj.lang == locale)?.name,
@@ -149,7 +145,7 @@ const EventCreateSubsubcategory = () => {
         }
         dataCate.push(dataIn)  
     })
-    }
+    
 //subCategory 
     const [dataSubcategory, setDataSubcategory]=useState([])
    

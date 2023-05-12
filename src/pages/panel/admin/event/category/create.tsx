@@ -269,7 +269,7 @@ console.log('values', getValues())
                                     key={index} 
                                     index={index} 
                                     lang={exp.lang} 
-                                    onChange={handleName}
+                                    onChange={(e)=>handleName(e)}
                                     num={category?.length}
                                     onClick={(e)=>onDelete(e, exp.lang,index)} 
                                     category={category}

@@ -40,7 +40,7 @@ export const EventInputLang = ({
         <div className="inputCoverAd relative space-y-1 px-5 pt-10 pb-10">
           <CustomLabel field="name" name={t('field_name')} />
           <input
-            onChange={onChange}
+            onChange={(e)=>onChange(e)}
             name='name'
             type="text"
             value={category?.find((e)=>e.lang===lang)?.name}

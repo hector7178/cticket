@@ -149,7 +149,7 @@ const EventCreateSubcategory = () => {
     
 } 
    
-console.log('errors', errors)
+console.log('errors',getValues())
     return (
         <>
             {/* Breadcrumb section */}
@@ -178,7 +178,7 @@ console.log('errors', errors)
                             
                              {
                             category.map((exp, index)=>{
-                                return ( <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6 "><span  className='text-[#e74c3c] w-full flex justify-end'>{
+                                return ( <div key={index} className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-6 "><span  className='text-[#e74c3c] w-full flex justify-end'>{
                                     Array.isArray(errors?.subcategory)?
                                         errors.subcategory[index]?
                                             errors.subcategory[index]["name"]?errors.subcategory[index]["name"].message:null
@@ -188,7 +188,7 @@ console.log('errors', errors)
                                     key={index} 
                                     index={index} 
                                     lang={exp.lang} 
-                                    onChange={handleName}
+                                    onChange={(e)=>handleName(e)}
                                     num={category?.length}
                                     onClick={(e)=>onDelete(e, exp.lang,index)} 
                                     category={category}

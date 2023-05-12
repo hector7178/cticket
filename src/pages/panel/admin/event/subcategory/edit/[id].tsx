@@ -155,12 +155,12 @@ console.log('values',getValues())
                                 </select>
                             </div>
                             {
-                            lang?.map((exp, index)=>{
+                            category?.map((exp, index)=>{
                                 return (<EventInputLang 
                                     key={index} 
                                     index={index} 
                                     lang={exp} 
-                                    onChange={handleName}
+                                    onChange={(e)=>handleName(e)}
                                     num={category?.length}
                                     onClick={(e)=>onDelete(e, exp,index)} 
                                     category={category}/>)
